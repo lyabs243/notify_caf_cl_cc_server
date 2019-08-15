@@ -1,0 +1,839 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: lyabs
+ * Date: 10/03/2019
+ * Time: 06:49
+ */
+
+class Match_model extends CI_Model
+{
+    public function __construct() {
+        $this->load->database();
+    }
+
+    public function set_status($idMatch,$status) {
+        $sql = "UPDATE spt_match SET status = ?
+                WHERE id = ? 
+                 ";
+
+        $args = array($status,$idMatch);
+        $result = $this->db->query($sql,$args);
+        return $result;
+    }
+
+    public function add_action($data) {
+        $this->db->insert('spt_match_action', $data);
+        return $this->db->insert_id();
+    }
+
+    //verifie si la composition d un match existe deja
+    function  is_composition_exist($idMatch)
+    {
+        $id = 0;
+        $query = $this->db->query('SELECT * FROM spt_composition WHERE id_match = ?',array($idMatch));
+        $results = $query->result();
+        foreach ($results as $result)
+        {
+            $id = $result->id;
+            break;
+        }
+        return $id;
+    }
+
+    public function add_match_composition($idMatch) {
+        $id = 0;
+        $id = $this->is_composition_exist($idMatch);
+        if($id <= 0)
+        {
+            $this->db->insert('spt_composition', array('id_match' => $ip));
+            $id = $this->db->insert_id();
+        }
+
+        return $id;
+    }
+
+    public function add_composition_details($idMatch,$idComposition,$idTeam,$players) {
+        $data['id_team'] = $idTeam;
+        $data['id_match'] = $idMatch;
+        $data['id_composition'] = $idComposition;
+        $result = false;
+        foreach ($players as $player)
+        {
+            $data['id_player'] = $player['id'];
+            $data['description'] = $this->get_player_name($player);
+            $this->db->insert('spt_composition_detail', $data);
+            $result = true;
+        }
+        return $result;
+    }
+
+    public function get_player_name($idPlayer) {
+        $sql = "SELECT id, name 
+                FROM `spt_player`
+                WHERE id = ?";
+        $args = array($idPlayer);
+        $query = $this->db->query($sql,$args);
+        $results = $query->result();
+        $name = '';
+        foreach ($results as $result)
+        {
+            $name = $result->name;
+        }
+        return $name;
+    }
+
+    public function get_current_matchs($idCompetition,$idEdition=0,$page=0) {
+        $timezone = $this->session->timezone;
+        //si l edition n est pas specifie on prend la derniere edition
+        if($idEdition<=0) {
+            $idEdition = $this->Edition_model->get_latest_competition_edition($idCompetition);
+        }
+        $sql = "SELECT sm.id, sta.id as teamAId, stb.id as teamBId, sta.title as teamA, stb.title as teamB, sta.url_logo as teamA_logo, stb.url_logo as teamB_logo,
+                (SELECT COUNT(*) FROM `spt_match_action` WHERE (type = 1 OR type = 2) AND id_team = sta.id AND id_match = sm.id) as teamA_goal,
+                (SELECT COUNT(*) FROM `spt_match_action` WHERE (type = 1 OR type = 2) AND id_team = stb.id AND id_match = sm.id) as teamB_goal,
+                sta.title_small as teamA_small, stb.title_small as teamB_small, CONVERT_TZ(sm.match_date,@@session.time_zone,?) as match_date, sm.status,sm.id_edition_stage,
+                sm.team_a_penalty, sm.team_b_penalty,
+                (SELECT stg.id_stage_group 
+                FROM `spt_team_group` stg
+                JOIN spt_stage_group ssg
+                ON stg.`id_stage_group` = ssg.id
+                WHERE ssg.id_edition_stage = sm.id_edition_stage
+                AND stg.id_team = teamAId) as idGroupA,
+                (SELECT stg.id_stage_group 
+                FROM `spt_team_group` stg
+                JOIN spt_stage_group ssg
+                ON stg.`id_stage_group` = ssg.id
+                WHERE ssg.id_edition_stage = sm.id_edition_stage
+                AND stg.id_team = teamBId) as idGroupB
+                FROM spt_match sm
+                JOIN spt_team sta 
+                ON sm.id_team_a = sta.id
+                JOIN spt_team stb
+                ON sm.id_team_b = stb.id
+                JOIN spt_edition_stage ses 
+                ON ses.id = sm.id_edition_stage
+                JOIN spt_competition_edition sce 
+                ON sce.id = ses.id_edition
+                WHERE (sm.status <> 6
+                AND sm.status <> 11
+                AND sm.status <> 3)
+                AND ses.id_edition = ?
+                ORDER BY sm.match_date ASC
+                 ";
+
+        if($page <= 0) {
+            $sql .= "
+                    LIMIT 5";
+            $args = array($timezone,$idEdition);
+        }
+        else {
+            $page_start = (((int)$page)-1)*10;
+            $args = array($timezone,$idEdition,$page_start);
+            $sql .= "
+                     LIMIT ?,10";
+        }
+        $query = $this->db->query($sql,$args);
+        $results = $query->result();
+        $matchs = array();
+        foreach ($results as $result)
+        {
+            $row = array();
+            $row['id'] = $result->id;
+            $row['teamAId'] = $result->teamAId;
+            $row['teamBId'] = $result->teamBId;
+            $row['teamA_small'] = $result->teamA_small;
+            $row['teamB_small'] = $result->teamB_small;
+            $row['teamA'] = $this->lang->line($row['teamA_small']);
+            $row['teamB'] = $this->lang->line($row['teamB_small']);
+            $row['teamA_logo'] = $result->teamA_logo;
+            $row['teamB_logo'] = $result->teamB_logo;
+            $row['teamA_goal'] = $result->teamA_goal;
+            $row['teamB_goal'] = $result->teamB_goal;
+            $row['team_a_penalty'] = $result->team_a_penalty;
+            $row['team_b_penalty'] = $result->team_b_penalty;
+            $row['match_date'] = $result->match_date;
+            $row['status'] = $result->status;
+            $row['id_edition_stage'] = $result->id_edition_stage;
+            $row['idGroupA'] = (int)$result->idGroupA;
+            $row['idGroupB'] = (int)$result->idGroupB;
+
+            //on change l affichage de la date du match par rapport au status
+            $row['match_date'] = $this->getMatchDate($row['id'],$row['status'],$row['match_date']);
+
+            array_push($matchs,$row);
+        }
+
+        return $matchs;
+    }
+
+    public function get_group_matchs_fixtures($idCompetition,$idEditionStage,$idGroup=0,$page=0) {
+        $timezone = $this->session->timezone;
+        $sql = "SELECT sm.id, sta.id as teamAId, stb.id as teamBId, sta.title as teamA, stb.title as teamB, sta.url_logo as teamA_logo, stb.url_logo as teamB_logo,
+                (SELECT COUNT(*) FROM `spt_match_action` WHERE (type = 1 OR type = 2) AND id_team = sta.id AND id_match = sm.id) as teamA_goal,
+                (SELECT COUNT(*) FROM `spt_match_action` WHERE (type = 1 OR type = 2) AND id_team = stb.id AND id_match = sm.id) as teamB_goal,
+                sta.title_small as teamA_small, stb.title_small as teamB_small, CONVERT_TZ(sm.match_date,@@session.time_zone,?) as match_date, sm.status,sm.id_edition_stage,
+                sm.team_a_penalty, sm.team_b_penalty,
+                (SELECT stg.id_stage_group 
+                FROM `spt_team_group` stg
+                JOIN spt_stage_group ssg
+                ON stg.`id_stage_group` = ssg.id
+                WHERE ssg.id_edition_stage = sm.id_edition_stage
+                AND stg.id_team = teamAId) as idGroupA,
+                (SELECT stg.id_stage_group 
+                FROM `spt_team_group` stg
+                JOIN spt_stage_group ssg
+                ON stg.`id_stage_group` = ssg.id
+                WHERE ssg.id_edition_stage = sm.id_edition_stage
+                AND stg.id_team = teamBId) as idGroupB
+                FROM spt_match sm
+                JOIN spt_team sta 
+                ON sm.id_team_a = sta.id
+                JOIN spt_team stb
+                ON sm.id_team_b = stb.id
+                JOIN spt_edition_stage ses 
+                ON ses.id = sm.id_edition_stage
+                JOIN spt_competition_edition sce 
+                ON sce.id = ses.id_edition
+                 ";
+
+        $page_start = (((int)$page)-1)*10;
+        if($idGroup > 0)
+        {
+            $sql.="JOIN  spt_team_group stg
+                ON sta.id = stg.id_team ";
+        }
+        $sql.="WHERE (sm.status = 0)
+                AND ses.id = ? ";
+        if($idGroup > 0)
+        {
+            $sql.="AND stg.id_stage_group = ? ";
+            $args = array($timezone,$idEditionStage,$idGroup,$page_start);
+        }
+        else
+        {
+            $args = array($timezone,$idEditionStage,$page_start);
+        }
+        $sql.="ORDER BY sm.match_date ASC 
+                     LIMIT ?,10 ";
+        $query = $this->db->query($sql,$args);
+        $results = $query->result();
+        $matchs = array();
+        foreach ($results as $result)
+        {
+            $row = array();
+            $row['id'] = $result->id;
+            $row['teamAId'] = $result->teamAId;
+            $row['teamBId'] = $result->teamBId;
+            $row['teamA_small'] = $result->teamA_small;
+            $row['teamB_small'] = $result->teamB_small;
+            $row['teamA'] = $this->lang->line($row['teamA_small']);
+            $row['teamB'] = $this->lang->line($row['teamB_small']);
+            $row['teamA_logo'] = $result->teamA_logo;
+            $row['teamB_logo'] = $result->teamB_logo;
+            $row['teamA_goal'] = $result->teamA_goal;
+            $row['teamB_goal'] = $result->teamB_goal;
+            $row['team_a_penalty'] = $result->team_a_penalty;
+            $row['team_b_penalty'] = $result->team_b_penalty;
+            $row['match_date'] = $result->match_date;
+            $row['status'] = $result->status;
+            $row['id_edition_stage'] = $result->id_edition_stage;
+            $row['idGroupA'] = (int)$result->idGroupA;
+            $row['idGroupB'] = (int)$result->idGroupB;
+
+            //on change l affichage de la date du match par rapport au status
+            $row['match_date'] = $this->getMatchDate($row['id'],$row['status'],$row['match_date']);
+
+            array_push($matchs,$row);
+        }
+
+        return $matchs;
+    }
+
+    public function get_group_matchs_results($idCompetition,$idEditionStage,$idGroup=0,$page=0) {
+        $timezone = $this->session->timezone;
+        $sql = "SELECT sm.id, sta.id as teamAId, stb.id as teamBId, sta.title as teamA, stb.title as teamB, sta.url_logo as teamA_logo, stb.url_logo as teamB_logo,
+                (SELECT COUNT(*) FROM `spt_match_action` WHERE (type = 1 OR type = 2) AND id_team = sta.id AND id_match = sm.id) as teamA_goal,
+                (SELECT COUNT(*) FROM `spt_match_action` WHERE (type = 1 OR type = 2) AND id_team = stb.id AND id_match = sm.id) as teamB_goal,
+                sta.title_small as teamA_small, stb.title_small as teamB_small, CONVERT_TZ(sm.match_date,@@session.time_zone,?) as match_date, sm.status,sm.id_edition_stage,
+                sm.team_a_penalty, sm.team_b_penalty,
+                (SELECT stg.id_stage_group 
+                FROM `spt_team_group` stg
+                JOIN spt_stage_group ssg
+                ON stg.`id_stage_group` = ssg.id
+                WHERE ssg.id_edition_stage = sm.id_edition_stage
+                AND stg.id_team = teamAId) as idGroupA,
+                (SELECT stg.id_stage_group 
+                FROM `spt_team_group` stg
+                JOIN spt_stage_group ssg
+                ON stg.`id_stage_group` = ssg.id
+                WHERE ssg.id_edition_stage = sm.id_edition_stage
+                AND stg.id_team = teamBId) as idGroupB
+                FROM spt_match sm
+                JOIN spt_team sta 
+                ON sm.id_team_a = sta.id
+                JOIN spt_team stb
+                ON sm.id_team_b = stb.id
+                JOIN spt_edition_stage ses 
+                ON ses.id = sm.id_edition_stage
+                JOIN spt_competition_edition sce 
+                ON sce.id = ses.id_edition
+                 ";
+
+        $page_start = (((int)$page)-1)*10;
+
+        if($idGroup > 0)
+        {
+            $sql.="JOIN  spt_team_group stg
+                ON sta.id = stg.id_team ";
+        }
+        $sql .="WHERE (sm.status = 3)
+                AND ses.id = ? ";
+        if($idGroup > 0)
+        {
+            $sql.="AND stg.id_stage_group = ? ";
+            $args = array($timezone,$idEditionStage,$idGroup,$page_start);
+        }
+        else
+        {
+            $args = array($timezone,$idEditionStage,$page_start);
+        }
+        $sql.="ORDER BY sm.match_date DESC
+                     LIMIT ?,10 ";
+        $query = $this->db->query($sql,$args);
+        $results = $query->result();
+        $matchs = array();
+        foreach ($results as $result)
+        {
+            $row = array();
+            $row['id'] = $result->id;
+            $row['teamAId'] = $result->teamAId;
+            $row['teamBId'] = $result->teamBId;
+            $row['teamA_small'] = $result->teamA_small;
+            $row['teamB_small'] = $result->teamB_small;
+            $row['teamA'] = $this->lang->line($row['teamA_small']);
+            $row['teamB'] = $this->lang->line($row['teamB_small']);
+            $row['teamA_logo'] = $result->teamA_logo;
+            $row['teamB_logo'] = $result->teamB_logo;
+            $row['teamA_goal'] = $result->teamA_goal;
+            $row['teamB_goal'] = $result->teamB_goal;
+            $row['team_a_penalty'] = $result->team_a_penalty;
+            $row['team_b_penalty'] = $result->team_b_penalty;
+            $row['match_date'] = $result->match_date;
+            $row['status'] = $result->status;
+            $row['id_edition_stage'] = $result->id_edition_stage;
+            $row['idGroupA'] = (int)$result->idGroupA;
+            $row['idGroupB'] = (int)$result->idGroupB;
+
+            //on change l affichage de la date du match par rapport au status
+            $row['match_date'] = $this->getMatchDate($row['id'],$row['status'],$row['match_date']);
+
+            array_push($matchs,$row);
+        }
+
+        return $matchs;
+    }
+
+    public function get_match_actions($idMatch,$actionMin=0) {
+        $sql = "SELECT sma.`id`, sma.`id_match`, sma.`type`, sma.`detail_a`, sma.`detail_b`, sma.`detail_c`, sma.`detail_d`, sma.`minute`, sma.`id_team`, sma.`id_admin_user`, sma.`register_date`, sm.id_team_a, sm.id_team_b,
+                (SELECT COUNT(*) FROM `spt_match_action` WHERE (type = 1 OR type = 2) AND id_team = sm.id_team_a AND id_match = sm.id AND register_date <= sma.register_date) as teamA_goal,
+                (SELECT COUNT(*) FROM `spt_match_action` WHERE (type = 1 OR type = 2) AND id_team = sm.id_team_b AND id_match = sm.id AND register_date <= sma.register_date) as teamB_goal
+                FROM `spt_match_action` sma
+                JOIN spt_match sm
+                ON sma.id_match = sm.id
+                WHERE sma.id_match = ?
+                AND sma.id > ?
+                ORDER BY sma.register_date DESC
+                 ";
+        $args = array($idMatch,$actionMin);
+
+        $query = $this->db->query($sql,$args);
+        $results = $query->result();
+        $actions = array();
+        foreach ($results as $result)
+        {
+            $row = array();
+            $row['id'] = $result->id;
+            $row['id_match'] = $result->id_match;
+            $row['type'] = $result->type;
+            $row['detail_a'] = ($result->detail_a == null)? '' : $result->detail_a;
+            $row['detail_b'] = ($result->detail_b == null)? '' : $result->detail_b;
+            $row['detail_c'] = ($result->detail_c == null)? '' : $result->detail_c;
+            $row['detail_d'] = ($result->detail_d == null)? '' : $result->detail_d;
+            $row['teamA_goal'] = $result->teamA_goal;
+            $row['teamB_goal'] = $result->teamB_goal;
+            $row['minute'] = $result->minute;
+            $row['id_team'] = $result->id_team;
+
+            //gere la position de l action dans la vue(gauche ou droite)
+            if($result->id_team == $result->id_team_a)
+            {
+                $row['position'] = 0;
+            }
+            else
+            {
+                $row['position'] = 1;
+            }
+
+            array_push($actions,$row);
+        }
+
+        return $actions;
+    }
+
+    public function get_match_lineup($idMatch,$idTeam) {
+        $sql = "SELECT scd.`id_player`, scd.`id_team`, scd.`description`, sp.name, spe.num_player
+                FROM `spt_composition_detail` scd
+                LEFT JOIN spt_player sp
+                ON scd.id_player = sp.id
+                JOIN spt_player_edition spe
+                ON sp.id = spe.id_player
+                WHERE scd.id_match = ?
+                AND scd.id_team = ?";
+        $args = array($idMatch,$idTeam);
+
+        $query = $this->db->query($sql,$args);
+        $results = $query->result();
+        $lineup = array();
+        foreach ($results as $result)
+        {
+            $row = array();
+            $row['id_player'] = $result->id_player;
+            $row['id_team'] = $result->id_team;
+            $row['description'] = $result->description;
+            $row['name'] = $result->name;
+            $row['num_player'] = $result->num_player;
+
+            array_push($lineup,$row);
+        }
+
+        return $lineup;
+    }
+
+    public function get_team_players($idCompetition,$idEdition=0,$idTeam) {
+        if($idEdition<=0) {
+            $idEdition = $this->Edition_model->get_latest_competition_edition($idCompetition);
+        }
+        $sql = "SELECT spt.`id_player`, spt.`id_team`, sp.name, spe.num_player
+                FROM `spt_player_team` spt
+                JOIN spt_player sp
+                ON spt.id_player = sp.id
+                JOIN spt_player_edition spe
+                ON sp.id = spe.id_player
+                WHERE spt.id_team = ?
+                AND spe.id_edition = ? ";
+        $args = array($idTeam,$idEdition);
+
+        $query = $this->db->query($sql,$args);
+        $results = $query->result();
+        $lineup = array();
+        foreach ($results as $result)
+        {
+            $row = array();
+            $row['id_player'] = $result->id_player;
+            $row['id_team'] = $result->id_team;
+            $row['description'] = $result->name;
+            $row['name'] = $result->name;
+            $row['num_player'] = $result->num_player;
+
+            array_push($lineup,$row);
+        }
+
+        return $lineup;
+    }
+
+    public function add_comment($data) {
+        // insertion dans la table
+        $this->db->insert('spt_comment', $data);
+        return $this->db->insert_id();
+    }
+
+    public function get_match_comments($idMatch,$page=1,$idCommentMin=0) {
+        $sql = "SELECT sc.id,sc.`id_user`, sc.`comment`, sc.`register_date`, s.full_name, s.url_profil_pic, s.id_account_user
+                FROM `spt_comment` sc
+                JOIN subscriber s
+                ON sc.id_user = s.id_user
+                WHERE sc.id_match = ?
+                AND sc.id > ?
+                ORDER BY sc.register_date DESC 
+                LIMIT ?,10";
+        $page_start = (((int)$page)-1)*10;
+        $args = array($idMatch,$idCommentMin,$page_start);
+
+        $query = $this->db->query($sql,$args);
+        $results = $query->result();
+        $comments = array();
+        foreach ($results as $result)
+        {
+            $row = array();
+            $row['id'] = $result->id;
+            $row['id_user'] = $result->id_user;
+            $row['id_account_user'] = $result->id_account_user;
+            $row['comment'] = $result->comment;
+            $row['register_date'] = $result->register_date;
+            $row['full_name'] = $result->full_name;
+            $row['url_profil_pic'] = $result->url_profil_pic;
+
+            array_push($comments,$row);
+        }
+
+        return $comments;
+    }
+
+    public function get_match_video($idMatch) {
+        $sql = "SELECT smv.`youtube_video_id`
+                FROM `spt_match_video` smv
+                WHERE smv.id_match = ?
+                ORDER BY smv.register_date DESC ";
+        $args = array($idMatch);
+
+        $query = $this->db->query($sql,$args);
+        $results = $query->result();
+        $video = array();
+        foreach ($results as $result)
+        {
+            $row = array();
+            $row['youtube_video'] = $result->youtube_video_id;
+            $youtube_details = $this->Video_model->get_toutube_video_details($row['youtube_video']);
+            $row['title'] = $youtube_details['title'];
+            $row['channelTitle'] = $youtube_details['channelTitle'];
+            $row['thumbnails'] = $youtube_details['thumbnails'];
+            array_push($video,$row);
+            break;
+        }
+
+        return $video;
+    }
+
+    public function get_latest_results($idCompetition,$idEdition=0,$page=0) {
+        $timezone = $this->session->timezone;
+        //si l edition n est pas specifie on prend la derniere edition
+        if($idEdition<=0) {
+            $idEdition = $this->Edition_model->get_latest_competition_edition($idCompetition);
+        }
+        $sql = "SELECT sm.id, sta.id as teamAId, stb.id as teamBId, sta.title as teamA, stb.title as teamB, sta.url_logo as teamA_logo, stb.url_logo as teamB_logo,
+                (SELECT COUNT(*) FROM `spt_match_action` WHERE (type = 1 OR type = 2) AND id_team = sta.id AND id_match = sm.id) as teamA_goal,
+                (SELECT COUNT(*) FROM `spt_match_action` WHERE (type = 1 OR type = 2) AND id_team = stb.id AND id_match = sm.id) as teamB_goal,
+                sta.title_small as teamA_small, stb.title_small as teamB_small, CONVERT_TZ(sm.match_date,@@session.time_zone,?) as match_date, sm.status,sm.id_edition_stage,
+                sm.team_a_penalty, sm.team_b_penalty,
+                (SELECT stg.id_stage_group 
+                FROM `spt_team_group` stg
+                JOIN spt_stage_group ssg
+                ON stg.`id_stage_group` = ssg.id
+                WHERE ssg.id_edition_stage = sm.id_edition_stage
+                AND stg.id_team = teamAId) as idGroupA,
+                (SELECT stg.id_stage_group 
+                FROM `spt_team_group` stg
+                JOIN spt_stage_group ssg
+                ON stg.`id_stage_group` = ssg.id
+                WHERE ssg.id_edition_stage = sm.id_edition_stage
+                AND stg.id_team = teamBId) as idGroupB
+                FROM spt_match sm
+                JOIN spt_team sta 
+                ON sm.id_team_a = sta.id
+                JOIN spt_team stb
+                ON sm.id_team_b = stb.id
+                JOIN spt_edition_stage ses 
+                ON ses.id = sm.id_edition_stage
+                JOIN spt_competition_edition sce 
+                ON sce.id = ses.id_edition
+                WHERE (sm.status = 3)
+                AND ses.id_edition = ?
+                ORDER BY sm.match_date DESC
+                 ";
+
+        if($page <= 0) {
+            $sql .= "
+                    LIMIT 5";
+            $args = array($timezone,$idEdition);
+        }
+        else {
+            $page_start = (((int)$page)-1)*10;
+            $args = array($timezone,$idEdition,$page_start);
+            $sql .= "
+                     LIMIT ?,10";
+        }
+        $query = $this->db->query($sql,$args);
+        $results = $query->result();
+        $matchs = array();
+        foreach ($results as $result)
+        {
+            $row = array();
+            $row['id'] = $result->id;
+            $row['teamAId'] = $result->teamAId;
+            $row['teamBId'] = $result->teamBId;
+            $row['teamA_small'] = $result->teamA_small;
+            $row['teamB_small'] = $result->teamB_small;
+            $row['teamA'] = $this->lang->line($row['teamA_small']);
+            $row['teamB'] = $this->lang->line($row['teamB_small']);
+            $row['teamA_logo'] = $result->teamA_logo;
+            $row['teamB_logo'] = $result->teamB_logo;
+            $row['teamA_goal'] = $result->teamA_goal;
+            $row['teamB_goal'] = $result->teamB_goal;
+            $row['team_a_penalty'] = $result->team_a_penalty;
+            $row['team_b_penalty'] = $result->team_b_penalty;
+            $row['match_date'] = $result->match_date;
+            $row['status'] = $result->status;
+            $row['id_edition_stage'] = $result->id_edition_stage;
+            $row['idGroupA'] = (int)$result->idGroupA;
+            $row['idGroupB'] = (int)$result->idGroupB;
+
+            //on change l affichage de la date du match par rapport au status
+            $row['match_date'] = $this->getMatchDate($row['id'],$row['status'],$row['match_date']);
+
+            array_push($matchs,$row);
+        }
+
+        return $matchs;
+    }
+
+    //get all matchs of a team in a group
+    public function get_matchs_group_teams($idTeam,$idEditionStage) {
+        $timezone = $this->session->timezone;
+        $sql = "SELECT sm.id, sta.id as teamAId, stb.id as teamBId, sta.title as teamA, stb.title as teamB, sta.url_logo as teamA_logo, stb.url_logo as teamB_logo,
+                (SELECT COUNT(*) FROM `spt_match_action` WHERE (type = 1 OR type = 2) AND id_team = sta.id AND id_match = sm.id) as teamA_goal,
+                (SELECT COUNT(*) FROM `spt_match_action` WHERE (type = 1 OR type = 2) AND id_team = stb.id AND id_match = sm.id) as teamB_goal,
+                sta.title_small as teamA_small, stb.title_small as teamB_small, CONVERT_TZ(sm.match_date,@@session.time_zone,?) as match_date, sm.status,sm.id_edition_stage,
+                sm.team_a_penalty, sm.team_b_penalty,
+                (SELECT stg.id_stage_group 
+                FROM `spt_team_group` stg
+                JOIN spt_stage_group ssg
+                ON stg.`id_stage_group` = ssg.id
+                WHERE ssg.id_edition_stage = sm.id_edition_stage
+                AND stg.id_team = teamAId) as idGroupA,
+                (SELECT stg.id_stage_group 
+                FROM `spt_team_group` stg
+                JOIN spt_stage_group ssg
+                ON stg.`id_stage_group` = ssg.id
+                WHERE ssg.id_edition_stage = sm.id_edition_stage
+                AND stg.id_team = teamBId) as idGroupB
+                FROM spt_match sm
+                JOIN spt_team sta 
+                ON sm.id_team_a = sta.id
+                JOIN spt_team stb
+                ON sm.id_team_b = stb.id
+                JOIN spt_edition_stage ses 
+                ON ses.id = sm.id_edition_stage
+                JOIN spt_competition_edition sce 
+                ON sce.id = ses.id_edition
+                WHERE (sm.status = 3 OR sm.status = 1)
+                AND (sta.id = ? OR stb.id = ?)
+                AND ses.id = ?
+                ORDER BY sm.match_date DESC";
+        $args = array($timezone,$idTeam,$idTeam,$idEditionStage);
+        $query = $this->db->query($sql,$args);
+        $results = $query->result();
+        $matchs = array();
+        foreach ($results as $result)
+        {
+            $row = array();
+            $row['id'] = $result->id;
+            $row['teamAId'] = $result->teamAId;
+            $row['teamBId'] = $result->teamBId;
+            $row['teamA_small'] = $result->teamA_small;
+            $row['teamB_small'] = $result->teamB_small;
+            $row['teamA'] = $this->lang->line($row['teamA_small']);
+            $row['teamB'] = $this->lang->line($row['teamB_small']);
+            $row['teamA_logo'] = $result->teamA_logo;
+            $row['teamB_logo'] = $result->teamB_logo;
+            $row['teamA_goal'] = $result->teamA_goal;
+            $row['teamB_goal'] = $result->teamB_goal;
+            $row['team_a_penalty'] = $result->team_a_penalty;
+            $row['team_b_penalty'] = $result->team_b_penalty;
+            $row['match_date'] = $result->match_date;
+            $row['status'] = $result->status;
+            $row['id_edition_stage'] = $result->id_edition_stage;
+            $row['idGroupA'] = (int)$result->idGroupA;
+            $row['idGroupB'] = (int)$result->idGroupB;
+
+            //on change l affichage de la date du match par rapport au status
+            $row['match_date'] = $this->getMatchDate($row['id'],$row['status'],$row['match_date']);
+
+            array_push($matchs,$row);
+        }
+        return $matchs;
+    }
+
+    public function get_match($idMatch) {
+        $timezone = $this->session->timezone;
+        $sql = "SELECT sm.id, sta.id as teamAId, stb.id as teamBId, sta.title as teamA, stb.title as teamB, sta.url_logo as teamA_logo, stb.url_logo as teamB_logo,
+                (SELECT COUNT(*) FROM `spt_match_action` WHERE (type = 1 OR type = 2) AND id_team = sta.id AND id_match = sm.id) as teamA_goal,
+                (SELECT COUNT(*) FROM `spt_match_action` WHERE (type = 1 OR type = 2) AND id_team = stb.id AND id_match = sm.id) as teamB_goal,
+                sta.title_small as teamA_small, stb.title_small as teamB_small, CONVERT_TZ(sm.match_date,@@session.time_zone,?) as match_date, sm.status,sm.id_edition_stage,
+                sm.team_a_penalty, sm.team_b_penalty,
+                (SELECT stg.id_stage_group 
+                FROM `spt_team_group` stg
+                JOIN spt_stage_group ssg
+                ON stg.`id_stage_group` = ssg.id
+                WHERE ssg.id_edition_stage = sm.id_edition_stage
+                AND stg.id_team = teamAId) as idGroupA,
+                (SELECT stg.id_stage_group 
+                FROM `spt_team_group` stg
+                JOIN spt_stage_group ssg
+                ON stg.`id_stage_group` = ssg.id
+                WHERE ssg.id_edition_stage = sm.id_edition_stage
+                AND stg.id_team = teamBId) as idGroupB
+                FROM spt_match sm
+                JOIN spt_team sta 
+                ON sm.id_team_a = sta.id
+                JOIN spt_team stb
+                ON sm.id_team_b = stb.id
+                JOIN spt_edition_stage ses 
+                ON ses.id = sm.id_edition_stage
+                JOIN spt_competition_edition sce 
+                ON sce.id = ses.id_edition
+                WHERE sm.id = ?";
+        $args = array($timezone,$idMatch);
+        $query = $this->db->query($sql,$args);
+        $results = $query->result();
+        $matchs = array();
+        foreach ($results as $result)
+        {
+            $row = array();
+            $row['id'] = $result->id;
+            $row['teamAId'] = $result->teamAId;
+            $row['teamBId'] = $result->teamBId;
+            $row['teamA_small'] = $result->teamA_small;
+            $row['teamB_small'] = $result->teamB_small;
+            $row['teamA'] = $this->lang->line($row['teamA_small']);
+            $row['teamB'] = $this->lang->line($row['teamB_small']);
+            $row['teamA_logo'] = $result->teamA_logo;
+            $row['teamB_logo'] = $result->teamB_logo;
+            $row['teamA_goal'] = $result->teamA_goal;
+            $row['teamB_goal'] = $result->teamB_goal;
+            $row['team_a_penalty'] = $result->team_a_penalty;
+            $row['team_b_penalty'] = $result->team_b_penalty;
+            $row['match_date'] = $result->match_date;
+            $row['status'] = $result->status;
+            $row['id_edition_stage'] = $result->id_edition_stage;
+            $row['idGroupA'] = (int)$result->idGroupA;
+            $row['idGroupB'] = (int)$result->idGroupB;
+
+            //on change l affichage de la date du match par rapport au status
+            $row['match_date'] = $this->getMatchDate($row['id'],$row['status'],$row['match_date']);
+
+            array_push($matchs,$row);
+        }
+        return $matchs;
+    }
+
+    private function getMatchDate($idMatch,$status,$date)
+    {
+        $date = strtotime($date);
+        $result = $date;
+        //le match n a paa encore commence
+        if($status == 0)
+        {
+            //si la date du match c est la date d aujourd hui
+            if(date($this->lang->line('date')) == date($this->lang->line('date'),$date))
+            {
+                $result = date($this->lang->line('time'),$date);
+            }
+            else
+            {
+                $result = date($this->lang->line('date_time'),$date);
+            }
+        }
+        //le match est en cour
+        elseif ($status == 1)
+        {
+            $start_date = new DateTime($this->get_match_status_date($idMatch,$status));
+            $since_start = $start_date->diff(new DateTime($this->get_current_time()));
+            $result = ($since_start->h*60)+$since_start->i . '\'';
+        }
+        //la mi temps
+        elseif ($status == 2)
+        {
+            $result = $this->lang->line('half_time');
+        }
+        //fin du match
+        elseif ($status == 3)
+        {
+            $result = $this->lang->line('full_time');
+        }
+        //prolongation
+        elseif ($status == 4)
+        {
+            $result = $this->lang->line('extra_time');
+        }
+        //seance de tirs au but
+        elseif ($status == 5)
+        {
+            $result = $this->lang->line('penalty_kick');
+        }
+        //match reporte
+        elseif ($status == 6)
+        {
+            $result = $this->lang->line('to_define');
+        }
+        //debut 2eme mi temps
+        elseif ($status == 7)
+        {
+            $start_date = new DateTime($this->get_match_status_date($idMatch,$status));
+            $since_start = $start_date->diff(new DateTime($this->get_current_time()));
+            $result = (45 + ($since_start->h*60) + $since_start->i) . '\'';
+        }
+        //debut prolongation
+        elseif ($status == 8)
+        {
+            $start_date = new DateTime($this->get_match_status_date($idMatch,$status));
+            $since_start = $start_date->diff(new DateTime($this->get_current_time()));
+            $result = (90 + ($since_start->h*60) + $since_start->i) . '\'';
+        }
+        //mi temp prolongation
+        elseif ($status == 9)
+        {
+            $result = $this->lang->line('half_time');
+        }
+        //debut 2eme prolongation
+        elseif ($status == 10)
+        {
+            $start_date = new DateTime($this->get_match_status_date($idMatch,$status));
+            $since_start = $start_date->diff(new DateTime($this->get_current_time()));
+            $result = (105 + ($since_start->h*60) + $since_start->i) . '\'';
+        }
+        //fin prolongation
+        elseif ($status == 11)
+        {
+            $result = $this->lang->line('full_time');
+        }
+
+        return $result;
+    }
+
+    private function get_match_status_date($idMatch,$status) {
+        $sql = "SELECT register_date
+                FROM `spt_match_step`
+                WHERE id_match = ?
+                AND status = ? ";
+        $args = array($idMatch,$status);
+
+        $query = $this->db->query($sql,$args);
+        $results = $query->result();
+        $date = date('Y-m-d H:i');
+        foreach ($results as $result)
+        {
+            $date= $result->register_date;
+            break;
+        }
+
+        return $date;
+    }
+
+    private function get_current_time()
+    {
+        $sql = "SELECT NOW() as time FROM DUAL";
+        $args = array();
+
+        $query = $this->db->query($sql,$args);
+        $results = $query->result();
+        $date = date('Y-m-d H:i:s');
+        foreach ($results as $result)
+        {
+            $date= $result->time;
+            break;
+        }
+
+        return $date;
+    }
+}

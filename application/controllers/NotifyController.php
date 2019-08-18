@@ -34,6 +34,8 @@ class NotifyController extends CI_Controller
                 $_SESSION['lang'] = 'en';
             }
 
+            $_SESSION['version'] = $this->input->post('version');
+
             $_SESSION['timezone'] = $this->input->post('timezone');
             if(!isset($_SESSION['timezone']))
             {

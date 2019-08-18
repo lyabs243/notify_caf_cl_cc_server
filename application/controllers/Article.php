@@ -38,7 +38,7 @@ class Article extends NotifyController {
         $result['latest_news'] = $this->Article_model->get_latest_news($idUser,0,0,$forFeed);
         $result['top_story'] = $this->Article_model->get_latest_news($idUser,0,0,$forFeed);
 
-        $news['ALL_IN_ONE_NEWS'] = $result;
+        $news['NOTIFYGROUP'] = $result;
 
         header( 'Content-Type: application/json; charset=utf-8' );
         echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
@@ -47,7 +47,7 @@ class Article extends NotifyController {
 
     public function latest_news($idUser,$page=0,$idWebsite=0,$forFeed=0)
     {
-        $news['ALL_IN_ONE_NEWS'] = $this->Article_model->get_latest_news($idUser,$page,$idWebsite,$forFeed);
+        $news['NOTIFYGROUP'] = $this->Article_model->get_latest_news($idUser,$page,$idWebsite,$forFeed);
 
         header( 'Content-Type: application/json; charset=utf-8' );
         echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
@@ -57,7 +57,7 @@ class Article extends NotifyController {
     public function notify_news($idUser,$forFeed=0,$idCompetition=0)
     {
         $lang = $access = $this->session->lang;
-        $news['ALL_IN_ONE_NEWS'] = $this->Article_model->notify_news($idUser,$forFeed,$idCompetition,$lang);
+        $news['NOTIFYGROUP'] = $this->Article_model->notify_news($idUser,$forFeed,$idCompetition,$lang);
 
         header( 'Content-Type: application/json; charset=utf-8' );
         echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
@@ -66,7 +66,7 @@ class Article extends NotifyController {
 
     public function search_news($idUser,$searchText,$page,$forFeed=0)
     {
-        $news['ALL_IN_ONE_NEWS'] = $this->Article_model->search_news($idUser,$searchText,$page,$forFeed);
+        $news['NOTIFYGROUP'] = $this->Article_model->search_news($idUser,$searchText,$page,$forFeed);
 
         header( 'Content-Type: application/json; charset=utf-8' );
         echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);

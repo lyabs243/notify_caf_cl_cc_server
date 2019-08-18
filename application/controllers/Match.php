@@ -54,7 +54,7 @@ class Match extends NotifyController {
             $this->form_validation->set_error_delimiters('<br /><div class="errorMessage"><span style="font-size: 150%;">&uarr;&nbsp;</span>', '</div>');
 
             if ($this->form_validation->run() == FALSE) {
-                $news['ALL_IN_ONE_NEWS'][] = array('success' => '0');
+                $news['NOTIFYGROUP'][] = array('success' => '0');
             } else {*/
                 // succès de la validation : récupération des données passées en post
 
@@ -67,17 +67,17 @@ class Match extends NotifyController {
                     $idComposition = $this->Match_model->add_match_composition($idMatch);
                     $this->Match_model->add_composition_details($idMatch,$idComposition,$idTeam,$players);
 
-                    $news['ALL_IN_ONE_NEWS'][] = array('success' => '1');
+                    $news['NOTIFYGROUP'][] = array('success' => '1');
                 }
                 else
                 {
-                    $news['ALL_IN_ONE_NEWS'][] = array('success' => '0');
+                    $news['NOTIFYGROUP'][] = array('success' => '0');
                 }
             //}
         }
         else
         {
-            $news['ALL_IN_ONE_NEWS'][] = array('success' => '0');
+            $news['NOTIFYGROUP'][] = array('success' => '0');
         }
 
         header( 'Content-Type: application/json; charset=utf-8' );
@@ -108,9 +108,9 @@ class Match extends NotifyController {
         }
 
         if($result)
-            $news['ALL_IN_ONE_NEWS'][] = array('success' => '1');
+            $news['NOTIFYGROUP'][] = array('success' => '1');
         else
-            $news['ALL_IN_ONE_NEWS'][] = array('success' => '0');
+            $news['NOTIFYGROUP'][] = array('success' => '0');
         header( 'Content-Type: application/json; charset=utf-8' );
         echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
         die;
@@ -118,7 +118,7 @@ class Match extends NotifyController {
 
     public function actions($idMatch,$actionMin=0)
     {
-        $news['ALL_IN_ONE_NEWS'] = $this->Match_model->get_match_actions($idMatch,$actionMin);
+        $news['NOTIFYGROUP'] = $this->Match_model->get_match_actions($idMatch,$actionMin);
 
         header( 'Content-Type: application/json; charset=utf-8' );
         echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
@@ -127,7 +127,7 @@ class Match extends NotifyController {
 
     public function lineup($idMatch,$idTeam)
     {
-        $news['ALL_IN_ONE_NEWS'] = $this->Match_model->get_match_lineup($idMatch,$idTeam);
+        $news['NOTIFYGROUP'] = $this->Match_model->get_match_lineup($idMatch,$idTeam);
 
         header( 'Content-Type: application/json; charset=utf-8' );
         echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
@@ -136,7 +136,7 @@ class Match extends NotifyController {
 
     public function team_players($idCompetition,$idEdition=0,$idTeam)
     {
-        $news['ALL_IN_ONE_NEWS'] = $this->Match_model->get_team_players($idCompetition,$idEdition,$idTeam);
+        $news['NOTIFYGROUP'] = $this->Match_model->get_team_players($idCompetition,$idEdition,$idTeam);
 
         header( 'Content-Type: application/json; charset=utf-8' );
         echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
@@ -145,7 +145,7 @@ class Match extends NotifyController {
 
     public function comments($idMatch,$page=1,$idCommentMin=0)
     {
-        $news['ALL_IN_ONE_NEWS'] = $this->Match_model->get_match_comments($idMatch,$page,$idCommentMin);
+        $news['NOTIFYGROUP'] = $this->Match_model->get_match_comments($idMatch,$page,$idCommentMin);
 
         header( 'Content-Type: application/json; charset=utf-8' );
         echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
@@ -154,7 +154,7 @@ class Match extends NotifyController {
 
     public function video($idMatch)
     {
-        $news['ALL_IN_ONE_NEWS'] = $this->Match_model->get_match_video($idMatch);
+        $news['NOTIFYGROUP'] = $this->Match_model->get_match_video($idMatch);
 
         header( 'Content-Type: application/json; charset=utf-8' );
         echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
@@ -163,7 +163,7 @@ class Match extends NotifyController {
 
     public function get($idMatch)
     {
-        $news['ALL_IN_ONE_NEWS'] = $this->Match_model->get_match($idMatch);
+        $news['NOTIFYGROUP'] = $this->Match_model->get_match($idMatch);
 
         header( 'Content-Type: application/json; charset=utf-8' );
         echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
@@ -182,7 +182,7 @@ class Match extends NotifyController {
             $this->form_validation->set_error_delimiters('<br /><div class="errorMessage"><span style="font-size: 150%;">&uarr;&nbsp;</span>', '</div>');
 
             if ($this->form_validation->run() == FALSE) {
-                $news['ALL_IN_ONE_NEWS'][] = array('success' => '0');
+                $news['NOTIFYGROUP'][] = array('success' => '0');
             } else {
                 // succès de la validation : récupération des données passées en post
 
@@ -193,15 +193,15 @@ class Match extends NotifyController {
                 $result = $this->Match_model->add_comment($data);
 
                 if($result > 0)
-                    $news['ALL_IN_ONE_NEWS'][] = array('success' => '1');
+                    $news['NOTIFYGROUP'][] = array('success' => '1');
                 else
-                    $news['ALL_IN_ONE_NEWS'][] = array('success' => '0');
+                    $news['NOTIFYGROUP'][] = array('success' => '0');
             }
 
         }
         else
         {
-            $news['ALL_IN_ONE_NEWS'][] = array('success' => '0');
+            $news['NOTIFYGROUP'][] = array('success' => '0');
         }
 
         header( 'Content-Type: application/json; charset=utf-8' );
@@ -223,9 +223,9 @@ class Match extends NotifyController {
             $result = $this->Match_model->add_action($data);
 
             if($result > 0)
-                $news['ALL_IN_ONE_NEWS'][] = array('success' => '1');
+                $news['NOTIFYGROUP'][] = array('success' => '1');
             else
-                $news['ALL_IN_ONE_NEWS'][] = array('success' => '0');
+                $news['NOTIFYGROUP'][] = array('success' => '0');
 
         header( 'Content-Type: application/json; charset=utf-8' );
         echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);

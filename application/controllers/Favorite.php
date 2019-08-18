@@ -28,7 +28,7 @@ class Favorite extends NotifyController
 
     public function all($idUser)
     {
-        $news['ALL_IN_ONE_NEWS'] = $this->Favorite_model->get_favorites($idUser);
+        $news['NOTIFYGROUP'] = $this->Favorite_model->get_favorites($idUser);
 
         header( 'Content-Type: application/json; charset=utf-8' );
         echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
@@ -37,7 +37,7 @@ class Favorite extends NotifyController
 
     public function all_feeds($idUser)
     {
-        $news['ALL_IN_ONE_NEWS'] = $this->Favorite_model->get_favorites_feed($idUser);
+        $news['NOTIFYGROUP'] = $this->Favorite_model->get_favorites_feed($idUser);
 
         header( 'Content-Type: application/json; charset=utf-8' );
         echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
@@ -92,11 +92,11 @@ class Favorite extends NotifyController
                 $data['id_website'] = $website['id'];
                 $this->Favorite_model->add_favorite($data);
             }
-            $news['ALL_IN_ONE_NEWS'][] = array('success' => '1','url_adress' => $website['url_adress']);
+            $news['NOTIFYGROUP'][] = array('success' => '1','url_adress' => $website['url_adress']);
         }
         else
         {
-            $news['ALL_IN_ONE_NEWS'][] = array('success' => '0','url_adress' => '');
+            $news['NOTIFYGROUP'][] = array('success' => '0','url_adress' => '');
         }
 
         header( 'Content-Type: application/json; charset=utf-8' );
@@ -115,7 +115,7 @@ class Favorite extends NotifyController
             $this->form_validation->set_error_delimiters('<br /><div class="errorMessage"><span style="font-size: 150%;">&uarr;&nbsp;</span>', '</div>');
 
             if ($this->form_validation->run() == FALSE) {
-                $news['ALL_IN_ONE_NEWS'][] = array('success' => '0');
+                $news['NOTIFYGROUP'][] = array('success' => '0');
             } else {
                 $urlAdress = $this->input->post('url_adress');
                 $data_feed['id_user'] = $idUser;
@@ -158,12 +158,12 @@ class Favorite extends NotifyController
                 if (!$this->Favorite_model->is_favorite_feed_exist($data_feed['id_feed'], $idUser)) {
                     $this->Favorite_model->add_favorite_feed($data_feed);
                 }
-                $news['ALL_IN_ONE_NEWS'][] = array('success' => '1', 'url_adress' => $urlAdress);
+                $news['NOTIFYGROUP'][] = array('success' => '1', 'url_adress' => $urlAdress);
             }
         }
         else
         {
-            $news['ALL_IN_ONE_NEWS'][] = array('success' => '0','url_adress' => '');
+            $news['NOTIFYGROUP'][] = array('success' => '0','url_adress' => '');
         }
 
         header( 'Content-Type: application/json; charset=utf-8' );
@@ -181,7 +181,7 @@ class Favorite extends NotifyController
             $this->form_validation->set_error_delimiters('<br /><div class="errorMessage"><span style="font-size: 150%;">&uarr;&nbsp;</span>', '</div>');
 
             if ($this->form_validation->run() == FALSE) {
-                $news['ALL_IN_ONE_NEWS'][] = array('success' => '0');
+                $news['NOTIFYGROUP'][] = array('success' => '0');
             } else {
                 // succès de la validation : récupération des données passées en post
 
@@ -197,17 +197,17 @@ class Favorite extends NotifyController
                             $this->Favorite_model->add_favorite($data);
                         }
                     }
-                    $news['ALL_IN_ONE_NEWS'][] = array('success' => '1');
+                    $news['NOTIFYGROUP'][] = array('success' => '1');
                 }
                 else
                 {
-                    $news['ALL_IN_ONE_NEWS'][] = array('success' => '0');
+                    $news['NOTIFYGROUP'][] = array('success' => '0');
                 }
             }
         }
         else
         {
-            $news['ALL_IN_ONE_NEWS'][] = array('success' => '0');
+            $news['NOTIFYGROUP'][] = array('success' => '0');
         }
 
         header( 'Content-Type: application/json; charset=utf-8' );
@@ -225,7 +225,7 @@ class Favorite extends NotifyController
             $this->form_validation->set_error_delimiters('<br /><div class="errorMessage"><span style="font-size: 150%;">&uarr;&nbsp;</span>', '</div>');
 
             if ($this->form_validation->run() == FALSE) {
-                $news['ALL_IN_ONE_NEWS'][] = array('success' => '0');
+                $news['NOTIFYGROUP'][] = array('success' => '0');
             } else {
                 // succès de la validation : récupération des données passées en post
 
@@ -237,17 +237,17 @@ class Favorite extends NotifyController
                     }
                     $this->Favorite_model->delete_favorite($idUser, $listFav);
 
-                    $news['ALL_IN_ONE_NEWS'][] = array('success' => '1');
+                    $news['NOTIFYGROUP'][] = array('success' => '1');
                 }
                 else
                 {
-                    $news['ALL_IN_ONE_NEWS'][] = array('success' => '0');
+                    $news['NOTIFYGROUP'][] = array('success' => '0');
                 }
             }
         }
         else
         {
-            $news['ALL_IN_ONE_NEWS'][] = array('success' => '0');
+            $news['NOTIFYGROUP'][] = array('success' => '0');
         }
 
         header( 'Content-Type: application/json; charset=utf-8' );
@@ -265,7 +265,7 @@ class Favorite extends NotifyController
             $this->form_validation->set_error_delimiters('<br /><div class="errorMessage"><span style="font-size: 150%;">&uarr;&nbsp;</span>', '</div>');
 
             if ($this->form_validation->run() == FALSE) {
-                $news['ALL_IN_ONE_NEWS'][] = array('success' => '0');
+                $news['NOTIFYGROUP'][] = array('success' => '0');
             } else {
                 // succès de la validation : récupération des données passées en post
 
@@ -277,17 +277,17 @@ class Favorite extends NotifyController
                     }
                     $this->Favorite_model->delete_favorite_feed($idUser, $listFav);
 
-                    $news['ALL_IN_ONE_NEWS'][] = array('success' => '1');
+                    $news['NOTIFYGROUP'][] = array('success' => '1');
                 }
                 else
                 {
-                    $news['ALL_IN_ONE_NEWS'][] = array('success' => '0');
+                    $news['NOTIFYGROUP'][] = array('success' => '0');
                 }
             }
         }
         else
         {
-            $news['ALL_IN_ONE_NEWS'][] = array('success' => '0');
+            $news['NOTIFYGROUP'][] = array('success' => '0');
         }
 
         header( 'Content-Type: application/json; charset=utf-8' );
@@ -304,7 +304,7 @@ class Favorite extends NotifyController
 
         $this->form_validation->set_error_delimiters('<br /><div class="errorMessage"><span style="font-size: 150%;">&uarr;&nbsp;</span>', '</div>');
         if ($this->form_validation->run() == FALSE) {
-            $news['ALL_IN_ONE_NEWS'][] = array('success' => '0');
+            $news['NOTIFYGROUP'][] = array('success' => '0');
         } else {
             $start = $this->input->post('start');
             $length = $this->input->post('length');
@@ -315,11 +315,11 @@ class Favorite extends NotifyController
                 foreach ($categories as $key => $value) {
                     $listCat[] = (int)$value['id'];
                 }
-                $news['ALL_IN_ONE_NEWS'] = $this->Favorite_model->get_suggest_favs($id_country,$listCat,$start, $length);
+                $news['NOTIFYGROUP'] = $this->Favorite_model->get_suggest_favs($id_country,$listCat,$start, $length);
             }
             else
             {
-                $news['ALL_IN_ONE_NEWS'][] = array('success' => '0');
+                $news['NOTIFYGROUP'][] = array('success' => '0');
             }
         }
 
@@ -336,12 +336,12 @@ class Favorite extends NotifyController
 
         $this->form_validation->set_error_delimiters('<br /><div class="errorMessage"><span style="font-size: 150%;">&uarr;&nbsp;</span>', '</div>');
         if ($this->form_validation->run() == FALSE) {
-            $news['ALL_IN_ONE_NEWS'][] = array('success' => '0');
+            $news['NOTIFYGROUP'][] = array('success' => '0');
         } else {
             $start = $this->input->post('start');
             $length = $this->input->post('length');
 
-            $news['ALL_IN_ONE_NEWS'] = $this->Favorite_model->get_countries($start, $length);
+            $news['NOTIFYGROUP'] = $this->Favorite_model->get_countries($start, $length);
         }
 
         header( 'Content-Type: application/json; charset=utf-8' );
@@ -357,12 +357,12 @@ class Favorite extends NotifyController
 
         $this->form_validation->set_error_delimiters('<br /><div class="errorMessage"><span style="font-size: 150%;">&uarr;&nbsp;</span>', '</div>');
         if ($this->form_validation->run() == FALSE) {
-            $news['ALL_IN_ONE_NEWS'][] = array('success' => '0');
+            $news['NOTIFYGROUP'][] = array('success' => '0');
         } else {
             $start = $this->input->post('start');
             $length = $this->input->post('length');
 
-            $news['ALL_IN_ONE_NEWS'] = $this->Favorite_model->get_categories($id_country,$start, $length);
+            $news['NOTIFYGROUP'] = $this->Favorite_model->get_categories($id_country,$start, $length);
         }
 
         header( 'Content-Type: application/json; charset=utf-8' );

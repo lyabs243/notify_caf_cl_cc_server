@@ -59,7 +59,7 @@ class Competition extends NotifyController {
         $result['current_match'] = $this->Match_model->get_current_matchs($idCompetition,0,0);
         $result['latest_result'] = $this->Match_model->get_latest_results($idCompetition,0,0);
 
-        $news['ALL_IN_ONE_NEWS'] = $result;
+        $news['NOTIFYGROUP'] = $result;
 
         //update user params
         $data['ip'] = $_SERVER['REMOTE_ADDR'];
@@ -73,7 +73,7 @@ class Competition extends NotifyController {
 
     public function scorers_edition($idCompetition,$page)
     {
-        $news['ALL_IN_ONE_NEWS'] = $this->Edition_model->get_scorers($idCompetition,$page);
+        $news['NOTIFYGROUP'] = $this->Edition_model->get_scorers($idCompetition,$page);
 
         header( 'Content-Type: application/json; charset=utf-8' );
         echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
@@ -82,7 +82,7 @@ class Competition extends NotifyController {
 
     public function groups($idEditionStage)
     {
-        $news['ALL_IN_ONE_NEWS'] = $this->Edition_model->get_groups($idEditionStage);
+        $news['NOTIFYGROUP'] = $this->Edition_model->get_groups($idEditionStage);
 
         header( 'Content-Type: application/json; charset=utf-8' );
         echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
@@ -150,7 +150,7 @@ class Competition extends NotifyController {
             $team['goal_difference'] = $goal_difference;
             array_push($result,$team);
         }
-        $rows['ALL_IN_ONE_NEWS'] = $this->Edition_model->order_group_teams($result);
+        $rows['NOTIFYGROUP'] = $this->Edition_model->order_group_teams($result);
 
         header( 'Content-Type: application/json; charset=utf-8' );
         echo json_encode($rows,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
@@ -159,7 +159,7 @@ class Competition extends NotifyController {
 
     public function stages_edition($idCompetition)
     {
-        $news['ALL_IN_ONE_NEWS'] = $this->Edition_model->get_edition_stages($idCompetition);
+        $news['NOTIFYGROUP'] = $this->Edition_model->get_edition_stages($idCompetition);
 
         header( 'Content-Type: application/json; charset=utf-8' );
         echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
@@ -169,7 +169,7 @@ class Competition extends NotifyController {
     public function news($idUser,$idCompetition,$page)
     {
         $lang = $access = $this->session->lang;
-        $news['ALL_IN_ONE_NEWS'] = $this->Article_model->get_latest_news($idUser,$page,0,0,$idCompetition,$lang);
+        $news['NOTIFYGROUP'] = $this->Article_model->get_latest_news($idUser,$page,0,0,$idCompetition,$lang);
 
         header( 'Content-Type: application/json; charset=utf-8' );
         echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
@@ -178,7 +178,7 @@ class Competition extends NotifyController {
 
     public function notify_match_step($idUser,$idCompetition)
     {
-        $news['ALL_IN_ONE_NEWS'] = $this->Edition_model->notify_match_step($idUser,$idCompetition);
+        $news['NOTIFYGROUP'] = $this->Edition_model->notify_match_step($idUser,$idCompetition);
 
         header( 'Content-Type: application/json; charset=utf-8' );
         echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
@@ -187,7 +187,7 @@ class Competition extends NotifyController {
 
     public function current_matchs($idCompetition,$page)
     {
-        $news['ALL_IN_ONE_NEWS'] = $this->Match_model->get_current_matchs($idCompetition,0,$page);
+        $news['NOTIFYGROUP'] = $this->Match_model->get_current_matchs($idCompetition,0,$page);
 
         header( 'Content-Type: application/json; charset=utf-8' );
         echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
@@ -196,7 +196,7 @@ class Competition extends NotifyController {
 
     public function stage_fixture($idCompetition,$idEditionStage,$idGroup,$page)
     {
-        $news['ALL_IN_ONE_NEWS'] = $this->Match_model->get_group_matchs_fixtures($idCompetition,$idEditionStage,$idGroup,$page);
+        $news['NOTIFYGROUP'] = $this->Match_model->get_group_matchs_fixtures($idCompetition,$idEditionStage,$idGroup,$page);
 
         header( 'Content-Type: application/json; charset=utf-8' );
         echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
@@ -205,7 +205,7 @@ class Competition extends NotifyController {
 
     public function stage_result($idCompetition,$idEditionStage,$idGroup,$page)
     {
-        $news['ALL_IN_ONE_NEWS'] = $this->Match_model->get_group_matchs_results($idCompetition,$idEditionStage,$idGroup,$page);
+        $news['NOTIFYGROUP'] = $this->Match_model->get_group_matchs_results($idCompetition,$idEditionStage,$idGroup,$page);
 
         header( 'Content-Type: application/json; charset=utf-8' );
         echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
@@ -214,7 +214,7 @@ class Competition extends NotifyController {
 
     public function latest_results($idCompetition,$page)
     {
-        $news['ALL_IN_ONE_NEWS'] = $this->Match_model->get_latest_results($idCompetition,0,$page);
+        $news['NOTIFYGROUP'] = $this->Match_model->get_latest_results($idCompetition,0,$page);
 
         header( 'Content-Type: application/json; charset=utf-8' );
         echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);

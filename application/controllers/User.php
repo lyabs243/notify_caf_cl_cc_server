@@ -14,7 +14,6 @@ class User extends NotifyController
     {
         // this is your constructor
         parent::__construct();
-        $this->load->library('ion_auth');
         $this->load->model('User_model');
     }
 
@@ -37,7 +36,7 @@ class User extends NotifyController
     public function add()
     {
         $id = $this->User_model->add_user();
-        $news['ALL_IN_ONE_NEWS'][] = array
+        $news['NOTIFYGROUP'][] = array
         (
             'success' => '1',
             'id' => $id,

@@ -30,7 +30,7 @@ class Subscriber extends NotifyController
         $this->form_validation->set_error_delimiters('<br /><div class="errorMessage"><span style="font-size: 150%;">&uarr;&nbsp;</span>', '</div>');
 
         if ($this->form_validation->run() == FALSE) {
-            $news['ALL_IN_ONE_NEWS'][] = array('success' => '0');
+            $news['NOTIFYGROUP'][] = array('success' => '0');
         } else {
             // succès de la validation : récupération des données passées en post
 
@@ -44,7 +44,7 @@ class Subscriber extends NotifyController
             $data['id_account'] = $this->input->post('id_account_type');
 
             $result = $this->Subscriber_model->add_subscriber($data);
-            $news['ALL_IN_ONE_NEWS'][] = $result;
+            $news['NOTIFYGROUP'][] = $result;
         }
 
         header( 'Content-Type: application/json; charset=utf-8' );

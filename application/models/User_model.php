@@ -44,7 +44,16 @@ class User_model extends CI_Model
     function  is_ip_user_exist($ip_user)
     {
         $id = 0;
-        $query = $this->db->query('SELECT * FROM user WHERE ip = ?',array($ip_user));
+        $query = $this->db->query(
+            'SELECT * FROM user u
+              WHERE ip = ? 
+              AND id NOT IN 
+              (
+                SELECT id_user FROM subscriber WHERE id_user = u.id
+              )
+              ORDER BY id ASC
+              LIMIT 1'
+            ,array($ip_user));
         $results = $query->result();
         foreach ($results as $result)
         {

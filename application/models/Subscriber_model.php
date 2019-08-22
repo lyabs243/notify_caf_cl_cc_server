@@ -20,6 +20,8 @@ class Subscriber_model extends CI_Model
             $subscriber = $data;
             $data['id_user'] = $this->User_model->add_user(true);
             $this->db->insert('subscriber', $data);
+            $subscriber['active'] = 1;
+            $subscriber['type'] = 1;
             $subscriber['success'] = 1;
             $subscriber['username'] = '';
             $subscriber['id'] = $data['id_user'];
@@ -32,7 +34,8 @@ class Subscriber_model extends CI_Model
             {
                 $subscriber['full_name'] = $data['full_name'];
                 $subscriber['url_profil_pic'] = $data['url_profil_pic'];
-
+                $subscriber['active'] = $data['active'];
+                $subscriber['type'] = $data['type'];
                 $newData['full_name'] = $subscriber['full_name'];
                 $newData['url_profil_pic'] = $subscriber['url_profil_pic'];
                 $this->update_subscriber($subscriber['id_subscriber'],$newData);
@@ -66,6 +69,8 @@ class Subscriber_model extends CI_Model
             $data['full_name'] = $result->full_name;
             $data['url_profil_pic'] = $result->url_profil_pic;
             $data['id_account_type'] = $result->id_account;
+            $data['type'] = $result->type;
+            $data['active'] = $result->active;
         }
         return $data;
     }

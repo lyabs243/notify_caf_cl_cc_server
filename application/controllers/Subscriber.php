@@ -31,6 +31,19 @@ class Subscriber extends NotifyController
         die;
     }
 
+    public function unblock($idAdmin,$idSubscriber){
+        $result = $this->Subscriber_model->unblock_subscriber($idAdmin,$idSubscriber);
+        if($result){
+            $news['NOTIFYGROUP'][] = array('success' => '1');
+        }
+        else{
+            $news['NOTIFYGROUP'][] = array('success' => '0');
+        }
+        header( 'Content-Type: application/json; charset=utf-8' );
+        echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        die;
+    }
+
     public function add()
     {
         $this->load->library('form_validation');

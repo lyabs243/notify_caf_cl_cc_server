@@ -84,6 +84,16 @@ class Subscriber_model extends CI_Model
         return 0;
     }
 
+    public function unblock_subscriber($idAdmin,$id) {
+        $admin = $this->get($idAdmin);
+        //on ne modifie que si c'est un admin qui le fait
+        if($admin['type'] == 2){
+            $data['active'] = 1;
+            return $this->update_subscriber($id, $data);
+        }
+        return 0;
+    }
+
     //verifie si le subscriber existe deja en renvoyant ses coordonneessss
     function  is_subscriber_exist($id_account_user,$id_account_type)
     {

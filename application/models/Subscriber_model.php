@@ -51,6 +51,39 @@ class Subscriber_model extends CI_Model
         return $this->db->update('subscriber', $data);
     }
 
+    //get all data of specific subscriber
+    public function get($id){
+        $data = null;
+        $query = $this->db->query('SELECT * FROM subscriber WHERE id = ?'
+            ,array($id));
+        $results = $query->result();
+        foreach ($results as $result)
+        {
+            $data = array();
+            $data['success'] = 1;
+            $data['id'] = $result->id_user;
+            $data['id_subscriber'] = $result->id;
+            $data['id_account_user'] = $result->id_account_user;
+            $data['username'] = $result->username;
+            $data['full_name'] = $result->full_name;
+            $data['url_profil_pic'] = $result->url_profil_pic;
+            $data['id_account_type'] = $result->id_account;
+            $data['type'] = $result->type;
+            $data['active'] = $result->active;
+        }
+        return $data;
+    }
+
+    public function block_subscriber($idAdmin,$id) {
+        $admin = $this->get($idAdmin);
+        //on ne modifie que si c'est un admin qui le fait
+        if($admin['type'] == 2){
+            $data['active'] = 0;
+            return $this->update_subscriber($id, $data);
+        }
+        return 0;
+    }
+
     //verifie si le subscriber existe deja en renvoyant ses coordonneessss
     function  is_subscriber_exist($id_account_user,$id_account_type)
     {

@@ -18,14 +18,14 @@ class NotifyController extends CI_Controller
         $this->load->library('form_validation');
         $nData = array();
         // définition des règles de validation
-        $this->form_validation->set_rules('access_api', '« Api »', 'required');
+        //$this->form_validation->set_rules('access_api', '« Api »', 'required');
 
         // ajout du style pour les messages d'erreur
-        $this->form_validation->set_error_delimiters('<br /><div class="errorMessage"><span style="font-size: 150%;">&uarr;&nbsp;</span>', '</div>');
+        //$this->form_validation->set_error_delimiters('<br /><div class="errorMessage"><span style="font-size: 150%;">&uarr;&nbsp;</span>', '</div>');
 
-        if ($this->form_validation->run() == FALSE) {
+        /*if ($this->form_validation->run() == FALSE) {
             header('location: http://notifygroup.org');
-        } else {
+        } else {*/
             // succès de la validation : récupération des données passées en post
             $access = $this->input->post('access_api');
             $_SESSION['lang'] = $this->input->post('lang');
@@ -42,10 +42,10 @@ class NotifyController extends CI_Controller
                 $_SESSION['timezone'] = '+00:00';
             }
 
-            if(!$this->User_model->can_access_api($access))
+            /*if(!$this->User_model->can_access_api($access))
             {
                 header('location: http://notifygroup.org');
-            }
-        }
+            }*/
+        //}
     }
 }

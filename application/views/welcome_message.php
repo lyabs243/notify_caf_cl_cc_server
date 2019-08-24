@@ -106,7 +106,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <input type="submit" value="OK">
         </form>
 		<code>Test Add subscriber</code>
-        <form method="post" action="subscriber/add">
+        <form method="post" action="http://notifygroup.org/notifyapp/api/index.php/subscriber/add">
             <input name="full_name" placeholder="Full name" type="text">
             <input name="url_profil_pic" placeholder="Url Profile Pic" type="text">
             <input name="id_account" placeholder="id account" type="text">

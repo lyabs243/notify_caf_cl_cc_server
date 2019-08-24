@@ -34,8 +34,6 @@ class Subscriber_model extends CI_Model
             {
                 $subscriber['full_name'] = $data['full_name'];
                 $subscriber['url_profil_pic'] = $data['url_profil_pic'];
-                $subscriber['active'] = $data['active'];
-                $subscriber['type'] = $data['type'];
                 $newData['full_name'] = $subscriber['full_name'];
                 $newData['url_profil_pic'] = $subscriber['url_profil_pic'];
                 $this->update_subscriber($subscriber['id_subscriber'],$newData);

@@ -113,6 +113,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <input name="id_account_type" placeholder="id account type" type="text">
             <input type="submit" value="OK">
         </form>
+        <code>Test Add subscriber appeal</code>
+        <form method="post" action="http://notifygroup.org/notifyapp/api/index.php/subscriberAppeal/add/3">
+            <input name="is_policie_violate" placeholder="is policie violate" type="text">
+            <input name="is_policie_respect_after_activation" placeholder="is policie respect after activation" type="text">
+            <input name="appeal_description" placeholder="appeal description" type="text">
+            <input type="submit" value="OK">
+        </form>
 
         <code>Test get countries</code>
         <form method="post" action="favorite/country/6">

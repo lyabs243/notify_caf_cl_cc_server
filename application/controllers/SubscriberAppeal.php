@@ -14,6 +14,7 @@ class SubscriberAppeal extends NotifyController
     {
         // this is your constructor
         parent::__construct();
+        $this->load->model('Subscriber_model');
         $this->load->model('Subscriber_appeal_model');
     }
 
@@ -58,6 +59,27 @@ class SubscriberAppeal extends NotifyController
         $result = $this->Subscriber_appeal_model->update_appeal($id,$data);
         if($result)
             $news['NOTIFYGROUP'][] = array('success' => '1');
+        else
+            $news['NOTIFYGROUP'][] = array('success' => '0');
+
+        header( 'Content-Type: application/json; charset=utf-8' );
+        echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        die;
+    }
+
+    public function approve_appeal($id,$id_admin,$id_subscriber){
+        $data['approve'] = 1;
+        $result = $this->Subscriber_appeal_model->update_appeal($id,$data);
+        if($result){
+            //unclock subscriber
+            $result1 = $this->Subscriber_model->unblock_subscriber($id_admin,$id_subscriber);
+            if($result1){
+                $news['NOTIFYGROUP'][] = array('success' => '1');
+            }
+            else{
+                $news['NOTIFYGROUP'][] = array('success' => '0');
+            }
+        }
         else
             $news['NOTIFYGROUP'][] = array('success' => '0');
 

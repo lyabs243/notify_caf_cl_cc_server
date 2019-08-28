@@ -72,10 +72,17 @@ class Subscriber_model extends CI_Model
         return $data;
     }
 
+    public function  is_admin($id){
+        $admin = $this->get($id);
+        if($admin['type'] == 2) {
+            return true;
+        }
+        return false;
+    }
+
     public function block_subscriber($idAdmin,$id) {
-        $admin = $this->get($idAdmin);
         //on ne modifie que si c'est un admin qui le fait
-        if($admin['type'] == 2){
+        if($this->is_admin($idAdmin)){
             $data['active'] = 0;
             return $this->update_subscriber($id, $data);
         }
@@ -83,9 +90,8 @@ class Subscriber_model extends CI_Model
     }
 
     public function unblock_subscriber($idAdmin,$id) {
-        $admin = $this->get($idAdmin);
         //on ne modifie que si c'est un admin qui le fait
-        if($admin['type'] == 2){
+        if($this->is_admin($idAdmin)){
             $data['active'] = 1;
             return $this->update_subscriber($id, $data);
         }

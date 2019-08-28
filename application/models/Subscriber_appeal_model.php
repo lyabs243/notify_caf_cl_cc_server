@@ -51,4 +51,10 @@ class Subscriber_appeal_model extends CI_Model
         return $appeals;
     }
 
+    public function update_appeal($id, $data) {
+        // modification dans la table
+        $this->db->where('id', $id);
+        return $this->db->update('subscriber_appeal', $data);
+    }
+
 }

@@ -52,4 +52,17 @@ class SubscriberAppeal extends NotifyController
         echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
         die;
     }
+
+    public function desactivate_appeal($id){
+        $data['active'] = 0;
+        $result = $this->Subscriber_appeal_model->update_appeal($id,$data);
+        if($result)
+            $news['NOTIFYGROUP'][] = array('success' => '1');
+        else
+            $news['NOTIFYGROUP'][] = array('success' => '0');
+
+        header( 'Content-Type: application/json; charset=utf-8' );
+        echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        die;
+    }
 }

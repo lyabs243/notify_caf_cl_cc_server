@@ -34,4 +34,22 @@ class SubscriberAppeal extends NotifyController
         echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
         die;
     }
+
+    public function get_appeals($page=1)
+    {
+        $page = (int)$page;
+        $data = $this->Subscriber_appeal_model->get_appeals($page);
+
+        if(!count($data)){
+            $news['NOTIFYGROUP'][] = array('success' => '0');
+        }
+        else{
+
+            $news['NOTIFYGROUP'][] = array('success' => '1','data' => $data);
+        }
+
+        header( 'Content-Type: application/json; charset=utf-8' );
+        echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        die;
+    }
 }

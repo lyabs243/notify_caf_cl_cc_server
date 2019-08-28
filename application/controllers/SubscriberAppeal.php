@@ -54,13 +54,18 @@ class SubscriberAppeal extends NotifyController
         die;
     }
 
-    public function desactivate_appeal($id){
-        $data['active'] = 0;
-        $result = $this->Subscriber_appeal_model->update_appeal($id,$data);
-        if($result)
-            $news['NOTIFYGROUP'][] = array('success' => '1');
-        else
+    public function desactivate_appeal($id,$id_admin){
+        if($this->Subscriber_model->is_admin($id_admin)) {
+            $data['active'] = 0;
+            $result = $this->Subscriber_appeal_model->update_appeal($id, $data);
+            if ($result)
+                $news['NOTIFYGROUP'][] = array('success' => '1');
+            else
+                $news['NOTIFYGROUP'][] = array('success' => '0');
+        }
+        else{
             $news['NOTIFYGROUP'][] = array('success' => '0');
+        }
 
         header( 'Content-Type: application/json; charset=utf-8' );
         echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
@@ -69,19 +74,22 @@ class SubscriberAppeal extends NotifyController
 
     public function approve_appeal($id,$id_admin,$id_subscriber){
         $data['approve'] = 1;
-        $result = $this->Subscriber_appeal_model->update_appeal($id,$data);
-        if($result){
-            //unclock subscriber
-            $result1 = $this->Subscriber_model->unblock_subscriber($id_admin,$id_subscriber);
-            if($result1){
-                $news['NOTIFYGROUP'][] = array('success' => '1');
-            }
-            else{
+        if($this->Subscriber_model->is_admin($id_admin)) {
+            $result = $this->Subscriber_appeal_model->update_appeal($id, $data);
+            if ($result) {
+                //unclock subscriber
+                $result1 = $this->Subscriber_model->unblock_subscriber($id_admin, $id_subscriber);
+                if ($result1) {
+                    $news['NOTIFYGROUP'][] = array('success' => '1');
+                } else {
+                    $news['NOTIFYGROUP'][] = array('success' => '0');
+                }
+            } else
                 $news['NOTIFYGROUP'][] = array('success' => '0');
-            }
         }
-        else
+        else{
             $news['NOTIFYGROUP'][] = array('success' => '0');
+        }
 
         header( 'Content-Type: application/json; charset=utf-8' );
         echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);

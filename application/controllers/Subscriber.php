@@ -44,6 +44,15 @@ class Subscriber extends NotifyController
         die;
     }
 
+    public function get($id)
+    {
+        $result = $this->Subscriber_model->get($id);
+        $news['NOTIFYGROUP'][] = $result;
+        header( 'Content-Type: application/json; charset=utf-8' );
+        echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        die;
+    }
+
     public function add()
     {
         $this->load->library('form_validation');

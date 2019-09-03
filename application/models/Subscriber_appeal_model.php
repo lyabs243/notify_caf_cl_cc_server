@@ -21,10 +21,12 @@ class Subscriber_appeal_model extends CI_Model
 
     //get non aprove and actives appeals of subscribers
     public function get_appeals($page){
+        $timezone = $this->session->timezone;
         $page_start = (((int)$page)-1)*10;
         $appeals = array();
         $query = $this->db->query('
-            SELECT sa.`id`, sa.`id_subscriber`, sa.`is_policie_violate`, sa.`is_policie_respect_after_activation`, sa.`appeal_description`, sa.`active`, `approve`, sa.`register_date`,s.full_name
+            SELECT sa.`id`, sa.`id_subscriber`, sa.`is_policie_violate`, sa.`is_policie_respect_after_activation`, sa.`appeal_description`,
+             sa.`active`, `approve`, CONVERT_TZ(sa.`register_date`,@@session.time_zone,?) as register_date,s.full_name
             FROM `subscriber_appeal` sa
             JOIN subscriber s
             ON sa.id_subscriber = s.id
@@ -32,7 +34,7 @@ class Subscriber_appeal_model extends CI_Model
             AND sa.approve = 0
             ORDER BY register_date ASC
             LIMIT ?,10'
-            ,array($page_start));
+            ,array($timezone,$page_start));
         $results = $query->result();
         foreach ($results as $result)
         {

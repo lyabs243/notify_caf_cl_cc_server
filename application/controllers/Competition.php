@@ -81,6 +81,15 @@ class Competition extends NotifyController {
         die;
     }
 
+    public function get_all($page=1)
+    {
+        $news['NOTIFYGROUP'] = $this->Competition_model->get_competitions($page);
+
+        header( 'Content-Type: application/json; charset=utf-8' );
+        echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        die;
+    }
+
     public function scorers_edition($idCompetition,$page)
     {
         $news['NOTIFYGROUP'] = $this->Edition_model->get_scorers($idCompetition,$page);

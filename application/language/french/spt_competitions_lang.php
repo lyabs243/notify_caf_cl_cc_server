@@ -10,4 +10,6 @@ $lang =
     array
     (
         'AFCON' => 'Coupe d\'Afrique des Nations',
+        'CAF CL' => 'Ligue des Champions de la CAF',
+        'CAF CC' => 'Coupe de la Confederation',
     );

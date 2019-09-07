@@ -27,13 +27,14 @@ class Competition extends NotifyController {
         $this->load->model('User_model');
         $this->load->model('Edition_model');
         $this->load->model('Match_model');
+        $this->load->model('Competition_model');
 
         $lang = $access = $this->session->lang;
         $language = 'english';
         if($lang == 'fr')
             $language = 'french';
 
-        $this->lang->load(array('spt_match_status','spt_teams_lang','date_format'),
+        $this->lang->load(array('spt_competitions'),
             $language);
     }
 
@@ -65,6 +66,15 @@ class Competition extends NotifyController {
         $data['ip'] = $_SERVER['REMOTE_ADDR'];
         $data['last_connexion'] = date("Y-m-d H:i:s");
         $this->User_model->update_user($idUser,$data);
+
+        header( 'Content-Type: application/json; charset=utf-8' );
+        echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        die;
+    }
+
+    public function get($idCompetition)
+    {
+        $news['NOTIFYGROUP'] = $this->Competition_model->get_competition($idCompetition);
 
         header( 'Content-Type: application/json; charset=utf-8' );
         echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);

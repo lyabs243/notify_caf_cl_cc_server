@@ -21,7 +21,7 @@ class Competition_model extends CI_Model
         $args = array($timezone,$id);
         $query = $this->db->query($sql,$args);
         $results = $query->result();
-        $matchs = array();
+        $competitions = array();
         foreach ($results as $result)
         {
             $row = array();
@@ -32,9 +32,9 @@ class Competition_model extends CI_Model
             $row['trophy_icon_url'] = $result->trophy_icon_url;
             $row['register_date'] = $result->register_date;
 
-            array_push($matchs,$row);
+            array_push($competitions,$row);
         }
-        return $matchs;
+        return $competitions;
     }
 
     public function get_competitions($page=1) {
@@ -47,7 +47,7 @@ class Competition_model extends CI_Model
         $args = array($timezone,$page_start);
         $query = $this->db->query($sql,$args);
         $results = $query->result();
-        $matchs = array();
+        $competitions = array();
         foreach ($results as $result)
         {
             $row = array();
@@ -58,8 +58,8 @@ class Competition_model extends CI_Model
             $row['trophy_icon_url'] = $result->trophy_icon_url;
             $row['register_date'] = $result->register_date;
 
-            array_push($matchs,$row);
+            array_push($competitions,$row);
         }
-        return $matchs;
+        return $competitions;
     }
 }

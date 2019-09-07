@@ -74,7 +74,14 @@ class Competition extends NotifyController {
 
     public function get($idCompetition)
     {
-        $result['NOTIFYGROUP'] = $this->Competition_model->get_competition($idCompetition);
+        $data = $this->Competition_model->get_competition($idCompetition);
+
+        if(count($data)){
+            $result['NOTIFYGROUP'][] = array('success' => '1','data' => $data);
+        }
+        else{
+            $result['NOTIFYGROUP'][] = array('success' => '0');
+        }
 
         header( 'Content-Type: application/json; charset=utf-8' );
         echo json_encode($result,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
@@ -83,7 +90,14 @@ class Competition extends NotifyController {
 
     public function get_all($page=1)
     {
-        $result['NOTIFYGROUP'] = $this->Competition_model->get_competitions($page);
+        $data = $this->Competition_model->get_competitions($page);
+
+        if(count($data)){
+            $result['NOTIFYGROUP'][] = array('success' => '1','data' => $data);
+        }
+        else{
+            $result['NOTIFYGROUP'][] = array('success' => '0');
+        }
 
         header( 'Content-Type: application/json; charset=utf-8' );
         echo json_encode($result,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);

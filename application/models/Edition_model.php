@@ -139,7 +139,8 @@ class Edition_model extends CI_Model
                 JOIN spt_competition sc
                 ON sce.id_competition = sc.id
                 WHERE ses.id_edition = ?
-                AND sc.id = ?";
+                AND sc.id = ?
+                ORDER BY ses.register_date DESC";
         $args = array($idEdition,$idCompetition);
         $query = $this->db->query($sql,$args);
         $results = $query->result();

@@ -162,7 +162,14 @@ class Edition_model extends CI_Model
 
             array_push($stages,$row);
         }
-        return $stages;
+        if(count($results) > 0){
+            $data['success'] = '1';
+            $data['data'] = $stages;
+        }
+        else{
+            $data['success'] = '0';
+        }
+        return $data;
     }
 
     public function get_groups($idEditionStage) {

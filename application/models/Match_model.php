@@ -83,13 +83,8 @@ class Match_model extends CI_Model
         return $name;
     }
 
-    public function get_current_matchs($idCompetition,$idEdition=0,$page=0) {
-        $timezone = $this->session->timezone;
-        //si l edition n est pas specifie on prend la derniere edition
-        if($idEdition<=0) {
-            $idEdition = $this->Edition_model->get_latest_competition_edition($idCompetition);
-        }
-        $sql = "SELECT sm.id, sta.id as teamAId, stb.id as teamBId, sta.title as teamA, stb.title as teamB, sta.url_logo as teamA_logo, stb.url_logo as teamB_logo,
+    private function get_query_match_header(){
+        return "SELECT sm.id, sta.id as teamAId, stb.id as teamBId, sta.title as teamA, stb.title as teamB, sta.url_logo as teamA_logo, stb.url_logo as teamB_logo,
                 (SELECT COUNT(*) FROM `spt_match_action` WHERE (type = 1 OR type = 2) AND id_team = sta.id AND id_match = sm.id) as teamA_goal,
                 (SELECT COUNT(*) FROM `spt_match_action` WHERE (type = 1 OR type = 2) AND id_team = stb.id AND id_match = sm.id) as teamB_goal,
                 sta.title_small as teamA_small, stb.title_small as teamB_small, CONVERT_TZ(sm.match_date,@@session.time_zone,?) as match_date, sm.status,sm.id_edition_stage,
@@ -114,7 +109,48 @@ class Match_model extends CI_Model
                 JOIN spt_edition_stage ses 
                 ON ses.id = sm.id_edition_stage
                 JOIN spt_competition_edition sce 
-                ON sce.id = ses.id_edition
+                ON sce.id = ses.id_edition";
+    }
+
+    private function get_match_array_from_result($results){
+        $matchs = array();
+        foreach ($results as $result)
+        {
+            $row = array();
+            $row['id'] = $result->id;
+            $row['teamAId'] = $result->teamAId;
+            $row['teamBId'] = $result->teamBId;
+            $row['teamA_small'] = $result->teamA_small;
+            $row['teamB_small'] = $result->teamB_small;
+            $row['teamA'] = $this->lang->line($row['teamA_small']);
+            $row['teamB'] = $this->lang->line($row['teamB_small']);
+            $row['teamA_logo'] = $result->teamA_logo;
+            $row['teamB_logo'] = $result->teamB_logo;
+            $row['teamA_goal'] = $result->teamA_goal;
+            $row['teamB_goal'] = $result->teamB_goal;
+            $row['team_a_penalty'] = $result->team_a_penalty;
+            $row['team_b_penalty'] = $result->team_b_penalty;
+            $row['match_date'] = $result->match_date;
+            $row['status'] = $result->status;
+            $row['id_edition_stage'] = $result->id_edition_stage;
+            $row['idGroupA'] = (int)$result->idGroupA;
+            $row['idGroupB'] = (int)$result->idGroupB;
+
+            //on change l affichage de la date du match par rapport au status
+            $row['match_date'] = $this->getMatchDate($row['id'],$row['status'],$row['match_date']);
+
+            array_push($matchs,$row);
+        }
+        return $matchs;
+    }
+
+    public function get_current_matchs($idCompetition,$idEdition=0,$page=0) {
+        $timezone = $this->session->timezone;
+        //si l edition n est pas specifie on prend la derniere edition
+        if($idEdition<=0) {
+            $idEdition = $this->Edition_model->get_latest_competition_edition($idCompetition);
+        }
+        $sql = $this->get_query_match_header() . "
                 WHERE (sm.status <> 6
                 AND sm.status <> 0
                 AND sm.status <> 11
@@ -136,34 +172,37 @@ class Match_model extends CI_Model
         }
         $query = $this->db->query($sql,$args);
         $results = $query->result();
-        $matchs = array();
-        foreach ($results as $result)
-        {
-            $row = array();
-            $row['id'] = $result->id;
-            $row['teamAId'] = $result->teamAId;
-            $row['teamBId'] = $result->teamBId;
-            $row['teamA_small'] = $result->teamA_small;
-            $row['teamB_small'] = $result->teamB_small;
-            $row['teamA'] = $this->lang->line($row['teamA_small']);
-            $row['teamB'] = $this->lang->line($row['teamB_small']);
-            $row['teamA_logo'] = $result->teamA_logo;
-            $row['teamB_logo'] = $result->teamB_logo;
-            $row['teamA_goal'] = $result->teamA_goal;
-            $row['teamB_goal'] = $result->teamB_goal;
-            $row['team_a_penalty'] = $result->team_a_penalty;
-            $row['team_b_penalty'] = $result->team_b_penalty;
-            $row['match_date'] = $result->match_date;
-            $row['status'] = $result->status;
-            $row['id_edition_stage'] = $result->id_edition_stage;
-            $row['idGroupA'] = (int)$result->idGroupA;
-            $row['idGroupB'] = (int)$result->idGroupB;
+        $matchs = $this->get_match_array_from_result($results);
 
-            //on change l affichage de la date du match par rapport au status
-            $row['match_date'] = $this->getMatchDate($row['id'],$row['status'],$row['match_date']);
+        return $matchs;
+    }
 
-            array_push($matchs,$row);
+    public function get_latest_results($idCompetition,$idEdition=0,$page=0) {
+        $timezone = $this->session->timezone;
+        //si l edition n est pas specifie on prend la derniere edition
+        if($idEdition<=0) {
+            $idEdition = $this->Edition_model->get_latest_competition_edition($idCompetition);
         }
+        $sql = $this->get_query_match_header() . "
+                WHERE (sm.status = 3)
+                AND ses.id_edition = ?
+                ORDER BY sm.match_date DESC
+                 ";
+
+        if($page <= 0) {
+            $sql .= "
+                    LIMIT 2";
+            $args = array($timezone,$idEdition);
+        }
+        else {
+            $page_start = (((int)$page)-1)*10;
+            $args = array($timezone,$idEdition,$page_start);
+            $sql .= "
+                     LIMIT ?,10";
+        }
+        $query = $this->db->query($sql,$args);
+        $results = $query->result();
+        $matchs = $this->get_match_array_from_result($results);
 
         return $matchs;
     }
@@ -174,32 +213,7 @@ class Match_model extends CI_Model
         if($idEdition<=0) {
             $idEdition = $this->Edition_model->get_latest_competition_edition($idCompetition);
         }
-        $sql = "SELECT sm.id, sta.id as teamAId, stb.id as teamBId, sta.title as teamA, stb.title as teamB, sta.url_logo as teamA_logo, stb.url_logo as teamB_logo,
-                (SELECT COUNT(*) FROM `spt_match_action` WHERE (type = 1 OR type = 2) AND id_team = sta.id AND id_match = sm.id) as teamA_goal,
-                (SELECT COUNT(*) FROM `spt_match_action` WHERE (type = 1 OR type = 2) AND id_team = stb.id AND id_match = sm.id) as teamB_goal,
-                sta.title_small as teamA_small, stb.title_small as teamB_small, CONVERT_TZ(sm.match_date,@@session.time_zone,?) as match_date, sm.status,sm.id_edition_stage,
-                sm.team_a_penalty, sm.team_b_penalty,
-                (SELECT stg.id_stage_group 
-                FROM `spt_team_group` stg
-                JOIN spt_stage_group ssg
-                ON stg.`id_stage_group` = ssg.id
-                WHERE ssg.id_edition_stage = sm.id_edition_stage
-                AND stg.id_team = teamAId) as idGroupA,
-                (SELECT stg.id_stage_group 
-                FROM `spt_team_group` stg
-                JOIN spt_stage_group ssg
-                ON stg.`id_stage_group` = ssg.id
-                WHERE ssg.id_edition_stage = sm.id_edition_stage
-                AND stg.id_team = teamBId) as idGroupB
-                FROM spt_match sm
-                JOIN spt_team sta 
-                ON sm.id_team_a = sta.id
-                JOIN spt_team stb
-                ON sm.id_team_b = stb.id
-                JOIN spt_edition_stage ses 
-                ON ses.id = sm.id_edition_stage
-                JOIN spt_competition_edition sce 
-                ON sce.id = ses.id_edition
+        $sql = $this->get_query_match_header() . "
                 WHERE (sm.status = 0)
                 AND ses.id_edition = ?
                 ORDER BY sm.match_date ASC
@@ -218,67 +232,14 @@ class Match_model extends CI_Model
         }
         $query = $this->db->query($sql,$args);
         $results = $query->result();
-        $matchs = array();
-        foreach ($results as $result)
-        {
-            $row = array();
-            $row['id'] = $result->id;
-            $row['teamAId'] = $result->teamAId;
-            $row['teamBId'] = $result->teamBId;
-            $row['teamA_small'] = $result->teamA_small;
-            $row['teamB_small'] = $result->teamB_small;
-            $row['teamA'] = $this->lang->line($row['teamA_small']);
-            $row['teamB'] = $this->lang->line($row['teamB_small']);
-            $row['teamA_logo'] = $result->teamA_logo;
-            $row['teamB_logo'] = $result->teamB_logo;
-            $row['teamA_goal'] = $result->teamA_goal;
-            $row['teamB_goal'] = $result->teamB_goal;
-            $row['team_a_penalty'] = $result->team_a_penalty;
-            $row['team_b_penalty'] = $result->team_b_penalty;
-            $row['match_date'] = $result->match_date;
-            $row['status'] = $result->status;
-            $row['id_edition_stage'] = $result->id_edition_stage;
-            $row['idGroupA'] = (int)$result->idGroupA;
-            $row['idGroupB'] = (int)$result->idGroupB;
-
-            //on change l affichage de la date du match par rapport au status
-            $row['match_date'] = $this->getMatchDate($row['id'],$row['status'],$row['match_date']);
-
-            array_push($matchs,$row);
-        }
+        $matchs = $this->get_match_array_from_result($results);
 
         return $matchs;
     }
 
     public function get_group_matchs_fixtures($idCompetition,$idEditionStage,$idGroup=0,$page=0) {
         $timezone = $this->session->timezone;
-        $sql = "SELECT sm.id, sta.id as teamAId, stb.id as teamBId, sta.title as teamA, stb.title as teamB, sta.url_logo as teamA_logo, stb.url_logo as teamB_logo,
-                (SELECT COUNT(*) FROM `spt_match_action` WHERE (type = 1 OR type = 2) AND id_team = sta.id AND id_match = sm.id) as teamA_goal,
-                (SELECT COUNT(*) FROM `spt_match_action` WHERE (type = 1 OR type = 2) AND id_team = stb.id AND id_match = sm.id) as teamB_goal,
-                sta.title_small as teamA_small, stb.title_small as teamB_small, CONVERT_TZ(sm.match_date,@@session.time_zone,?) as match_date, sm.status,sm.id_edition_stage,
-                sm.team_a_penalty, sm.team_b_penalty,
-                (SELECT stg.id_stage_group 
-                FROM `spt_team_group` stg
-                JOIN spt_stage_group ssg
-                ON stg.`id_stage_group` = ssg.id
-                WHERE ssg.id_edition_stage = sm.id_edition_stage
-                AND stg.id_team = teamAId) as idGroupA,
-                (SELECT stg.id_stage_group 
-                FROM `spt_team_group` stg
-                JOIN spt_stage_group ssg
-                ON stg.`id_stage_group` = ssg.id
-                WHERE ssg.id_edition_stage = sm.id_edition_stage
-                AND stg.id_team = teamBId) as idGroupB
-                FROM spt_match sm
-                JOIN spt_team sta 
-                ON sm.id_team_a = sta.id
-                JOIN spt_team stb
-                ON sm.id_team_b = stb.id
-                JOIN spt_edition_stage ses 
-                ON ses.id = sm.id_edition_stage
-                JOIN spt_competition_edition sce 
-                ON sce.id = ses.id_edition
-                 ";
+        $sql = $this->get_query_match_header();
 
         $page_start = (((int)$page)-1)*10;
         if($idGroup > 0)
@@ -301,67 +262,14 @@ class Match_model extends CI_Model
                      LIMIT ?,10 ";
         $query = $this->db->query($sql,$args);
         $results = $query->result();
-        $matchs = array();
-        foreach ($results as $result)
-        {
-            $row = array();
-            $row['id'] = $result->id;
-            $row['teamAId'] = $result->teamAId;
-            $row['teamBId'] = $result->teamBId;
-            $row['teamA_small'] = $result->teamA_small;
-            $row['teamB_small'] = $result->teamB_small;
-            $row['teamA'] = $this->lang->line($row['teamA_small']);
-            $row['teamB'] = $this->lang->line($row['teamB_small']);
-            $row['teamA_logo'] = $result->teamA_logo;
-            $row['teamB_logo'] = $result->teamB_logo;
-            $row['teamA_goal'] = $result->teamA_goal;
-            $row['teamB_goal'] = $result->teamB_goal;
-            $row['team_a_penalty'] = $result->team_a_penalty;
-            $row['team_b_penalty'] = $result->team_b_penalty;
-            $row['match_date'] = $result->match_date;
-            $row['status'] = $result->status;
-            $row['id_edition_stage'] = $result->id_edition_stage;
-            $row['idGroupA'] = (int)$result->idGroupA;
-            $row['idGroupB'] = (int)$result->idGroupB;
-
-            //on change l affichage de la date du match par rapport au status
-            $row['match_date'] = $this->getMatchDate($row['id'],$row['status'],$row['match_date']);
-
-            array_push($matchs,$row);
-        }
+        $matchs = $this->get_match_array_from_result($results);
 
         return $matchs;
     }
 
     public function get_group_matchs_results($idCompetition,$idEditionStage,$idGroup=0,$page=0) {
         $timezone = $this->session->timezone;
-        $sql = "SELECT sm.id, sta.id as teamAId, stb.id as teamBId, sta.title as teamA, stb.title as teamB, sta.url_logo as teamA_logo, stb.url_logo as teamB_logo,
-                (SELECT COUNT(*) FROM `spt_match_action` WHERE (type = 1 OR type = 2) AND id_team = sta.id AND id_match = sm.id) as teamA_goal,
-                (SELECT COUNT(*) FROM `spt_match_action` WHERE (type = 1 OR type = 2) AND id_team = stb.id AND id_match = sm.id) as teamB_goal,
-                sta.title_small as teamA_small, stb.title_small as teamB_small, CONVERT_TZ(sm.match_date,@@session.time_zone,?) as match_date, sm.status,sm.id_edition_stage,
-                sm.team_a_penalty, sm.team_b_penalty,
-                (SELECT stg.id_stage_group 
-                FROM `spt_team_group` stg
-                JOIN spt_stage_group ssg
-                ON stg.`id_stage_group` = ssg.id
-                WHERE ssg.id_edition_stage = sm.id_edition_stage
-                AND stg.id_team = teamAId) as idGroupA,
-                (SELECT stg.id_stage_group 
-                FROM `spt_team_group` stg
-                JOIN spt_stage_group ssg
-                ON stg.`id_stage_group` = ssg.id
-                WHERE ssg.id_edition_stage = sm.id_edition_stage
-                AND stg.id_team = teamBId) as idGroupB
-                FROM spt_match sm
-                JOIN spt_team sta 
-                ON sm.id_team_a = sta.id
-                JOIN spt_team stb
-                ON sm.id_team_b = stb.id
-                JOIN spt_edition_stage ses 
-                ON ses.id = sm.id_edition_stage
-                JOIN spt_competition_edition sce 
-                ON sce.id = ses.id_edition
-                 ";
+        $sql = $this->get_query_match_header();
 
         $page_start = (((int)$page)-1)*10;
 
@@ -385,34 +293,7 @@ class Match_model extends CI_Model
                      LIMIT ?,10 ";
         $query = $this->db->query($sql,$args);
         $results = $query->result();
-        $matchs = array();
-        foreach ($results as $result)
-        {
-            $row = array();
-            $row['id'] = $result->id;
-            $row['teamAId'] = $result->teamAId;
-            $row['teamBId'] = $result->teamBId;
-            $row['teamA_small'] = $result->teamA_small;
-            $row['teamB_small'] = $result->teamB_small;
-            $row['teamA'] = $this->lang->line($row['teamA_small']);
-            $row['teamB'] = $this->lang->line($row['teamB_small']);
-            $row['teamA_logo'] = $result->teamA_logo;
-            $row['teamB_logo'] = $result->teamB_logo;
-            $row['teamA_goal'] = $result->teamA_goal;
-            $row['teamB_goal'] = $result->teamB_goal;
-            $row['team_a_penalty'] = $result->team_a_penalty;
-            $row['team_b_penalty'] = $result->team_b_penalty;
-            $row['match_date'] = $result->match_date;
-            $row['status'] = $result->status;
-            $row['id_edition_stage'] = $result->id_edition_stage;
-            $row['idGroupA'] = (int)$result->idGroupA;
-            $row['idGroupB'] = (int)$result->idGroupB;
-
-            //on change l affichage de la date du match par rapport au status
-            $row['match_date'] = $this->getMatchDate($row['id'],$row['status'],$row['match_date']);
-
-            array_push($matchs,$row);
-        }
+        $matchs = $this->get_match_array_from_result($results);
 
         return $matchs;
     }
@@ -588,117 +469,10 @@ class Match_model extends CI_Model
         return $video;
     }
 
-    public function get_latest_results($idCompetition,$idEdition=0,$page=0) {
-        $timezone = $this->session->timezone;
-        //si l edition n est pas specifie on prend la derniere edition
-        if($idEdition<=0) {
-            $idEdition = $this->Edition_model->get_latest_competition_edition($idCompetition);
-        }
-        $sql = "SELECT sm.id, sta.id as teamAId, stb.id as teamBId, sta.title as teamA, stb.title as teamB, sta.url_logo as teamA_logo, stb.url_logo as teamB_logo,
-                (SELECT COUNT(*) FROM `spt_match_action` WHERE (type = 1 OR type = 2) AND id_team = sta.id AND id_match = sm.id) as teamA_goal,
-                (SELECT COUNT(*) FROM `spt_match_action` WHERE (type = 1 OR type = 2) AND id_team = stb.id AND id_match = sm.id) as teamB_goal,
-                sta.title_small as teamA_small, stb.title_small as teamB_small, CONVERT_TZ(sm.match_date,@@session.time_zone,?) as match_date, sm.status,sm.id_edition_stage,
-                sm.team_a_penalty, sm.team_b_penalty,
-                (SELECT stg.id_stage_group 
-                FROM `spt_team_group` stg
-                JOIN spt_stage_group ssg
-                ON stg.`id_stage_group` = ssg.id
-                WHERE ssg.id_edition_stage = sm.id_edition_stage
-                AND stg.id_team = teamAId) as idGroupA,
-                (SELECT stg.id_stage_group 
-                FROM `spt_team_group` stg
-                JOIN spt_stage_group ssg
-                ON stg.`id_stage_group` = ssg.id
-                WHERE ssg.id_edition_stage = sm.id_edition_stage
-                AND stg.id_team = teamBId) as idGroupB
-                FROM spt_match sm
-                JOIN spt_team sta 
-                ON sm.id_team_a = sta.id
-                JOIN spt_team stb
-                ON sm.id_team_b = stb.id
-                JOIN spt_edition_stage ses 
-                ON ses.id = sm.id_edition_stage
-                JOIN spt_competition_edition sce 
-                ON sce.id = ses.id_edition
-                WHERE (sm.status = 3)
-                AND ses.id_edition = ?
-                ORDER BY sm.match_date DESC
-                 ";
-
-        if($page <= 0) {
-            $sql .= "
-                    LIMIT 2";
-            $args = array($timezone,$idEdition);
-        }
-        else {
-            $page_start = (((int)$page)-1)*10;
-            $args = array($timezone,$idEdition,$page_start);
-            $sql .= "
-                     LIMIT ?,10";
-        }
-        $query = $this->db->query($sql,$args);
-        $results = $query->result();
-        $matchs = array();
-        foreach ($results as $result)
-        {
-            $row = array();
-            $row['id'] = $result->id;
-            $row['teamAId'] = $result->teamAId;
-            $row['teamBId'] = $result->teamBId;
-            $row['teamA_small'] = $result->teamA_small;
-            $row['teamB_small'] = $result->teamB_small;
-            $row['teamA'] = $this->lang->line($row['teamA_small']);
-            $row['teamB'] = $this->lang->line($row['teamB_small']);
-            $row['teamA_logo'] = $result->teamA_logo;
-            $row['teamB_logo'] = $result->teamB_logo;
-            $row['teamA_goal'] = $result->teamA_goal;
-            $row['teamB_goal'] = $result->teamB_goal;
-            $row['team_a_penalty'] = $result->team_a_penalty;
-            $row['team_b_penalty'] = $result->team_b_penalty;
-            $row['match_date'] = $result->match_date;
-            $row['status'] = $result->status;
-            $row['id_edition_stage'] = $result->id_edition_stage;
-            $row['idGroupA'] = (int)$result->idGroupA;
-            $row['idGroupB'] = (int)$result->idGroupB;
-
-            //on change l affichage de la date du match par rapport au status
-            $row['match_date'] = $this->getMatchDate($row['id'],$row['status'],$row['match_date']);
-
-            array_push($matchs,$row);
-        }
-
-        return $matchs;
-    }
-
     //get all matchs of a team in a group
     public function get_matchs_group_teams($idTeam,$idEditionStage) {
         $timezone = $this->session->timezone;
-        $sql = "SELECT sm.id, sta.id as teamAId, stb.id as teamBId, sta.title as teamA, stb.title as teamB, sta.url_logo as teamA_logo, stb.url_logo as teamB_logo,
-                (SELECT COUNT(*) FROM `spt_match_action` WHERE (type = 1 OR type = 2) AND id_team = sta.id AND id_match = sm.id) as teamA_goal,
-                (SELECT COUNT(*) FROM `spt_match_action` WHERE (type = 1 OR type = 2) AND id_team = stb.id AND id_match = sm.id) as teamB_goal,
-                sta.title_small as teamA_small, stb.title_small as teamB_small, CONVERT_TZ(sm.match_date,@@session.time_zone,?) as match_date, sm.status,sm.id_edition_stage,
-                sm.team_a_penalty, sm.team_b_penalty,
-                (SELECT stg.id_stage_group 
-                FROM `spt_team_group` stg
-                JOIN spt_stage_group ssg
-                ON stg.`id_stage_group` = ssg.id
-                WHERE ssg.id_edition_stage = sm.id_edition_stage
-                AND stg.id_team = teamAId) as idGroupA,
-                (SELECT stg.id_stage_group 
-                FROM `spt_team_group` stg
-                JOIN spt_stage_group ssg
-                ON stg.`id_stage_group` = ssg.id
-                WHERE ssg.id_edition_stage = sm.id_edition_stage
-                AND stg.id_team = teamBId) as idGroupB
-                FROM spt_match sm
-                JOIN spt_team sta 
-                ON sm.id_team_a = sta.id
-                JOIN spt_team stb
-                ON sm.id_team_b = stb.id
-                JOIN spt_edition_stage ses 
-                ON ses.id = sm.id_edition_stage
-                JOIN spt_competition_edition sce 
-                ON sce.id = ses.id_edition
+        $sql = $this->get_query_match_header() . "
                 WHERE (sm.status = 3 OR sm.status = 1)
                 AND (sta.id = ? OR stb.id = ?)
                 AND ses.id = ?
@@ -706,97 +480,18 @@ class Match_model extends CI_Model
         $args = array($timezone,$idTeam,$idTeam,$idEditionStage);
         $query = $this->db->query($sql,$args);
         $results = $query->result();
-        $matchs = array();
-        foreach ($results as $result)
-        {
-            $row = array();
-            $row['id'] = $result->id;
-            $row['teamAId'] = $result->teamAId;
-            $row['teamBId'] = $result->teamBId;
-            $row['teamA_small'] = $result->teamA_small;
-            $row['teamB_small'] = $result->teamB_small;
-            $row['teamA'] = $this->lang->line($row['teamA_small']);
-            $row['teamB'] = $this->lang->line($row['teamB_small']);
-            $row['teamA_logo'] = $result->teamA_logo;
-            $row['teamB_logo'] = $result->teamB_logo;
-            $row['teamA_goal'] = $result->teamA_goal;
-            $row['teamB_goal'] = $result->teamB_goal;
-            $row['team_a_penalty'] = $result->team_a_penalty;
-            $row['team_b_penalty'] = $result->team_b_penalty;
-            $row['match_date'] = $result->match_date;
-            $row['status'] = $result->status;
-            $row['id_edition_stage'] = $result->id_edition_stage;
-            $row['idGroupA'] = (int)$result->idGroupA;
-            $row['idGroupB'] = (int)$result->idGroupB;
-
-            //on change l affichage de la date du match par rapport au status
-            $row['match_date'] = $this->getMatchDate($row['id'],$row['status'],$row['match_date']);
-
-            array_push($matchs,$row);
-        }
+        $matchs = $this->get_match_array_from_result($results);
         return $matchs;
     }
 
     public function get_match($idMatch) {
         $timezone = $this->session->timezone;
-        $sql = "SELECT sm.id, sta.id as teamAId, stb.id as teamBId, sta.title as teamA, stb.title as teamB, sta.url_logo as teamA_logo, stb.url_logo as teamB_logo,
-                (SELECT COUNT(*) FROM `spt_match_action` WHERE (type = 1 OR type = 2) AND id_team = sta.id AND id_match = sm.id) as teamA_goal,
-                (SELECT COUNT(*) FROM `spt_match_action` WHERE (type = 1 OR type = 2) AND id_team = stb.id AND id_match = sm.id) as teamB_goal,
-                sta.title_small as teamA_small, stb.title_small as teamB_small, CONVERT_TZ(sm.match_date,@@session.time_zone,?) as match_date, sm.status,sm.id_edition_stage,
-                sm.team_a_penalty, sm.team_b_penalty,
-                (SELECT stg.id_stage_group 
-                FROM `spt_team_group` stg
-                JOIN spt_stage_group ssg
-                ON stg.`id_stage_group` = ssg.id
-                WHERE ssg.id_edition_stage = sm.id_edition_stage
-                AND stg.id_team = teamAId) as idGroupA,
-                (SELECT stg.id_stage_group 
-                FROM `spt_team_group` stg
-                JOIN spt_stage_group ssg
-                ON stg.`id_stage_group` = ssg.id
-                WHERE ssg.id_edition_stage = sm.id_edition_stage
-                AND stg.id_team = teamBId) as idGroupB
-                FROM spt_match sm
-                JOIN spt_team sta 
-                ON sm.id_team_a = sta.id
-                JOIN spt_team stb
-                ON sm.id_team_b = stb.id
-                JOIN spt_edition_stage ses 
-                ON ses.id = sm.id_edition_stage
-                JOIN spt_competition_edition sce 
-                ON sce.id = ses.id_edition
+        $sql = $this->get_query_match_header() . "
                 WHERE sm.id = ?";
         $args = array($timezone,$idMatch);
         $query = $this->db->query($sql,$args);
         $results = $query->result();
-        $matchs = array();
-        foreach ($results as $result)
-        {
-            $row = array();
-            $row['id'] = $result->id;
-            $row['teamAId'] = $result->teamAId;
-            $row['teamBId'] = $result->teamBId;
-            $row['teamA_small'] = $result->teamA_small;
-            $row['teamB_small'] = $result->teamB_small;
-            $row['teamA'] = $this->lang->line($row['teamA_small']);
-            $row['teamB'] = $this->lang->line($row['teamB_small']);
-            $row['teamA_logo'] = $result->teamA_logo;
-            $row['teamB_logo'] = $result->teamB_logo;
-            $row['teamA_goal'] = $result->teamA_goal;
-            $row['teamB_goal'] = $result->teamB_goal;
-            $row['team_a_penalty'] = $result->team_a_penalty;
-            $row['team_b_penalty'] = $result->team_b_penalty;
-            $row['match_date'] = $result->match_date;
-            $row['status'] = $result->status;
-            $row['id_edition_stage'] = $result->id_edition_stage;
-            $row['idGroupA'] = (int)$result->idGroupA;
-            $row['idGroupB'] = (int)$result->idGroupB;
-
-            //on change l affichage de la date du match par rapport au status
-            $row['match_date'] = $this->getMatchDate($row['id'],$row['status'],$row['match_date']);
-
-            array_push($matchs,$row);
-        }
+        $matchs = $this->get_match_array_from_result($results);
         return $matchs;
     }
 

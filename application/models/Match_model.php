@@ -88,7 +88,8 @@ class Match_model extends CI_Model
                 (SELECT COUNT(*) FROM `spt_match_action` WHERE (type = 1 OR type = 2) AND id_team = sta.id AND id_match = sm.id) as teamA_goal,
                 (SELECT COUNT(*) FROM `spt_match_action` WHERE (type = 1 OR type = 2) AND id_team = stb.id AND id_match = sm.id) as teamB_goal,
                 sta.title_small as teamA_small, stb.title_small as teamB_small, CONVERT_TZ(sm.match_date,@@session.time_zone,?) as match_date, sm.status,sm.id_edition_stage,
-                sm.team_a_penalty, sm.team_b_penalty,
+                sm.team_a_penalty, sm.team_b_penalty, sc.id as comp_id, sc.title as comp_title, sc.title_small as comp_title_small,
+                sc.description as comp_description, sc.trophy_icon_url as comp_trophy_icon_url, sc.category as comp_category, sc.register_date as comp_register_date,
                 (SELECT stg.id_stage_group 
                 FROM `spt_team_group` stg
                 JOIN spt_stage_group ssg
@@ -139,6 +140,13 @@ class Match_model extends CI_Model
             $row['id_edition_stage'] = $result->id_edition_stage;
             $row['idGroupA'] = (int)$result->idGroupA;
             $row['idGroupB'] = (int)$result->idGroupB;
+
+            $row['competition']['id'] = $result->comp_id;
+            $row['competition']['title_small'] = $result->comp_title_small;
+            $row['competition']['title'] = $this->lang->line($row['competition']['title_small']);;
+            $row['competition']['description'] = $result->comp_description;
+            $row['competition']['trophy_icon_url'] = $result->comp_trophy_icon_url;
+            $row['competition']['register_date'] = $result->comp_register_date;
 
             //on change l affichage de la date du match par rapport au status
             $row['match_date'] = $this->getMatchDate($row['id'],$row['status'],$row['match_date']);

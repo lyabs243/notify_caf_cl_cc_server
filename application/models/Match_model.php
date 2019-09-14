@@ -124,7 +124,7 @@ class Match_model extends CI_Model
 
         if($page <= 0) {
             $sql .= "
-                    LIMIT 5";
+                    LIMIT 2";
             $args = array($timezone,$idEdition);
         }
         else {
@@ -544,7 +544,7 @@ class Match_model extends CI_Model
 
         if($page <= 0) {
             $sql .= "
-                    LIMIT 5";
+                    LIMIT 2";
             $args = array($timezone,$idEdition);
         }
         else {

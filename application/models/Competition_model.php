@@ -14,7 +14,8 @@ class Competition_model extends CI_Model
 
     public function get_competition($id) {
         $timezone = $this->session->timezone;
-        $sql = "SELECT sc.`id`, sc.`title`,sc.title_small, sc.`description`, sc.`trophy_icon_url`, CONVERT_TZ(sc.`register_date`,@@session.time_zone,?) as register_date 
+        $sql = "SELECT sc.`id`, sc.`title`,sc.title_small, sc.`description`, sc.`trophy_icon_url`, sc.category,
+                CONVERT_TZ(sc.`register_date`,@@session.time_zone,?) as register_date 
                 FROM `spt_competition` sc
                 WHERE sc.id = ?
                 ORDER BY sc.id ASC";
@@ -30,6 +31,7 @@ class Competition_model extends CI_Model
             $row['title'] = $this->lang->line($row['title_small']);;
             $row['description'] = $result->description;
             $row['trophy_icon_url'] = $result->trophy_icon_url;
+            $row['category'] = $result->category;
             $row['register_date'] = $result->register_date;
 
             array_push($competitions,$row);
@@ -40,7 +42,8 @@ class Competition_model extends CI_Model
     public function get_competitions($category=0,$page=1) {
         $timezone = $this->session->timezone;
         $page_start = ((int)$page-1)*10;
-        $sql = "SELECT sc.`id`, sc.`title`,sc.title_small, sc.`description`, sc.`trophy_icon_url`, CONVERT_TZ(sc.`register_date`,@@session.time_zone,?) as register_date 
+        $sql = "SELECT sc.`id`, sc.`title`,sc.title_small, sc.`description`, sc.`trophy_icon_url`, sc.category,
+                CONVERT_TZ(sc.`register_date`,@@session.time_zone,?) as register_date 
                 FROM `spt_competition` sc
                 ";
         if($category){
@@ -66,6 +69,7 @@ class Competition_model extends CI_Model
             $row['title'] = $this->lang->line($row['title_small']);;
             $row['description'] = $result->description;
             $row['trophy_icon_url'] = $result->trophy_icon_url;
+            $row['category'] = $result->category;
             $row['register_date'] = $result->register_date;
 
             array_push($competitions,$row);

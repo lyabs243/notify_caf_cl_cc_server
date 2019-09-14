@@ -84,7 +84,7 @@ class Match_model extends CI_Model
     }
 
     private function get_query_match_header(){
-        return "SELECT sm.id, sta.id as teamAId, stb.id as teamBId, sta.title as teamA, stb.title as teamB, sta.url_logo as teamA_logo, stb.url_logo as teamB_logo,
+        $query = "SELECT sm.id, sta.id as teamAId, stb.id as teamBId, sta.title as teamA, stb.title as teamB, sta.url_logo as teamA_logo, stb.url_logo as teamB_logo,
                 (SELECT COUNT(*) FROM `spt_match_action` WHERE (type = 1 OR type = 2) AND id_team = sta.id AND id_match = sm.id) as teamA_goal,
                 (SELECT COUNT(*) FROM `spt_match_action` WHERE (type = 1 OR type = 2) AND id_team = stb.id AND id_match = sm.id) as teamB_goal,
                 sta.title_small as teamA_small, stb.title_small as teamB_small, CONVERT_TZ(sm.match_date,@@session.time_zone,?) as match_date, sm.status,sm.id_edition_stage,
@@ -109,7 +109,11 @@ class Match_model extends CI_Model
                 JOIN spt_edition_stage ses 
                 ON ses.id = sm.id_edition_stage
                 JOIN spt_competition_edition sce 
-                ON sce.id = ses.id_edition";
+                ON sce.id = ses.id_edition 
+                JOIN spt_competition sc 
+                ON sc.id = sce.id_competition ";
+
+        return $query;
     }
 
     private function get_match_array_from_result($results){
@@ -144,7 +148,7 @@ class Match_model extends CI_Model
         return $matchs;
     }
 
-    public function get_current_matchs($idCompetition,$idEdition=0,$page=0) {
+    public function get_current_matchs($idCompetition,$idEdition=0,$page=0,$idCompetitionType=0) {
         $timezone = $this->session->timezone;
         //si l edition n est pas specifie on prend la derniere edition
         if($idEdition<=0) {
@@ -154,19 +158,27 @@ class Match_model extends CI_Model
                 WHERE (sm.status <> 6
                 AND sm.status <> 0
                 AND sm.status <> 11
-                AND sm.status <> 3)
-                AND ses.id_edition = ?
-                ORDER BY sm.match_date ASC
+                AND sm.status <> 3) ";
+        if($idCompetitionType > 0) {
+            $sql .= "AND sc.category = ? ";
+            $idArg2 = $idCompetitionType;
+        }
+        else {
+            $sql .= "AND ses.id_edition = ? ";
+            $idArg2 = $idEdition;
+        }
+
+        $sql .= "ORDER BY sm.match_date ASC
                  ";
 
         if($page <= 0) {
             $sql .= "
                     LIMIT 2";
-            $args = array($timezone,$idEdition);
+            $args = array($timezone,$idArg2);
         }
         else {
             $page_start = (((int)$page)-1)*10;
-            $args = array($timezone,$idEdition,$page_start);
+            $args = array($timezone,$idArg2,$page_start);
             $sql .= "
                      LIMIT ?,10";
         }
@@ -177,7 +189,7 @@ class Match_model extends CI_Model
         return $matchs;
     }
 
-    public function get_latest_results($idCompetition,$idEdition=0,$page=0) {
+    public function get_latest_results($idCompetition,$idEdition=0,$page=0,$idCompetitionType=0) {
         $timezone = $this->session->timezone;
         //si l edition n est pas specifie on prend la derniere edition
         if($idEdition<=0) {
@@ -185,18 +197,26 @@ class Match_model extends CI_Model
         }
         $sql = $this->get_query_match_header() . "
                 WHERE (sm.status = 3)
-                AND ses.id_edition = ?
-                ORDER BY sm.match_date DESC
                  ";
+        if($idCompetitionType > 0) {
+            $sql .= "AND sc.category = ? ";
+            $idArg2 = $idCompetitionType;
+        }
+        else {
+            $sql .= "AND ses.id_edition = ? ";
+            $idArg2 = $idEdition;
+        }
+
+        $sql .= "ORDER BY sm.match_date DESC ";
 
         if($page <= 0) {
             $sql .= "
                     LIMIT 2";
-            $args = array($timezone,$idEdition);
+            $args = array($timezone,$idArg2);
         }
         else {
             $page_start = (((int)$page)-1)*10;
-            $args = array($timezone,$idEdition,$page_start);
+            $args = array($timezone,$idArg2,$page_start);
             $sql .= "
                      LIMIT ?,10";
         }
@@ -207,7 +227,7 @@ class Match_model extends CI_Model
         return $matchs;
     }
 
-    public function get_fixture($idCompetition,$idEdition=0,$page=0) {
+    public function get_fixture($idCompetition,$idEdition=0,$page=0,$idCompetitionType=0) {
         $timezone = $this->session->timezone;
         //si l edition n est pas specifie on prend la derniere edition
         if($idEdition<=0) {
@@ -215,18 +235,27 @@ class Match_model extends CI_Model
         }
         $sql = $this->get_query_match_header() . "
                 WHERE (sm.status = 0)
-                AND ses.id_edition = ?
-                ORDER BY sm.match_date ASC
                  ";
+
+        if($idCompetitionType > 0) {
+            $sql .= "AND sc.category = ? ";
+            $idArg2 = $idCompetitionType;
+        }
+        else {
+            $sql .= "AND ses.id_edition = ? ";
+            $idArg2 = $idEdition;
+        }
+
+        $sql .= "ORDER BY sm.match_date ASC ";
 
         if($page <= 0) {
             $sql .= "
                     LIMIT 2";
-            $args = array($timezone,$idEdition);
+            $args = array($timezone,$idArg2);
         }
         else {
             $page_start = (((int)$page)-1)*10;
-            $args = array($timezone,$idEdition,$page_start);
+            $args = array($timezone,$idArg2,$page_start);
             $sql .= "
                      LIMIT ?,10";
         }
@@ -244,21 +273,21 @@ class Match_model extends CI_Model
         $page_start = (((int)$page)-1)*10;
         if($idGroup > 0)
         {
-            $sql.="JOIN  spt_team_group stg
+            $sql.=" JOIN  spt_team_group stg
                 ON sta.id = stg.id_team ";
         }
-        $sql.="WHERE (sm.status = 0)
+        $sql.=" WHERE (sm.status = 0)
                 AND ses.id = ? ";
         if($idGroup > 0)
         {
-            $sql.="AND stg.id_stage_group = ? ";
+            $sql.=" AND stg.id_stage_group = ? ";
             $args = array($timezone,$idEditionStage,$idGroup,$page_start);
         }
         else
         {
             $args = array($timezone,$idEditionStage,$page_start);
         }
-        $sql.="ORDER BY sm.match_date ASC 
+        $sql.=" ORDER BY sm.match_date ASC 
                      LIMIT ?,10 ";
         $query = $this->db->query($sql,$args);
         $results = $query->result();
@@ -275,21 +304,21 @@ class Match_model extends CI_Model
 
         if($idGroup > 0)
         {
-            $sql.="JOIN  spt_team_group stg
+            $sql.=" JOIN  spt_team_group stg
                 ON sta.id = stg.id_team ";
         }
-        $sql .="WHERE (sm.status = 3)
+        $sql .=" WHERE (sm.status = 3)
                 AND ses.id = ? ";
         if($idGroup > 0)
         {
-            $sql.="AND stg.id_stage_group = ? ";
+            $sql.=" AND stg.id_stage_group = ? ";
             $args = array($timezone,$idEditionStage,$idGroup,$page_start);
         }
         else
         {
             $args = array($timezone,$idEditionStage,$page_start);
         }
-        $sql.="ORDER BY sm.match_date DESC
+        $sql.=" ORDER BY sm.match_date DESC
                      LIMIT ?,10 ";
         $query = $this->db->query($sql,$args);
         $results = $query->result();

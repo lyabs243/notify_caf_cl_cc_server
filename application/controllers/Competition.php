@@ -89,9 +89,9 @@ class Competition extends NotifyController {
         die;
     }
 
-    public function get_all($page=1)
+    public function get_all($category=0,$page=1)
     {
-        $data = $this->Competition_model->get_competitions($page);
+        $data = $this->Competition_model->get_competitions($category,$page);
 
         if(count($data)){
             $result['NOTIFYGROUP'][] = array('success' => '1','data' => $data);

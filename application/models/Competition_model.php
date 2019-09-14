@@ -37,14 +37,24 @@ class Competition_model extends CI_Model
         return $competitions;
     }
 
-    public function get_competitions($page=1) {
+    public function get_competitions($category=0,$page=1) {
         $timezone = $this->session->timezone;
         $page_start = ((int)$page-1)*10;
         $sql = "SELECT sc.`id`, sc.`title`,sc.title_small, sc.`description`, sc.`trophy_icon_url`, CONVERT_TZ(sc.`register_date`,@@session.time_zone,?) as register_date 
                 FROM `spt_competition` sc
-                ORDER BY sc.id ASC
+                ";
+        if($category){
+            $sql .= "WHERE sc.category = ? ";
+        }
+        $sql .= "ORDER BY sc.id ASC
                 LIMIT ?,10";
-        $args = array($timezone,$page_start);
+        if($category){
+            $args = array($timezone,$category,$page_start);
+        }
+        else{
+            $args = array($timezone,$page_start);
+        }
+
         $query = $this->db->query($sql,$args);
         $results = $query->result();
         $competitions = array();

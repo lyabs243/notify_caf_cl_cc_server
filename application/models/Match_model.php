@@ -127,8 +127,8 @@ class Match_model extends CI_Model
             $row['teamBId'] = $result->teamBId;
             $row['teamA_small'] = $result->teamA_small;
             $row['teamB_small'] = $result->teamB_small;
-            $row['teamA'] = $this->lang->line($row['teamA_small']);
-            $row['teamB'] = $this->lang->line($row['teamB_small']);
+            $row['teamA'] = $result->teamA;
+            $row['teamB'] = $result->teamB;
             $row['teamA_logo'] = $result->teamA_logo;
             $row['teamB_logo'] = $result->teamB_logo;
             $row['teamA_goal'] = $result->teamA_goal;
@@ -138,18 +138,17 @@ class Match_model extends CI_Model
             $row['match_date'] = $result->match_date;
             $row['status'] = $result->status;
             $row['id_edition_stage'] = $result->id_edition_stage;
-            $row['idGroupA'] = (int)$result->idGroupA;
-            $row['idGroupB'] = (int)$result->idGroupB;
+            $row['idGroupA'] = $result->idGroupA;
+            $row['idGroupB'] = $result->idGroupB;
 
             $row['competition']['id'] = $result->comp_id;
             $row['competition']['title_small'] = $result->comp_title_small;
-            $row['competition']['title'] = $this->lang->line($row['competition']['title_small']);;
+            $row['competition']['title'] = strval($this->lang->line($row['competition']['title_small']));
             $row['competition']['description'] = $result->comp_description;
             $row['competition']['trophy_icon_url'] = $result->comp_trophy_icon_url;
             $row['competition']['register_date'] = $result->comp_register_date;
-
             //on change l affichage de la date du match par rapport au status
-            $row['match_date'] = $this->getMatchDate($row['id'],$row['status'],$row['match_date']);
+            $row['match_date'] = strval($this->getMatchDate($row['id'],$row['status'],$row['match_date']));
 
             array_push($matchs,$row);
         }

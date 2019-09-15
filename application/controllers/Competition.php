@@ -34,7 +34,7 @@ class Competition extends NotifyController {
         if($lang == 'fr')
             $language = 'french';
 
-        $this->lang->load(array('spt_competitions'),
+        $this->lang->load(array('spt_competitions','date_format','spt_match_status'),
             $language);
     }
 

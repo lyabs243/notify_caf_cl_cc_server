@@ -228,6 +228,15 @@ class Competition extends NotifyController {
         die;
     }
 
+    public function fixture($idCompetition,$page,$idCompetitionType=0)
+    {
+        $news['NOTIFYGROUP'] = $this->Match_model->get_fixture($idCompetition,0,$page,$idCompetitionType);
+
+        header( 'Content-Type: application/json; charset=utf-8' );
+        echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        die;
+    }
+
     public function stage_fixture($idCompetition,$idEditionStage,$idGroup,$page)
     {
         $news['NOTIFYGROUP'] = $this->Match_model->get_group_matchs_fixtures($idCompetition,$idEditionStage,$idGroup,$page);

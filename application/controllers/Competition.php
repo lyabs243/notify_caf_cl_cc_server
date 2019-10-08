@@ -219,9 +219,9 @@ class Competition extends NotifyController {
         die;
     }
 
-    public function current_matchs($idCompetition,$page)
+    public function current_matchs($idCompetition,$page,$idCompetitionType=0)
     {
-        $news['NOTIFYGROUP'] = $this->Match_model->get_current_matchs($idCompetition,0,$page);
+        $news['NOTIFYGROUP'] = $this->Match_model->get_current_matchs($idCompetition,0,$page,$idCompetitionType);
 
         header( 'Content-Type: application/json; charset=utf-8' );
         echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
@@ -246,9 +246,9 @@ class Competition extends NotifyController {
         die;
     }
 
-    public function latest_results($idCompetition,$page)
+    public function latest_results($idCompetition,$page,$idCompetitionType=0)
     {
-        $news['NOTIFYGROUP'] = $this->Match_model->get_latest_results($idCompetition,0,$page);
+        $news['NOTIFYGROUP'] = $this->Match_model->get_latest_results($idCompetition,0,$page,$idCompetitionType);
 
         header( 'Content-Type: application/json; charset=utf-8' );
         echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);

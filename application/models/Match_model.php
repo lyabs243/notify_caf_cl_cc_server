@@ -87,9 +87,10 @@ class Match_model extends CI_Model
         $query = "SELECT sm.id, sta.id as teamAId, stb.id as teamBId, sta.title as teamA, stb.title as teamB, sta.url_logo as teamA_logo, stb.url_logo as teamB_logo,
                 (SELECT COUNT(*) FROM `spt_match_action` WHERE (type = 1 OR type = 2) AND id_team = sta.id AND id_match = sm.id) as teamA_goal,
                 (SELECT COUNT(*) FROM `spt_match_action` WHERE (type = 1 OR type = 2) AND id_team = stb.id AND id_match = sm.id) as teamB_goal,
-                sta.title_small as teamA_small, stb.title_small as teamB_small, CONVERT_TZ(sm.match_date,@@session.time_zone,?) as match_date, sm.status,sm.id_edition_stage,
+                sta.title_small as teamA_small, stb.title_small as teamB_small, CONVERT_TZ(sm.match_date,@@session.time_zone,?) as match_date, sm.status,
                 sm.team_a_penalty, sm.team_b_penalty, sc.id as comp_id, sc.title as comp_title, sc.title_small as comp_title_small,
                 sc.description as comp_description, sc.trophy_icon_url as comp_trophy_icon_url, sc.category as comp_category, sc.register_date as comp_register_date,
+                ses.id as editstage_id, ses.id_edition as editstage_id_edition, ses.title as editstage_title, ses.type as editstage_type, ses.register_date as editstage_register_date,
                 (SELECT stg.id_stage_group 
                 FROM `spt_team_group` stg
                 JOIN spt_stage_group ssg
@@ -137,9 +138,14 @@ class Match_model extends CI_Model
             $row['team_b_penalty'] = $result->team_b_penalty;
             $row['match_date'] = $result->match_date;
             $row['status'] = $result->status;
-            $row['id_edition_stage'] = $result->id_edition_stage;
             $row['idGroupA'] = $result->idGroupA;
             $row['idGroupB'] = $result->idGroupB;
+
+            $row['edition_stage']['id'] = $result->editstage_id;
+            $row['edition_stage']['id_edition'] = $result->editstage_id_edition;
+            $row['edition_stage']['title'] = $result->editstage_title;
+            $row['edition_stage']['type'] = $result->editstage_type;
+            $row['edition_stage']['register_date'] = $result->editstage_register_date;
 
             $row['competition']['id'] = $result->comp_id;
             $row['competition']['title_small'] = $result->comp_title_small;

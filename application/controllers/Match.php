@@ -132,10 +132,15 @@ class Match extends NotifyController {
 
     public function lineup($idMatch,$idTeam)
     {
-        $news['NOTIFYGROUP'] = $this->Match_model->get_match_lineup($idMatch,$idTeam);
+        $lineup = $this->Match_model->get_match_lineup($idMatch,$idTeam);
+        if(count($lineup) > 0)
+            $result['NOTIFYGROUP']['success'] = '1';
+        else
+            $result['NOTIFYGROUP']['success'] = '0';
+        $result['NOTIFYGROUP']['data'] = $lineup;
 
         header( 'Content-Type: application/json; charset=utf-8' );
-        echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        echo json_encode($result,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
         die;
     }
 

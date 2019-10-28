@@ -123,7 +123,7 @@ class Match extends NotifyController {
             $result['NOTIFYGROUP']['success'] = '1';
         else
             $result['NOTIFYGROUP']['success'] = '0';
-        $result['NOTIFYGROUP']['data'] = $this->Match_model->get_match_actions($idMatch,$actionMin);
+        $result['NOTIFYGROUP']['data'] = $actions;
 
         header( 'Content-Type: application/json; charset=utf-8' );
         echo json_encode($result,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);

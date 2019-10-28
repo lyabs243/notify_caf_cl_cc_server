@@ -118,10 +118,15 @@ class Match extends NotifyController {
 
     public function actions($idMatch,$actionMin=0)
     {
-        $news['NOTIFYGROUP'] = $this->Match_model->get_match_actions($idMatch,$actionMin);
+        $actions = $this->Match_model->get_match_actions($idMatch,$actionMin);
+        if(count($actions) > 0)
+            $result['NOTIFYGROUP']['success'] = '1';
+        else
+            $result['NOTIFYGROUP']['success'] = '0';
+        $result['NOTIFYGROUP']['data'] = $this->Match_model->get_match_actions($idMatch,$actionMin);
 
         header( 'Content-Type: application/json; charset=utf-8' );
-        echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        echo json_encode($result,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
         die;
     }
 

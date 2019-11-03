@@ -164,10 +164,16 @@ class Match extends NotifyController {
 
     public function video($idMatch)
     {
-        $news['NOTIFYGROUP'] = $this->Match_model->get_match_video($idMatch);
+        $video = $this->Match_model->get_match_video($idMatch);
+
+        if(count($video) > 0)
+            $result['NOTIFYGROUP']['success'] = '1';
+        else
+            $result['NOTIFYGROUP']['success'] = '0';
+        $result['NOTIFYGROUP']['data'] = $video;
 
         header( 'Content-Type: application/json; charset=utf-8' );
-        echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        echo json_encode($result,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
         die;
     }
 

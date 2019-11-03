@@ -184,7 +184,12 @@ class Competition extends NotifyController {
             $team['goal_difference'] = $goal_difference;
             array_push($result,$team);
         }
-        $rows['NOTIFYGROUP'] = $this->Edition_model->order_group_teams($result);
+
+        if(count($teams) > 0)
+            $rows['NOTIFYGROUP']['success'] = '1';
+        else
+            $rows['NOTIFYGROUP']['success'] = '0';
+        $rows['NOTIFYGROUP']['data'] = $this->Edition_model->order_group_teams($result);
 
         header( 'Content-Type: application/json; charset=utf-8' );
         echo json_encode($rows,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);

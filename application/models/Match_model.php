@@ -501,9 +501,14 @@ class Match_model extends CI_Model
             $row = array();
             $row['youtube_video'] = $result->youtube_video_id;
             $youtube_details = $this->Video_model->get_toutube_video_details($row['youtube_video']);
-            $row['title'] = $youtube_details['title'];
-            $row['channelTitle'] = $youtube_details['channelTitle'];
-            $row['thumbnails'] = $youtube_details['thumbnails'];
+            $row['title'] = '';
+            $row['channelTitle'] = '';
+            $row['thumbnails'] = '';
+            if(count($youtube_details)) {
+                $row['title'] = $youtube_details['title'];
+                $row['channelTitle'] = $youtube_details['channelTitle'];
+                $row['thumbnails'] = $youtube_details['thumbnails'];
+            }
             array_push($video,$row);
             break;
         }

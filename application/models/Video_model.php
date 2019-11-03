@@ -23,7 +23,7 @@ class Video_model extends CI_Model
         curl_close($ch);
         $json = $server_output;
         $video = json_decode($json, true);
-
+        $data = array();
         if(isset($video['items'][0])) {
             $data['title'] = $video['items'][0]['snippet']['title'];
             $data['thumbnails'] = $video['items'][0]['snippet']['thumbnails']['high']['url'];

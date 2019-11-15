@@ -110,10 +110,10 @@ class Competition extends NotifyController {
         $data = $this->Edition_model->get_scorers($idCompetition,$page);
 
         if(count($data)){
-            $result['NOTIFYGROUP'][] = array('success' => '1','data' => $data);
+            $result['NOTIFYGROUP'] = array('success' => '1','data' => $data);
         }
         else{
-            $result['NOTIFYGROUP'][] = array('success' => '0');
+            $result['NOTIFYGROUP'] = array('success' => '0');
         }
 
         header( 'Content-Type: application/json; charset=utf-8' );

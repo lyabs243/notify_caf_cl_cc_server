@@ -41,8 +41,17 @@ class RssFeed_model extends CI_Model
         return $return;
     }
 
-    public function get_feed($url_adress) {
-        $query = $this->db->get_where('rss_feed', array('url_adress' => $url_adress));
-        return $query->row_array();
+    public function get_feeds() {
+        $query = $this->db->get('rss_feed');
+        $results = $query->result();
+        $feeds = array();
+        foreach ($results as $result)
+        {
+            $row = array();
+            $row['url_adress'] = $result->url_adress;
+
+            array_push($feeds,$row);
+        }
+        return $feeds;
     }
 }

@@ -8,7 +8,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 include APPPATH.'controllers/NotifyController.php';
-class RssFeed extends NotifyController
+class RssFeed extends CI_Controller
 {
     function __construct()
     {

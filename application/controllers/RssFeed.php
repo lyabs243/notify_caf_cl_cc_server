@@ -22,11 +22,11 @@ class RssFeed extends CI_Controller
         $data = $this->RssFeed_model->get_feeds();
 
         if(!count($data)){
-            $news['NOTIFYGROUP'][] = array('success' => '0');
+            $news['NOTIFYGROUP'] = array('success' => '0');
         }
         else{
 
-            $news['NOTIFYGROUP'][] = array('success' => '1','data' => $data);
+            $news['NOTIFYGROUP'] = array('success' => '1','data' => $data);
         }
 
         header( 'Content-Type: application/json; charset=utf-8' );

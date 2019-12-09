@@ -12,6 +12,17 @@ class Article_model extends CI_Model
         $this->load->database();
     }
 
+    public function view_article($id_article, $id_user)
+    {
+        $result = 0;
+        if(!$this->is_user_viewed_article($id_article,$id_user)) {
+            $sql = 'INSERT INTO `article_view`(`id_article`, `id_user`) VALUES (?, ?)';
+            $args = array($id_article, $id_user);
+            $result = $this->db->query($sql, $args);
+        }
+        return $result;
+    }
+
     public function get_trend_news($idUser,$forFeed,$idCompetition=0,$lang='en') {
         if($idCompetition)
         {
@@ -607,6 +618,19 @@ class Article_model extends CI_Model
         $return = false;
         $query = $this->db->query('SELECT * FROM article WHERE url_adress = ?'
             ,array($url_adress));
+        $results = $query->result();
+        foreach ($results as $result)
+        {
+            $return = true;
+        }
+        return $return;
+    }
+
+    function  is_user_viewed_article($id_article, $id_user)
+    {
+        $return = false;
+        $query = $this->db->query('SELECT * FROM article_view WHERE id_article = ? AND id_user = ?'
+            ,array($id_article,$id_user));
         $results = $query->result();
         foreach ($results as $result)
         {

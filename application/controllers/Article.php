@@ -27,6 +27,22 @@ class Article extends NotifyController {
         $this->load->model('User_model');
     }
 
+    public function view_article($id_article,$id_user)
+    {
+        $save = $this->Article_model->view_article($id_article, $id_user);
+
+        if($save){
+            $result['NOTIFYGROUP'] = array('success' => '1');
+        }
+        else{
+            $result['NOTIFYGROUP'] = array('success' => '0');
+        }
+
+        header( 'Content-Type: application/json; charset=utf-8' );
+        echo json_encode($result,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        die;
+    }
+
     public function index()
     {
         $this->load->view('welcome_message');

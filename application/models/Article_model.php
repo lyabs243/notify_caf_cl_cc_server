@@ -17,20 +17,22 @@ class Article_model extends CI_Model
         {
             $sql = "SELECT a.id, 0 as cat_id, 'image' as news_type,a.title as news_heading,a.description as news_description,
                 0 as news_video_id,'' as news_video_url,CONVERT_TZ(a.`register_date`,@@session.time_zone,'+00:00') as news_date,a.url_img as news_featured_image,
-                (SELECT COUNT(*) FROM article_view WHERE id_article = a.id) as total_views,
+                (SELECT COUNT(*) FROM article_view WHERE id_article = a.id) as total_views, 
                 0 as cid, 'General' as category_name, w.url_adress as url_fav
                 FROM `article`a
                 JOIN website w
                 ON a.id_website = w.id
+                JOIN rss_feed rf 
+                ON rf.id = a.id_rss_feed
                 left JOIN article_view av 
                 ON a.`id` = av.id_article
-                WHERE a.id IN 
+                WHERE a.id_rss_feed IN 
                 (
-                    SELECT id_article FROM spt_competition_news
-                    WHERE id_competition = ?
-                    AND lang = ?
+                    SELECT id_feed FROM  spt_competition_news_rss_feed
+                    WHERE id_competition_category = (SELECT category FROM spt_competition WHERE id = ?)
                 )
-                AND a.register_date >= DATE( DATE_SUB( NOW() , INTERVAL 1 DAY ) )
+                AND w.lang = ?
+                AND a.register_date >= DATE( DATE_SUB( NOW() , INTERVAL 3 DAY ) )
                 GROUP BY id
                 ORDER BY total_views desc 
                 LIMIT 5";
@@ -95,33 +97,15 @@ class Article_model extends CI_Model
         foreach ($results as $result)
         {
             $row = array();
-            if($i == 2 && $idCompetition)
-            {
-                $row['id'] = 1;
-                $row['url_share'] = 'http://fb.com/larogawear/';
-                $row['url_article'] = 'http://fb.com/larogawear/';
-                $row['cat_id'] = 2;
-                $row['url_fav'] = 'Annonce';
-                $row['news_type'] = 'image';
-                $row['news_heading'] = 'larogawear';
-                $row['news_description'] = 'Larogawear est une marque de vêtements  sportwear et streetwear de prêt à porter ,  créé en 2015 . C\'est un mélange de mode entre les tendances occidentales et la mode africaine . " Larogance " est le mot qui désigne le fais qu\'on soit habillé en " Larogawear " . La marque défend la " solidarité " et " l\'unité " des cultures à travers le slogan " Together we are stronger ".';
-                $row['news_video_id'] = '';
-                $row['news_video_url'] = '';
-                $row['news_date'] = '2028-06-30 13:51:40';
-                $row['news_featured_image'] = 'http://notifygroup.org/notifyapp/pictures/laroga.jpeg';
-                $row['total_views'] = 100;
-                $row['cid'] = '';
-                $row['category_name'] = '';
-            }
-            else {
+
                 $row['id'] = $result->id;
                 $row['url_share'] = 'http://news.notifygroup.org/' . $row['id'];
                 $row['url_article'] = 'http://news.notifygroup.org/q/' . $row['id'];
                 $row['cat_id'] = $result->cat_id;
                 $row['url_fav'] = $result->url_fav;
                 $row['news_type'] = $result->news_type;
-                $row['news_heading'] = $result->news_heading;
-                $row['news_description'] = $result->news_description;
+                $row['news_heading'] = strip_tags($result->news_heading);
+                $row['news_description'] = strip_tags($result->news_description);
                 $row['news_video_id'] = $result->news_video_id;
                 $row['news_video_url'] = $result->news_video_url;
                 $row['news_date'] = $result->news_date;
@@ -129,7 +113,6 @@ class Article_model extends CI_Model
                 $row['total_views'] = $result->total_views;
                 $row['cid'] = $result->cid;
                 $row['category_name'] = $result->category_name;
-            }
 
             $i++;
 

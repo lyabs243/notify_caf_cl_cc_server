@@ -615,4 +615,39 @@ class Article_model extends CI_Model
 
         return $news;
     }
+
+    //verifie si u article existe deja
+    function  is_article_exist($url_adress)
+    {
+        $return = false;
+        $query = $this->db->query('SELECT * FROM article WHERE url_adress = ?'
+            ,array($url_adress));
+        $results = $query->result();
+        foreach ($results as $result)
+        {
+            $return = true;
+        }
+        return $return;
+    }
+
+    public function add_from_jsonfeed($json)
+    {
+        $sql = 'INSERT INTO `article`(`id_website`, `url_adress`, `url_img`, `title`, `description`, 
+              `publication_date`, `id_rss_feed`)
+                VALUES (?,?,?,?,?,?,?)';
+        $feeds = json_decode($json);
+
+        foreach($feeds as $feed){
+            foreach($feed->items as $article) {
+                if (!$this->is_article_exist($article->link)) {
+                    $args = array($feed->id_website, $article->link, $article->img_url, $article->title, $article->description,
+                        $article->date_time, $feed->id_rss_feed);
+
+                    echo $this->db->query($sql, $args) . '<br>';
+                }
+            }
+        }
+    }
+
+
 }

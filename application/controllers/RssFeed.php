@@ -15,6 +15,7 @@ class RssFeed extends CI_Controller
         // this is your constructor
         parent::__construct();
         $this->load->model('RssFeed_model');
+        $this->load->model('Article_model');
     }
 
     public function get_feeds()
@@ -32,6 +33,32 @@ class RssFeed extends CI_Controller
         header( 'Content-Type: application/json; charset=utf-8' );
         echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
         die;
+    }
+
+    public function add_feed_file(){
+        $config['upload_path']          = './resource/json/';
+        $config['allowed_types']        = 'gif|jpg|png|txt';
+        $config['max_size']             = 1000;
+        $config['max_width']            = 1024;
+        $config['max_height']           = 768;
+
+        $this->load->library('upload', $config);
+
+        if ( ! $this->upload->do_upload('file_contents'))
+        {
+            $error = array('error' => $this->upload->display_errors());
+            print_r($error);
+        }
+        else
+        {
+            $data = array('upload_data' => $this->upload->data());
+            print_r($data);
+        }
+    }
+
+    public function add_news_from_feed(){
+        $json = file_get_contents('./resource/json/json_feed.txt');
+        $this->Article_model->add_from_jsonfeed($json);
     }
 
     public function desactivate_appeal($id,$id_admin){

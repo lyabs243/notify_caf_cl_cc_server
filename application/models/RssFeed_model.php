@@ -48,6 +48,7 @@ class RssFeed_model extends CI_Model
         foreach ($results as $result)
         {
             $row = array();
+            $row['id_website'] = $result->id_website;
             $row['url_adress'] = $result->url_adress;
 
             array_push($feeds,$row);

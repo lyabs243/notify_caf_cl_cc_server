@@ -15,8 +15,9 @@ class Article_model extends CI_Model
     public function get_trend_news($idUser,$forFeed,$idCompetition=0,$lang='en') {
         if($idCompetition)
         {
+            $timezone = $this->session->timezone;
             $sql = "SELECT a.id, 0 as cat_id, 'image' as news_type,a.title as news_heading,a.description as news_description,
-                0 as news_video_id,'' as news_video_url,CONVERT_TZ(a.`publication_date`,@@session.time_zone,'+00:00') as news_date,a.url_img as news_featured_image,
+                0 as news_video_id,'' as news_video_url,CONVERT_TZ(a.`publication_date`,@@session.time_zone,?) as news_date,a.url_img as news_featured_image,
                 (SELECT COUNT(*) FROM article_view WHERE id_article = a.id) as total_views, 
                 0 as cid, 'General' as category_name, w.url_adress as url_fav
                 FROM `article`a
@@ -83,7 +84,7 @@ class Article_model extends CI_Model
         }
         if($idCompetition)
         {
-            $args = array($idCompetition,$lang);
+            $args = array($timezone,$idCompetition,$lang);
         }
         else
         {
@@ -123,10 +124,11 @@ class Article_model extends CI_Model
 
     public function get_latest_news($idUser,$page=0,$idWebsite=0,$forFeed=0,$idCompetition=0,$lang='en') {
         $lastViewedArticle = $this->User_model->get_latest_viewed_article($idUser);
+        $timezone = $this->session->timezone;
         if($idCompetition)
         {
             $sql = "SELECT a.id, 0 as cat_id, 'image' as news_type,a.title as news_heading,a.description as news_description,
-                0 as news_video_id,'' as news_video_url,CONVERT_TZ(a.`publication_date`,@@session.time_zone,'+00:00') as news_date,a.url_img as news_featured_image,
+                0 as news_video_id,'' as news_video_url,CONVERT_TZ(a.`publication_date`,@@session.time_zone,?) as news_date,a.url_img as news_featured_image,
                 (SELECT COUNT(*) FROM article_view WHERE id_article = a.id) as total_views,
                 0 as cid, 'General' as category_name, w.url_adress as url_fav
                 FROM `article`a
@@ -205,7 +207,7 @@ class Article_model extends CI_Model
             {
                 if($idCompetition)
                 {
-                    $args = array($idCompetition,$lang,$page_start);
+                    $args = array($timezone,$idCompetition,$lang,$page_start);
                 }
                 else
                 {

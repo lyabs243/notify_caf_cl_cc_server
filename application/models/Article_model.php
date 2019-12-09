@@ -16,7 +16,7 @@ class Article_model extends CI_Model
         if($idCompetition)
         {
             $sql = "SELECT a.id, 0 as cat_id, 'image' as news_type,a.title as news_heading,a.description as news_description,
-                0 as news_video_id,'' as news_video_url,CONVERT_TZ(a.`register_date`,@@session.time_zone,'+00:00') as news_date,a.url_img as news_featured_image,
+                0 as news_video_id,'' as news_video_url,CONVERT_TZ(a.`publication_date`,@@session.time_zone,'+00:00') as news_date,a.url_img as news_featured_image,
                 (SELECT COUNT(*) FROM article_view WHERE id_article = a.id) as total_views, 
                 0 as cid, 'General' as category_name, w.url_adress as url_fav
                 FROM `article`a
@@ -126,7 +126,7 @@ class Article_model extends CI_Model
         if($idCompetition)
         {
             $sql = "SELECT a.id, 0 as cat_id, 'image' as news_type,a.title as news_heading,a.description as news_description,
-                0 as news_video_id,'' as news_video_url,CONVERT_TZ(a.`register_date`,@@session.time_zone,'+00:00') as news_date,a.url_img as news_featured_image,
+                0 as news_video_id,'' as news_video_url,CONVERT_TZ(a.`publication_date`,@@session.time_zone,'+00:00') as news_date,a.url_img as news_featured_image,
                 (SELECT COUNT(*) FROM article_view WHERE id_article = a.id) as total_views,
                 0 as cid, 'General' as category_name, w.url_adress as url_fav
                 FROM `article`a
@@ -134,12 +134,12 @@ class Article_model extends CI_Model
                 ON a.id_website = w.id
                 left JOIN article_view av 
                 ON a.`id` = av.id_article
-                WHERE a.id IN 
+                WHERE a.id_rss_feed IN 
                 (
-                    SELECT id_article FROM spt_competition_news
-                    WHERE id_competition = ?
-                    AND lang = ?
+                    SELECT id_feed FROM  spt_competition_news_rss_feed
+                    WHERE id_competition_category = (SELECT category FROM spt_competition WHERE id = ?)
                 )
+                AND w.lang = ?
                  ";
         }
         else if($forFeed)
@@ -165,7 +165,7 @@ class Article_model extends CI_Model
         }
         else {
             $sql = "SELECT a.id, 0 as cat_id, 'image' as news_type,a.title as news_heading,a.description as news_description,
-                0 as news_video_id,'' as news_video_url,CONVERT_TZ(a.`register_date`,@@session.time_zone,'+00:00') as news_date,a.url_img as news_featured_image,
+                0 as news_video_id,'' as news_video_url,CONVERT_TZ(a.`publication_date`,@@session.time_zone,'+00:00') as news_date,a.url_img as news_featured_image,
                 (SELECT COUNT(*) FROM article_view WHERE id_article = a.id) as total_views,
                 0 as cid, 'General' as category_name, w.url_adress as url_fav
                 FROM `article`a

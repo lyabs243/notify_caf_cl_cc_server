@@ -43,7 +43,9 @@ class RssFeed extends CI_Controller
         $config['max_height']           = 768;
 
         $this->load->library('upload', $config);
-
+        if (file_exists($config['upload_path'].'json_feed.txt')) {
+            unlink($config['upload_path'].'json_feed.txt');
+        }
         if ( ! $this->upload->do_upload('file_contents'))
         {
             $error = array('error' => $this->upload->display_errors());

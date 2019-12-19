@@ -44,7 +44,7 @@ class Article_model extends CI_Model
                     WHERE id_competition_category = (SELECT category FROM spt_competition WHERE id = ?)
                 )
                 AND w.lang = ?
-                AND a.register_date >= DATE( DATE_SUB( NOW() , INTERVAL 3 DAY ) )
+                AND a.register_date >= DATE( DATE_SUB( NOW() , INTERVAL 365 DAY ) )
                 GROUP BY id
                 ORDER BY total_views desc 
                 LIMIT 5";

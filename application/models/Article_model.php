@@ -23,8 +23,8 @@ class Article_model extends CI_Model
         return $result;
     }
 
-    public function get_trend_news($idUser,$forFeed,$idCompetition=0,$lang='en') {
-        if($idCompetition)
+    public function get_trend_news($idUser,$forFeed,$idCompetitionType=0,$lang='en') {
+        if($idCompetitionType)
         {
             $timezone = $this->session->timezone;
             $sql = "SELECT a.id, 0 as cat_id, 'image' as news_type,a.title as news_heading,a.description as news_description,
@@ -41,7 +41,7 @@ class Article_model extends CI_Model
                 WHERE a.id_rss_feed IN 
                 (
                     SELECT id_feed FROM  spt_competition_news_rss_feed
-                    WHERE id_competition_category = (SELECT category FROM spt_competition WHERE id = ?)
+                    WHERE id_competition_category = ?
                 )
                 AND w.lang = ?
                 AND a.register_date >= DATE( DATE_SUB( NOW() , INTERVAL 365 DAY ) )
@@ -93,9 +93,9 @@ class Article_model extends CI_Model
                 ORDER BY total_views desc 
                 LIMIT 5";
         }
-        if($idCompetition)
+        if($idCompetitionType)
         {
-            $args = array($timezone,$idCompetition,$lang);
+            $args = array($timezone,$idCompetitionType,$lang);
         }
         else
         {

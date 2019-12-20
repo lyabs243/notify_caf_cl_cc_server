@@ -133,10 +133,10 @@ class Article_model extends CI_Model
         return $news;
     }
 
-    public function get_latest_news($idUser,$page=0,$idWebsite=0,$forFeed=0,$idCompetition=0,$lang='en') {
+    public function get_latest_news($idUser,$page=0,$idWebsite=0,$forFeed=0,$idCompetitionType=0,$lang='en') {
         $lastViewedArticle = $this->User_model->get_latest_viewed_article($idUser);
         $timezone = $this->session->timezone;
-        if($idCompetition)
+        if($idCompetitionType)
         {
             $sql = "SELECT a.id, 0 as cat_id, 'image' as news_type,a.title as news_heading,a.description as news_description,
                 0 as news_video_id,'' as news_video_url,CONVERT_TZ(a.`publication_date`,@@session.time_zone,?) as news_date,a.url_img as news_featured_image,
@@ -150,7 +150,7 @@ class Article_model extends CI_Model
                 WHERE a.id_rss_feed IN 
                 (
                     SELECT id_feed FROM  spt_competition_news_rss_feed
-                    WHERE id_competition_category = (SELECT category FROM spt_competition WHERE id = ?)
+                    WHERE id_competition_category = ?
                 )
                 AND w.lang = ?
                  ";
@@ -216,16 +216,16 @@ class Article_model extends CI_Model
             }
             else
             {
-                if($idCompetition)
+                if($idCompetitionType)
                 {
-                    $args = array($timezone,$idCompetition,$lang,$page_start);
+                    $args = array($timezone,$idCompetitionType,$lang,$page_start);
                 }
                 else
                 {
                     $args = array($idUser,$page_start);
                 }
             }
-            if($idCompetition)
+            if($idCompetitionType)
             {
                 $sql .= "AND a.register_date >= DATE( DATE_SUB( NOW() , INTERVAL 365 DAY ) )";
             }

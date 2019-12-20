@@ -212,10 +212,10 @@ class Competition extends NotifyController {
         die;
     }
 
-    public function news($idUser,$idCompetition,$page)
+    public function news($idUser,$idCompetitionType,$page)
     {
         $lang = $access = $this->session->lang;
-        $news['NOTIFYGROUP'] = $this->Article_model->get_latest_news($idUser,$page,0,0,$idCompetition,$lang);
+        $news['NOTIFYGROUP'] = $this->Article_model->get_latest_news($idUser,$page,0,0,$idCompetitionType,$lang);
 
         header( 'Content-Type: application/json; charset=utf-8' );
         echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);

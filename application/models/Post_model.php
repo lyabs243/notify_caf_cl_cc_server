@@ -122,4 +122,9 @@ class Post_model extends CI_Model
 		return $abusive_posts;
 	}
 
+	public function update_post_status($id, $data) {
+		$this->db->where('id', $id);
+		return $this->db->update('post', $data);
+	}
+
 }

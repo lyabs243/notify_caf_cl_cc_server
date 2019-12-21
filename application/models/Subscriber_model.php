@@ -80,6 +80,11 @@ class Subscriber_model extends CI_Model
         return false;
     }
 
+	public function  is_active($id){
+		$subscriber = $this->get($id);
+		return $subscriber['active'];
+	}
+
     public function block_subscriber($idAdmin,$id) {
         //on ne modifie que si c'est un admin qui le fait
         if($this->is_admin($idAdmin)){

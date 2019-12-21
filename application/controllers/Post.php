@@ -20,31 +20,34 @@ class Post extends NotifyController
 
     public function add($id_subscriber, $uploadImage = false)
     {
+    	$result = false;
+    	if($this->Subscriber_model->is_active($id_subscriber)) {
 
-	    $config['upload_path']          = './resource/images/posts/';
-	    $config['allowed_types']        = 'gif|jpg|png';
-	    $config['max_size']             = 2000;
-	    $config['max_width']            = 2000;
-	    $config['max_height']           = 2000;
-	    $config['encrypt_name']         = TRUE;
+		    $config['upload_path'] = './resource/images/posts/';
+		    $config['allowed_types'] = 'gif|jpg|png';
+		    $config['max_size'] = 2000;
+		    $config['max_width'] = 2000;
+		    $config['max_height'] = 2000;
+		    $config['encrypt_name'] = TRUE;
 
-	    $this->load->library('upload', $config);
-	    $result = true;
+		    $this->load->library('upload', $config);
+		    $result = true;
 
-	    if($uploadImage) {
-		    if (!$this->upload->do_upload('img_post')) {
-			    $result = false;
-		    } else {
-			    $uploadData = $this->upload->data();
-			    $data['url_image'] = 'http://www.notifygroup.org/notifyapp/api/resource/images/posts/' . $uploadData['file_name'];
+		    if ($uploadImage) {
+			    if (!$this->upload->do_upload('img_post')) {
+				    $result = false;
+			    } else {
+				    $uploadData = $this->upload->data();
+				    $data['url_image'] = 'http://www.notifygroup.org/notifyapp/api/resource/images/posts/' . $uploadData['file_name'];
+			    }
 		    }
-	    }
 
-	    if($result) {
-		    $data['id_subscriber'] = (int)$id_subscriber;
-		    $data['post'] = $this->input->post('post');
-		    $data['type'] = (int)$this->input->post('type');
-		    $result = $this->Post_model->add_post($data);
+		    if ($result) {
+			    $data['id_subscriber'] = (int)$id_subscriber;
+			    $data['post'] = $this->input->post('post');
+			    $data['type'] = (int)$this->input->post('type');
+			    $result = $this->Post_model->add_post($data);
+		    }
 	    }
 
         if($result)

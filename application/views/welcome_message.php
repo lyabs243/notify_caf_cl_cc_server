@@ -175,6 +175,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <input type="submit" value="OK">
         </form>
 
+        <code>Test Signal postt</code>
+        <form method="post" action="post/signal/11/8" enctype="multipart/form-data">
+            <textarea name="message" placeholder="message"></textarea>
+            <input type="submit" value="OK">
+        </form>
+
         <code>Test Update post</code>
         <form method="post" action="post/update/9/7" enctype="multipart/form-data">
             <textarea name="post" placeholder="post"></textarea>

@@ -113,4 +113,24 @@ class Post extends NotifyController
         echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
         die;
     }
+
+	public function signal($id_post, $id_subscriber)
+	{
+		$result = false;
+		if($this->Subscriber_model->is_active($id_subscriber)) {
+			$data['id_subscriber'] = (int)$id_subscriber;
+			$data['id_post'] = (int)$id_post;
+			$data['message'] = $this->input->post('message');
+			$result = $this->Post_model->signal_post($data);
+		}
+
+		if($result)
+			$news['NOTIFYGROUP'][] = array('success' => '1');
+		else
+			$news['NOTIFYGROUP'][] = array('success' => '0');
+
+		header( 'Content-Type: application/json; charset=utf-8' );
+		echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+		die;
+	}
 }

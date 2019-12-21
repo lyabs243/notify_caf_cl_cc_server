@@ -19,6 +19,13 @@ class Post_model extends CI_Model
         return $id;
     }
 
+	public function signal_post($data) {
+		$this->db->insert('abusive_post', $data);
+		$id = $this->db->insert_id();
+
+		return $id;
+	}
+
 	public function update_post($id, $idSubscriber, $data) {
 		return $this->db->update('post', $data, array('id' => $id, 'id_subscriber' => $idSubscriber));
 	}

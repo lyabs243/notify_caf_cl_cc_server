@@ -74,4 +74,52 @@ class Post_model extends CI_Model
 		return $posts;
 	}
 
+	public function get_abusive_posts($page){
+		$timezone = $this->session->timezone;
+		$page_start = (((int)$page)-1)*10;
+		$query = '
+            SELECT ap.id, ap.message, ap.active, ap.id_post, ap.id_subscriber, CONVERT_TZ(ap.register_date,@@session.time_zone,?) as register_date, p.`id` as id_post, p.`id_subscriber` as id_subscriber_post, p.`post`,
+             p.`url_image`, p.`type`, p.active as active_post, CONVERT_TZ(p.`register_date`,@@session.time_zone,?) as register_date_post,
+             s.full_name as full_name_post, s.url_profil_pic as url_profil_pic_post,aps.full_name, aps.url_profil_pic
+            FROM `abusive_post` ap
+            JOIN subscriber aps 
+            ON ap.id_subscriber = aps.id
+            JOIN `post` p
+            ON ap.id_post = p.id
+            JOIN subscriber s
+            ON p.id_subscriber = s.id
+            WHERE ap.active = 1
+            ORDER BY register_date ASC 
+            LIMIT ?,10 ';
+		$query = $this->db->query($query, array($timezone, $timezone, $page_start));
+		$results = $query->result();
+		$abusive_posts = [];
+		foreach ($results as $result)
+		{
+			$data = array();
+
+			$data['id'] = $result->id;
+			$data['id_post'] = $result->id_post;
+			$data['message'] = $result->message;
+			$data['active'] = $result->active;
+			$data['id_subscriber'] = $result->id_subscriber;
+			$data['register_date'] = $result->register_date;
+
+			$data['subscriber']['full_name'] = $result->full_name;
+			$data['subscriber']['url_profil'] = $result->url_profil_pic;
+
+			$data['post']['id'] = $result->id_post;
+			$data['post']['id_subscriber'] = $result->id_subscriber_post;
+			$data['post']['post'] = $result->post;
+			$data['post']['url_image'] = $result->url_image;
+			$data['post']['subscriber']['full_name'] = $result->full_name_post;
+			$data['post']['subscriber']['url_profil'] = $result->url_profil_pic_post;
+			$data['post']['type'] = $result->type;
+			$data['post']['active'] = $result->active_post;
+			$data['post']['register_date'] = $result->register_date_post;
+			$abusive_posts[] = $data;
+		}
+		return $abusive_posts;
+	}
+
 }

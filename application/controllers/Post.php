@@ -72,6 +72,31 @@ class Post extends NotifyController
 		die;
 	}
 
+	public function get_abusive_posts($id_admin, $page=1)
+	{
+		$page = (int)$page;
+		$id_admin = (int)$id_admin;
+		if($this->Subscriber_model->is_admin($id_admin)) {
+			$data = $this->Post_model->get_abusive_posts($page);
+			$result = count($data);
+		}
+		else {
+			$result = false;
+		}
+
+		if(!$result){
+			$output['NOTIFYGROUP'][] = array('success' => '0');
+		}
+		else{
+
+			$output['NOTIFYGROUP'][] = array('success' => '1','data' => $data);
+		}
+
+		header( 'Content-Type: application/json; charset=utf-8' );
+		echo json_encode($output,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+		die;
+	}
+
     public function add($id_subscriber, $uploadImage = false)
     {
     	$result = false;

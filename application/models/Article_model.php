@@ -27,7 +27,7 @@ class Article_model extends CI_Model
         if($idCompetitionType)
         {
             $timezone = $this->session->timezone;
-            $sql = "SELECT a.id, 0 as cat_id, 'image' as news_type,a.title as news_heading,a.description as news_description,
+            $sql = "SELECT a.id, a.url_adress as url_article, 0 as cat_id, 'image' as news_type,a.title as news_heading,a.description as news_description,
                 0 as news_video_id,'' as news_video_url,CONVERT_TZ(a.`publication_date`,@@session.time_zone,?) as news_date,a.url_img as news_featured_image,
                 (SELECT COUNT(*) FROM article_view WHERE id_article = a.id) as total_views, 
                 0 as cid, 'General' as category_name, w.url_adress as url_fav
@@ -112,7 +112,7 @@ class Article_model extends CI_Model
 
                 $row['id'] = $result->id;
                 $row['url_share'] = 'http://news.notifygroup.org/' . $row['id'];
-                $row['url_article'] = 'http://news.notifygroup.org/q/' . $row['id'];
+                $row['url_article'] = $result->url_article;
                 $row['cat_id'] = $result->cat_id;
                 $row['url_fav'] = $result->url_fav;
                 $row['news_type'] = $result->news_type;
@@ -138,7 +138,7 @@ class Article_model extends CI_Model
         $timezone = $this->session->timezone;
         if($idCompetitionType)
         {
-            $sql = "SELECT a.id, 0 as cat_id, 'image' as news_type,a.title as news_heading,a.description as news_description,
+            $sql = "SELECT a.id, a.url_adress as url_article, 0 as cat_id, 'image' as news_type,a.title as news_heading,a.description as news_description,
                 0 as news_video_id,'' as news_video_url,CONVERT_TZ(a.`publication_date`,@@session.time_zone,?) as news_date,a.url_img as news_featured_image,
                 (SELECT COUNT(*) FROM article_view WHERE id_article = a.id) as total_views,
                 0 as cid, 'General' as category_name, w.url_adress as url_fav
@@ -248,7 +248,7 @@ class Article_model extends CI_Model
                 $lastViewedArticle = $row['id'];
             }
             $row['url_share'] = 'http://news.notifygroup.org/'.$row['id'];
-            $row['url_article'] = 'http://news.notifygroup.org/q/'.$row['id'];
+            $row['url_article'] = $result->url_article;
             $row['cat_id'] = $result->cat_id;
             $row['url_fav'] = $result->url_fav;
             $row['news_type'] = $result->news_type;

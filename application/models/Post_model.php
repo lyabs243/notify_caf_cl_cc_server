@@ -19,6 +19,10 @@ class Post_model extends CI_Model
         return $id;
     }
 
+	public function update_post($id, $idSubscriber, $data) {
+		return $this->db->update('post', $data, array('id' => $id, 'id_subscriber' => $idSubscriber));
+	}
+
 	//get posts of specific subscriber or all posts
 	public function get_posts($idSubscriber, $page){
 		$timezone = $this->session->timezone;

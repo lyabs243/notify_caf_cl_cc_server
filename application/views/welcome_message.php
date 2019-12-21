@@ -175,6 +175,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <input type="submit" value="OK">
         </form>
 
+        <code>Test Update post</code>
+        <form method="post" action="post/update/9/7" enctype="multipart/form-data">
+            <textarea name="post" placeholder="post"></textarea>
+            <input type="submit" value="OK">
+        </form>
+
 		<p>If you are exploring CodeIgniter for the very first time, you should start by reading the <a href="user_guide/">User Guide</a>.</p>
 	</div>
 

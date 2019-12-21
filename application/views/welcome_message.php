@@ -161,6 +161,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <input type="submit" value="OK">
         </form>
 
+        <code>Test add Rss feed json file</code>
+        <form method="post" action="rssFeed/add_feed_file/" enctype="multipart/form-data">
+            <input name="file_contents" type="file">
+            <input type="submit" value="OK">
+        </form>
+
+        <code>Test Add postt</code>
+        <form method="post" action="post/add/5/0" enctype="multipart/form-data">
+            <input name="img_post" type="file">
+            <textarea name="post" placeholder="post"></textarea>
+            <input name="type" type="text" placeholder="type">
+            <input type="submit" value="OK">
+        </form>
+
 		<p>If you are exploring CodeIgniter for the very first time, you should start by reading the <a href="user_guide/">User Guide</a>.</p>
 	</div>
 

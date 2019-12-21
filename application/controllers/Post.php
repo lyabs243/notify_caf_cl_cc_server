@@ -36,6 +36,23 @@ class Post extends NotifyController
 		die;
 	}
 
+	public function delete($id, $idSubscriber){
+		if($this->Subscriber_model->is_active($idSubscriber)) {
+			$result = $this->Post_model->delete_post($id, $idSubscriber);
+			if ($result)
+				$output['NOTIFYGROUP'][] = array('success' => '1');
+			else
+				$output['NOTIFYGROUP'][] = array('success' => '0');
+		}
+		else{
+			$output['NOTIFYGROUP'][] = array('success' => '0');
+		}
+
+		header( 'Content-Type: application/json; charset=utf-8' );
+		echo json_encode($output,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+		die;
+	}
+
 	public function get_posts($idSubscriber=0, $page=1)
 	{
 		$page = (int)$page;

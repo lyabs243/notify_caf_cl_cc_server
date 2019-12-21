@@ -23,6 +23,10 @@ class Post_model extends CI_Model
 		return $this->db->update('post', $data, array('id' => $id, 'id_subscriber' => $idSubscriber));
 	}
 
+	public function delete_post($id, $idSubscriber) {
+		return $this->db->delete('post', array('id' => $id, 'id_subscriber' => $idSubscriber));
+	}
+
 	//get posts of specific subscriber or all posts
 	public function get_posts($idSubscriber, $page){
 		$timezone = $this->session->timezone;

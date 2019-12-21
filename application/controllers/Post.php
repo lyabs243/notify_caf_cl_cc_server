@@ -18,6 +18,25 @@ class Post extends NotifyController
         $this->load->model('Post_model');
     }
 
+	public function get_posts($idSubscriber=0, $page=1)
+	{
+		$page = (int)$page;
+		$idSubscriber = (int)$idSubscriber;
+		$data = $this->Post_model->get_posts($idSubscriber, $page);
+
+		if(!count($data)){
+			$news['NOTIFYGROUP'][] = array('success' => '0');
+		}
+		else{
+
+			$news['NOTIFYGROUP'][] = array('success' => '1','data' => $data);
+		}
+
+		header( 'Content-Type: application/json; charset=utf-8' );
+		echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+		die;
+	}
+
     public function add($id_subscriber, $uploadImage = false)
     {
     	$result = false;

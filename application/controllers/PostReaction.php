@@ -20,6 +20,23 @@ class PostReaction extends NotifyController
 		$this->load->model('Post_reaction_model');
 	}
 
+	public function delete($id_post, $id_subscriber){
+		if($this->Subscriber_model->is_active($id_subscriber)) {
+			$result = $this->Post_reaction_model->delete_post_reaction($id_post, $id_subscriber);
+			if ($result)
+				$output['NOTIFYGROUP'][] = array('success' => '1');
+			else
+				$output['NOTIFYGROUP'][] = array('success' => '0');
+		}
+		else{
+			$output['NOTIFYGROUP'][] = array('success' => '0');
+		}
+
+		header( 'Content-Type: application/json; charset=utf-8' );
+		echo json_encode($output,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+		die;
+	}
+
 	public function add($id_post, $id_subscriber, $reaction)
 	{
 		$result = false;

@@ -19,6 +19,10 @@ class Post_reaction_model extends CI_Model
 		return $id;
 	}
 
+	public function delete_post_reaction($id_post, $id_subscriber) {
+		return $this->db->delete('post_reaction', array('id_post' => $id_post, 'id_subscriber' => $id_subscriber));
+	}
+
 	public function update_post_reaction($id_post, $id_subscriber, $data) {
 		return $this->db->update('post_reaction', $data, array('id_post' => $id_post, 'id_subscriber' => $id_subscriber));
 	}

@@ -35,7 +35,8 @@ class Post_model extends CI_Model
 	}
 
 	//get posts of specific subscriber or all posts
-	public function get_posts($idSubscriber, $page){
+	public function get_posts($active_subscriber, $idSubscriber, $page){
+		$this->load->model('Post_reaction_model');
 		$timezone = $this->session->timezone;
 		$page_start = (((int)$page)-1)*10;
 		$posts = array();
@@ -69,6 +70,8 @@ class Post_model extends CI_Model
 			$data['type'] = $result->type;
 			$data['active'] = $result->active;
 			$data['register_date'] = $result->register_date;
+			//get reaction for each post
+			$data['reaction'] = $this->Post_reaction_model->get_post_reactions($result->id, $active_subscriber);
 			$posts[] = $data;
 		}
 		return $posts;

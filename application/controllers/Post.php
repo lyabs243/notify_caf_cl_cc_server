@@ -53,11 +53,11 @@ class Post extends NotifyController
 		die;
 	}
 
-	public function get_posts($idSubscriber=0, $page=1)
+	public function get_posts($active_subscriber=0, $idSubscriber=0, $page=1)
 	{
 		$page = (int)$page;
 		$idSubscriber = (int)$idSubscriber;
-		$data = $this->Post_model->get_posts($idSubscriber, $page);
+		$data = $this->Post_model->get_posts($active_subscriber, $idSubscriber, $page);
 
 		if(!count($data)){
 			$news['NOTIFYGROUP'][] = array('success' => '0');

@@ -123,6 +123,10 @@ class Post_model extends CI_Model
 	}
 
 	public function update_post_status($id, $data) {
+    	//on block post, deactivate also abusive posts signal related to this post
+		if(!$data['active']) {
+			$this->db->update('abusive_post', array('active' => 0), array('id_post' => $id));
+		}
 		$this->db->where('id', $id);
 		return $this->db->update('post', $data);
 	}

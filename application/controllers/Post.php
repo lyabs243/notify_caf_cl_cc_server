@@ -194,4 +194,41 @@ class Post extends NotifyController
 		echo json_encode($output,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 		die;
 	}
+
+	//desactive les signalement de post
+	public function deactivate_abusive_post($id,$id_admin){
+		if($this->Subscriber_model->is_admin($id_admin)) {
+			$data['active'] = 0;
+			$result = $this->Post_model->update_abusive_post_status($id, $data);
+			if ($result)
+				$output['NOTIFYGROUP'][] = array('success' => '1');
+			else
+				$output['NOTIFYGROUP'][] = array('success' => '0');
+		}
+		else{
+			$output['NOTIFYGROUP'][] = array('success' => '0');
+		}
+
+		header( 'Content-Type: application/json; charset=utf-8' );
+		echo json_encode($output,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+		die;
+	}
+
+	public function active_abusive_post($id,$id_admin){
+		if($this->Subscriber_model->is_admin($id_admin)) {
+			$data['active'] = 1;
+			$result = $this->Post_model->update_abusive_post_status($id, $data);
+			if ($result)
+				$output['NOTIFYGROUP'][] = array('success' => '1');
+			else
+				$output['NOTIFYGROUP'][] = array('success' => '0');
+		}
+		else{
+			$output['NOTIFYGROUP'][] = array('success' => '0');
+		}
+
+		header( 'Content-Type: application/json; charset=utf-8' );
+		echo json_encode($output,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+		die;
+	}
 }

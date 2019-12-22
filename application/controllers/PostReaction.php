@@ -24,10 +24,16 @@ class PostReaction extends NotifyController
 	{
 		$result = false;
 		if($this->Subscriber_model->is_active($id_subscriber)) {
-			$data['id_subscriber'] = (int)$id_subscriber;
-			$data['id_post'] = (int)$id_post;
 			$data['reaction_type'] = (int)$reaction;
-			$result = $this->Post_reaction_model->add_post_reaction($data);
+			//subscriber post reaction exist, update it, lese add it
+			if($this->Post_reaction_model->is_subscriber_reaction_exist($id_post, $id_subscriber)) {
+				$result = $this->Post_reaction_model->update_post_reaction($id_post, $id_subscriber, $data);
+			}
+			else {
+				$data['id_subscriber'] = (int)$id_subscriber;
+				$data['id_post'] = (int)$id_post;
+				$result = $this->Post_reaction_model->add_post_reaction($data);
+			}
 		}
 
 		if($result)

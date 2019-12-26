@@ -86,7 +86,7 @@ class Post_reaction_model extends CI_Model
 	//get reaction type of a subscriber on a post
 	function  subscriber_post_reaction($id_post, $id_subscriber)
 	{
-		$reaction_type = 0;
+		$reaction_type = "0";
 		$query = $this->db->query('
 		SELECT reaction_type
 		 FROM post_reaction 

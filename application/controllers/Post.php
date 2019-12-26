@@ -60,11 +60,11 @@ class Post extends NotifyController
 		$data = $this->Post_model->get_posts($active_subscriber, $idSubscriber, $page);
 
 		if(!count($data)){
-			$news['NOTIFYGROUP'][] = array('success' => '0');
+			$news['NOTIFYGROUP'] = array('success' => '0');
 		}
 		else{
 
-			$news['NOTIFYGROUP'][] = array('success' => '1','data' => $data);
+			$news['NOTIFYGROUP'] = array('success' => '1','data' => $data);
 		}
 
 		header( 'Content-Type: application/json; charset=utf-8' );

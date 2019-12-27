@@ -72,6 +72,22 @@ class Post extends NotifyController
 		die;
 	}
 
+	public function get_post($id_post, $active_subscriber=0)
+	{
+		$data = $this->Post_model->get_post($id_post, $active_subscriber);
+
+		if(!count($data)){
+			$news['NOTIFYGROUP'] = array('success' => '0');
+		}
+		else{
+			$news['NOTIFYGROUP'] = array('success' => '1','data' => $data);
+		}
+
+		header( 'Content-Type: application/json; charset=utf-8' );
+		echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+		die;
+	}
+
 	public function get_abusive_posts($id_admin, $page=1)
 	{
 		$page = (int)$page;

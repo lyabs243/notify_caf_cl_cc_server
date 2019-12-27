@@ -77,6 +77,43 @@ class Post_model extends CI_Model
 		return $posts;
 	}
 
+	//get a specific post
+	public function get_post($id_post, $active_subscriber){
+		$this->load->model('Post_reaction_model');
+		$timezone = $this->session->timezone;
+		$post = null;
+		$args[] = $timezone;
+		$args[] = $id_post;
+		$query = '
+            SELECT p.`id`, p.`id_subscriber`, p.`post`, p.`url_image`, p.`type`, p.active, 
+             CONVERT_TZ(p.`register_date`,@@session.time_zone,?) as register_date,s.full_name, s.url_profil_pic
+            FROM `post` p
+            JOIN subscriber s
+            ON p.id_subscriber = s.id
+            WHERE p.active = 1
+            AND p.id = ?
+            ';
+		$query = $this->db->query($query, $args);
+		$results = $query->result();
+		foreach ($results as $result)
+		{
+			$data = array();
+			$data['id'] = $result->id;
+			$data['id_subscriber'] = $result->id_subscriber;
+			$data['post'] = $result->post;
+			$data['url_image'] = $result->url_image;
+			$data['subscriber']['full_name'] = $result->full_name;
+			$data['subscriber']['url_profil_pic'] = $result->url_profil_pic;
+			$data['type'] = $result->type;
+			$data['active'] = $result->active;
+			$data['register_date'] = $result->register_date;
+			//get reaction for each post
+			$data['reaction'] = $this->Post_reaction_model->get_post_reactions($result->id, $active_subscriber);
+			$post = $data;
+		}
+		return $post;
+	}
+
 	public function get_abusive_posts($page){
 		$timezone = $this->session->timezone;
 		$page_start = (((int)$page)-1)*10;

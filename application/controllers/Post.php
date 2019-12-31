@@ -116,13 +116,14 @@ class Post extends NotifyController
     public function add($id_subscriber, $uploadImage = false)
     {
     	$result = false;
+    	$error = null;
     	if($this->Subscriber_model->is_active($id_subscriber)) {
 
 		    $config['upload_path'] = './resource/images/posts/';
 		    $config['allowed_types'] = 'gif|jpg|png';
-		    $config['max_size'] = 2000;
-		    $config['max_width'] = 2000;
-		    $config['max_height'] = 2000;
+		    $config['max_size'] = 5000;
+		    //$config['max_width'] = 3000;
+		    //$config['max_height'] = 3000;
 		    $config['encrypt_name'] = TRUE;
 
 		    $this->load->library('upload', $config);
@@ -131,6 +132,7 @@ class Post extends NotifyController
 		    if ($uploadImage) {
 			    if (!$this->upload->do_upload('img_post')) {
 				    $result = false;
+				    $error = $this->upload->display_errors();
 			    } else {
 				    $uploadData = $this->upload->data();
 				    $data['url_image'] = 'http://www.notifygroup.org/notifyapp/api/resource/images/posts/' . $uploadData['file_name'];
@@ -148,7 +150,7 @@ class Post extends NotifyController
         if($result)
             $news['NOTIFYGROUP'][] = array('success' => '1');
         else
-            $news['NOTIFYGROUP'][] = array('success' => '0');
+            $news['NOTIFYGROUP'][] = array('success' => '0', 'error' => $error);
 
         header( 'Content-Type: application/json; charset=utf-8' );
         echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);

@@ -93,7 +93,7 @@ class Post extends NotifyController
 		$page = (int)$page;
 		$id_admin = (int)$id_admin;
 		if($this->Subscriber_model->is_admin($id_admin)) {
-			$data = $this->Post_model->get_abusive_posts($page);
+			$data = $this->Post_model->get_abusive_posts($page, $id_admin);
 			$result = count($data);
 		}
 		else {

@@ -114,7 +114,8 @@ class Post_model extends CI_Model
 		return $post;
 	}
 
-	public function get_abusive_posts($page){
+	public function get_abusive_posts($page, $id_admin){
+		$this->load->model('Post_reaction_model');
 		$timezone = $this->session->timezone;
 		$page_start = (((int)$page)-1)*10;
 		$query = '
@@ -157,6 +158,8 @@ class Post_model extends CI_Model
 			$data['post']['type'] = $result->type;
 			$data['post']['active'] = $result->active_post;
 			$data['post']['register_date'] = $result->register_date_post;
+			//get reaction for each post
+			$data['post']['reaction'] = $this->Post_reaction_model->get_post_reactions($result->id_post, $id_admin);
 			$abusive_posts[] = $data;
 		}
 		return $abusive_posts;

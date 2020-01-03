@@ -101,11 +101,11 @@ class Post extends NotifyController
 		}
 
 		if(!$result){
-			$output['NOTIFYGROUP'][] = array('success' => '0');
+			$output['NOTIFYGROUP'] = array('success' => '0');
 		}
 		else{
 
-			$output['NOTIFYGROUP'][] = array('success' => '1','data' => $data);
+			$output['NOTIFYGROUP'] = array('success' => '1','data' => $data);
 		}
 
 		header( 'Content-Type: application/json; charset=utf-8' );

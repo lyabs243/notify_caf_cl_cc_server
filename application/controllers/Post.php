@@ -249,4 +249,43 @@ class Post extends NotifyController
 		echo json_encode($output,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 		die;
 	}
+
+	public function add_comment($idUser,$idPost) {
+		$idUser = (int)$idUser;
+		$idPost = (int)$idPost;
+		if($this->User_model->is_user_exist($idUser)) {
+			$this->load->library('form_validation');
+			// définition des règles de validation
+			$this->form_validation->set_rules('comment', '« Comment »', 'required');
+
+			// ajout du style pour les messages d'erreur
+			$this->form_validation->set_error_delimiters('<br /><div class="errorMessage"><span style="font-size: 150%;">&uarr;&nbsp;</span>', '</div>');
+
+			if ($this->form_validation->run() == FALSE) {
+				$news['NOTIFYGROUP'] = array('success' => '0');
+			} else {
+				// succès de la validation : récupération des données passées en post
+
+				$comment = htmlspecialchars($this->input->post('comment'));
+				$data['comment'] = $comment;
+				$data['id_user'] = $idUser;
+				$data['id_post'] = $idPost;
+				$result = $this->Post_model->add_comment($data);
+
+				if($result > 0)
+					$news['NOTIFYGROUP'] = array('success' => '1');
+				else
+					$news['NOTIFYGROUP'] = array('success' => '0');
+			}
+
+		}
+		else
+		{
+			$news['NOTIFYGROUP'] = array('success' => '0');
+		}
+
+		header( 'Content-Type: application/json; charset=utf-8' );
+		echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+		die;
+	}
 }

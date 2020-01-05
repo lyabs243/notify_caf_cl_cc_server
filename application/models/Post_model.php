@@ -114,6 +114,12 @@ class Post_model extends CI_Model
 		return $post;
 	}
 
+	public function add_comment($data) {
+		// insertion dans la table
+		$this->db->insert('spt_comment', $data);
+		return $this->db->insert_id();
+	}
+
 	public function get_abusive_posts($page, $id_admin){
 		$this->load->model('Post_reaction_model');
 		$timezone = $this->session->timezone;

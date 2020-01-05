@@ -161,6 +161,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <input type="submit" value="OK">
         </form>
 
+        <code>Test add post comment</code>
+        <form method="post" action="post/add_comment/1/1">
+            <input name="comment" type="text" value=''>
+            <input type="submit" value="OK">
+        </form>
+
         <code>Test add Rss feed json file</code>
         <form method="post" action="rssFeed/add_feed_file/" enctype="multipart/form-data">
             <input name="file_contents" type="file">

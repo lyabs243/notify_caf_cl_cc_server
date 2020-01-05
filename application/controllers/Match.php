@@ -155,10 +155,17 @@ class Match extends NotifyController {
 
     public function comments($idMatch,$page=1,$idCommentMin=0)
     {
-        $news['NOTIFYGROUP'] = $this->Match_model->get_match_comments($idMatch,$page,$idCommentMin);
+	    $data = $this->Match_model->get_match_comments($idMatch,$page,$idCommentMin);
+
+	    if(count($data)) {
+		    $result['NOTIFYGROUP'] = array('success' => '1', 'data' => $data);
+	    }
+	    else {
+		    $result['NOTIFYGROUP'] = array('success' => '0');
+	    }
 
         header( 'Content-Type: application/json; charset=utf-8' );
-        echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        echo json_encode($result,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
         die;
     }
 

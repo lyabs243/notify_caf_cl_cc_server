@@ -20,4 +20,20 @@ class Comment_model extends CI_Model
 		return $this->db->delete('spt_comment', array('id' => $id, 'id_user' => $idUser));
 	}
 
+	function  total_post_comments($id_post)
+	{
+		$total = 0;
+		$query = $this->db->query('
+		SELECT COUNT(*) as total
+		 FROM spt_comment 
+		 WHERE id_post = ?'
+			,array($id_post));
+		$results = $query->result();
+		foreach ($results as $result)
+		{
+			$total = $result->total;
+		}
+		return $total;
+	}
+
 }

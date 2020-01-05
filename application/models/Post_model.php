@@ -37,6 +37,7 @@ class Post_model extends CI_Model
 	//get posts of specific subscriber or all posts
 	public function get_posts($active_subscriber, $idSubscriber, $page){
 		$this->load->model('Post_reaction_model');
+		$this->load->model('Comment_model');
 		$timezone = $this->session->timezone;
 		$page_start = (((int)$page)-1)*10;
 		$posts = array();
@@ -67,6 +68,7 @@ class Post_model extends CI_Model
 			$data['url_image'] = $result->url_image;
 			$data['subscriber']['full_name'] = $result->full_name;
 			$data['subscriber']['url_profil_pic'] = $result->url_profil_pic;
+			$data['total_comments'] = $this->Comment_model->total_post_comments($result->id);
 			$data['type'] = $result->type;
 			$data['active'] = $result->active;
 			$data['register_date'] = $result->register_date;
@@ -80,6 +82,7 @@ class Post_model extends CI_Model
 	//get a specific post
 	public function get_post($id_post, $active_subscriber){
 		$this->load->model('Post_reaction_model');
+		$this->load->model('Comment_model');
 		$timezone = $this->session->timezone;
 		$post = null;
 		$args[] = $timezone;
@@ -106,6 +109,7 @@ class Post_model extends CI_Model
 			$data['subscriber']['url_profil_pic'] = $result->url_profil_pic;
 			$data['type'] = $result->type;
 			$data['active'] = $result->active;
+			$data['total_comments'] = $this->Comment_model->total_post_comments($id_post);
 			$data['register_date'] = $result->register_date;
 			//get reaction for each post
 			$data['reaction'] = $this->Post_reaction_model->get_post_reactions($result->id, $active_subscriber);
@@ -155,6 +159,7 @@ class Post_model extends CI_Model
 
 	public function get_abusive_posts($page, $id_admin){
 		$this->load->model('Post_reaction_model');
+		$this->load->model('Comment_model');
 		$timezone = $this->session->timezone;
 		$page_start = (((int)$page)-1)*10;
 		$query = '
@@ -197,6 +202,7 @@ class Post_model extends CI_Model
 			$data['post']['type'] = $result->type;
 			$data['post']['active'] = $result->active_post;
 			$data['post']['register_date'] = $result->register_date_post;
+			$data['post']['total_comments'] = $this->Comment_model->total_post_comments($result->id_post);
 			//get reaction for each post
 			$data['post']['reaction'] = $this->Post_reaction_model->get_post_reactions($result->id_post, $id_admin);
 			$abusive_posts[] = $data;

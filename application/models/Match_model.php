@@ -455,7 +455,9 @@ class Match_model extends CI_Model
     }
 
     public function get_match_comments($idMatch,$page=1,$idCommentMin=0) {
-        $sql = "SELECT sc.id,sc.`id_user`, sc.`comment`, sc.`register_date`, s.full_name, s.url_profil_pic, s.id_account_user
+	    $this->load->model('Subscriber_model');
+        $sql = "SELECT sc.id,sc.`id_user`, sc.`comment`, sc.`register_date`, s.full_name, s.url_profil_pic, s.id_account_user,
+ 				s.id as id_subscriber
                 FROM `spt_comment` sc
                 JOIN subscriber s
                 ON sc.id_user = s.id_user
@@ -473,12 +475,11 @@ class Match_model extends CI_Model
         {
             $row = array();
             $row['id'] = $result->id;
+	        $row['id_match'] = $idMatch;
             $row['id_user'] = $result->id_user;
-            $row['id_account_user'] = $result->id_account_user;
             $row['comment'] = $result->comment;
+            $row['subscriber'] = $this->Subscriber_model->get($result->id_subscriber);
             $row['register_date'] = $result->register_date;
-            $row['full_name'] = $result->full_name;
-            $row['url_profil_pic'] = $result->url_profil_pic;
 
             array_push($comments,$row);
         }

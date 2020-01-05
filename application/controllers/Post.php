@@ -250,6 +250,15 @@ class Post extends NotifyController
 		die;
 	}
 
+	public function comments($idPost,$page=1,$idCommentMin=0)
+	{
+		$news['NOTIFYGROUP'] = $this->Post_model->get_post_comments($idPost,$page,$idCommentMin);
+
+		header( 'Content-Type: application/json; charset=utf-8' );
+		echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+		die;
+	}
+
 	public function add_comment($idUser,$idPost) {
 		$idUser = (int)$idUser;
 		$idPost = (int)$idPost;

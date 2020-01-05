@@ -120,6 +120,39 @@ class Post_model extends CI_Model
 		return $this->db->insert_id();
 	}
 
+	public function get_post_comments($idPost,$page=1,$idCommentMin=0) {
+		$this->load->model('Subscriber_model');
+		$sql = "SELECT sc.id,sc.`id_user`, sc.`comment`, sc.`register_date`, s.full_name, s.url_profil_pic, s.id_account_user,
+ 				s.id as id_subscriber
+                FROM `spt_comment` sc
+                JOIN subscriber s
+                ON sc.id_user = s.id_user
+                WHERE sc.id_post = ?
+                AND sc.id > ?
+                ORDER BY sc.register_date DESC 
+                LIMIT ?,10";
+		$page_start = (((int)$page)-1)*10;
+		$args = array($idPost,$idCommentMin,$page_start);
+
+		$query = $this->db->query($sql,$args);
+		$results = $query->result();
+		$comments = array();
+		foreach ($results as $result)
+		{
+			$row = array();
+			$row['id'] = $result->id;
+			$row['id_post'] = $idPost;
+			$row['id_user'] = $result->id_user;
+			$row['comment'] = $result->comment;
+			$row['subscriber'] = $this->Subscriber_model->get($result->id_subscriber);
+			$row['register_date'] = $result->register_date;
+
+			array_push($comments,$row);
+		}
+
+		return $comments;
+	}
+
 	public function get_abusive_posts($page, $id_admin){
 		$this->load->model('Post_reaction_model');
 		$timezone = $this->session->timezone;

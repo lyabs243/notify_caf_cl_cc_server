@@ -209,9 +209,9 @@ class Match extends NotifyController {
                 $result = $this->Match_model->add_comment($data);
 
                 if($result > 0)
-                    $news['NOTIFYGROUP'][] = array('success' => '1');
+                    $news['NOTIFYGROUP'] = array('success' => '1');
                 else
-                    $news['NOTIFYGROUP'][] = array('success' => '0');
+                    $news['NOTIFYGROUP'] = array('success' => '0');
             }
 
         }

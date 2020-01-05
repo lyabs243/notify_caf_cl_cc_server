@@ -40,4 +40,21 @@ class Comment extends NotifyController
 		echo json_encode($output,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 		die;
 	}
+
+	public function delete($id, $idUser){
+		if($this->User_model->is_user_exist($idUser)) {
+			$result = $this->Comment_model->delete_comment($id, $idUser);
+			if ($result)
+				$output['NOTIFYGROUP'] = array('success' => '1');
+			else
+				$output['NOTIFYGROUP'] = array('success' => '0');
+		}
+		else{
+			$output['NOTIFYGROUP'] = array('success' => '0');
+		}
+
+		header( 'Content-Type: application/json; charset=utf-8' );
+		echo json_encode($output,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+		die;
+	}
 }

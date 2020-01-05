@@ -16,4 +16,8 @@ class Comment_model extends CI_Model
 		return $this->db->update('spt_comment', $data, array('id' => $id, 'id_user' => $idUser));
 	}
 
+	public function delete_comment($id, $idUser) {
+		return $this->db->delete('spt_comment', array('id' => $id, 'id_user' => $idUser));
+	}
+
 }

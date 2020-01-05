@@ -193,6 +193,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <input type="submit" value="OK">
         </form>
 
+        <code>Test Update comment</code>
+        <form method="post" action="comment/update/1/1" enctype="multipart/form-data">
+            <textarea name="comment" placeholder="comment"></textarea>
+            <input type="submit" value="OK">
+        </form>
+
 		<p>If you are exploring CodeIgniter for the very first time, you should start by reading the <a href="user_guide/">User Guide</a>.</p>
 	</div>
 

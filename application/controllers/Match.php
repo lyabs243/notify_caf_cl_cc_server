@@ -198,7 +198,7 @@ class Match extends NotifyController {
             $this->form_validation->set_error_delimiters('<br /><div class="errorMessage"><span style="font-size: 150%;">&uarr;&nbsp;</span>', '</div>');
 
             if ($this->form_validation->run() == FALSE) {
-                $news['NOTIFYGROUP'][] = array('success' => '0');
+                $news['NOTIFYGROUP'] = array('success' => '0');
             } else {
                 // succès de la validation : récupération des données passées en post
 

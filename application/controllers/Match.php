@@ -217,7 +217,7 @@ class Match extends NotifyController {
         }
         else
         {
-            $news['NOTIFYGROUP'][] = array('success' => '0');
+            $news['NOTIFYGROUP'] = array('success' => '0');
         }
 
         header( 'Content-Type: application/json; charset=utf-8' );

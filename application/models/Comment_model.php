@@ -36,4 +36,45 @@ class Comment_model extends CI_Model
 		return $total;
 	}
 
+	public function add_comment($data) {
+		$this->load->model('Comment_model');
+		$this->db->insert('spt_comment', $data);
+		$data = array();
+		$id = $this->db->insert_id();
+		if($id > 0) {
+			$data = $this->Comment_model->get_comment($id);
+		}
+		return $data;
+	}
+
+	//get a specific comment
+	public function get_comment($id) {
+		$this->load->model('Subscriber_model');
+		$sql = "SELECT sc.id,sc.`id_user`, sc.`comment`, sc.`register_date`, s.full_name, s.url_profil_pic, s.id_account_user,
+ 				sc.id_post, sc.id_match, s.id as id_subscriber
+                FROM `spt_comment` sc
+                JOIN subscriber s
+                ON sc.id_user = s.id_user
+                WHERE sc.id = ?";
+		$args = array($id);
+
+		$query = $this->db->query($sql,$args);
+		$results = $query->result();
+		$comment = null;
+		foreach ($results as $result)
+		{
+			$row['id'] = $result->id;
+			$row['id_post'] = $result->id_post;
+			$row['id_match'] = $result->id_match;
+			$row['id_user'] = $result->id_user;
+			$row['comment'] = $result->comment;
+			$row['subscriber'] = $this->Subscriber_model->get($result->id_subscriber);
+			$row['register_date'] = $result->register_date;
+
+			$comment = $row;
+		}
+
+		return $comment;
+	}
+
 }

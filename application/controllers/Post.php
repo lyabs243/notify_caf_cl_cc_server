@@ -267,6 +267,7 @@ class Post extends NotifyController
 	}
 
 	public function add_comment($idUser,$idPost) {
+		$this->load->model('Comment_model');
 		$idUser = (int)$idUser;
 		$idPost = (int)$idPost;
 		if($this->User_model->is_user_exist($idUser)) {
@@ -286,10 +287,10 @@ class Post extends NotifyController
 				$data['comment'] = $comment;
 				$data['id_user'] = $idUser;
 				$data['id_post'] = $idPost;
-				$result = $this->Post_model->add_comment($data);
+				$result = $this->Comment_model->add_comment($data);
 
-				if($result > 0)
-					$news['NOTIFYGROUP'] = array('success' => '1');
+				if(count($result))
+					$news['NOTIFYGROUP'] = array('success' => '1', 'data' => $result);
 				else
 					$news['NOTIFYGROUP'] = array('success' => '0');
 			}

@@ -448,12 +448,6 @@ class Match_model extends CI_Model
         return $lineup;
     }
 
-    public function add_comment($data) {
-        // insertion dans la table
-        $this->db->insert('spt_comment', $data);
-        return $this->db->insert_id();
-    }
-
     public function get_match_comments($idMatch,$page=1,$idCommentMin=0) {
 	    $this->load->model('Subscriber_model');
         $sql = "SELECT sc.id,sc.`id_user`, sc.`comment`, sc.`register_date`, s.full_name, s.url_profil_pic, s.id_account_user,

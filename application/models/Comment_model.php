@@ -50,13 +50,14 @@ class Comment_model extends CI_Model
 	//get a specific comment
 	public function get_comment($id) {
 		$this->load->model('Subscriber_model');
-		$sql = "SELECT sc.id,sc.`id_user`, sc.`comment`, sc.`register_date`, s.full_name, s.url_profil_pic, s.id_account_user,
- 				sc.id_post, sc.id_match, s.id as id_subscriber
+		$timezone = $this->session->timezone;
+		$sql = "SELECT sc.id,sc.`id_user`, sc.`comment`, CONVERT_TZ(sc.`register_date`,@@session.time_zone,?) as register_date,
+ 				s.full_name, s.url_profil_pic, s.id_account_user, sc.id_post, sc.id_match, s.id as id_subscriber
                 FROM `spt_comment` sc
                 JOIN subscriber s
                 ON sc.id_user = s.id_user
                 WHERE sc.id = ?";
-		$args = array($id);
+		$args = array($timezone, $id);
 
 		$query = $this->db->query($sql,$args);
 		$results = $query->result();

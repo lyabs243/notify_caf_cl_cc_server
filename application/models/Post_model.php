@@ -120,8 +120,9 @@ class Post_model extends CI_Model
 
 	public function get_post_comments($idPost,$page=1,$idCommentMin=0) {
 		$this->load->model('Subscriber_model');
-		$sql = "SELECT sc.id,sc.`id_user`, sc.`comment`, sc.`register_date`, s.full_name, s.url_profil_pic, s.id_account_user,
- 				s.id as id_subscriber
+		$timezone = $this->session->timezone;
+		$sql = "SELECT sc.id,sc.`id_user`, sc.`comment`, CONVERT_TZ(sc.`register_date`,@@session.time_zone,?) as register_date,
+ 				s.full_name, s.url_profil_pic, s.id_account_user, s.id as id_subscriber
                 FROM `spt_comment` sc
                 JOIN subscriber s
                 ON sc.id_user = s.id_user
@@ -130,7 +131,7 @@ class Post_model extends CI_Model
                 ORDER BY sc.register_date DESC 
                 LIMIT ?,10";
 		$page_start = (((int)$page)-1)*10;
-		$args = array($idPost,$idCommentMin,$page_start);
+		$args = array($timezone, $idPost, $idCommentMin, $page_start);
 
 		$query = $this->db->query($sql,$args);
 		$results = $query->result();

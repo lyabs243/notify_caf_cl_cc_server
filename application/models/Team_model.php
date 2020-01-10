@@ -35,6 +35,18 @@ class Team_model extends CI_Model
 		}
 	}
 
+	public function update_country_urlflag_from_json($json)
+	{
+		$countries = json_decode($json);
+		echo 'Total: ' . count($countries) . '<br>';
+		foreach($countries as $country){
+			$data['url_flag'] = 'http://notifygroup.org/notifyapp/api/resource/teams/' . $country->url_flag;
+
+			$this->db->where('iso3', $country->country_code);
+			echo $this->db->update('country', $data) . ' ' . $country->name;
+		}
+	}
+
 	//check if specific team already exist from url logo
 	function  is_team_exist($url_team_logo)
 	{

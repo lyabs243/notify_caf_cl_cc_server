@@ -1,0 +1,207 @@
+[
+  {
+    "name": "Egypt",
+    "url_flag": "country/egy.png",
+    "country_code": "EGY"
+  },
+  {
+    "name": "Tunisia",
+    "url_flag": "country/tun.png",
+    "country_code": "TUN"
+  },
+  {
+    "name": "Congo DR",
+    "url_flag": "country/cod.png",
+    "country_code": "COD"
+  },
+  {
+    "name": "Sudan",
+    "url_flag": "country/sdn.png",
+    "country_code": "SDN"
+  },
+  {
+    "name": "Morocco",
+    "url_flag": "country/mar.png",
+    "country_code": "MAR"
+  },
+  {
+    "name": "Ivory Coast",
+    "url_flag": "country/civ.png",
+    "country_code": "CIV"
+  },
+  {
+    "name": "Algeria",
+    "url_flag": "country/dza.png",
+    "country_code": "DZA"
+  },
+  {
+    "name": "Cameroon",
+    "url_flag": "country/cmr.png",
+    "country_code": "CMR"
+  },
+  {
+    "name": "Mali",
+    "url_flag": "country/mli.png",
+    "country_code": "MLI"
+  },
+  {
+    "name": "Zambia",
+    "url_flag": "country/zmb.png",
+    "country_code": "ZMB"
+  },
+  {
+    "name": "Nigeria",
+    "url_flag": "country/nga.png",
+    "country_code": "NGA"
+  },
+  {
+    "name": "South Africa",
+    "url_flag": "country/zaf.png",
+    "country_code": "ZAF"
+  },
+  {
+    "name": "Guinnea",
+    "url_flag": "country/gin.png",
+    "country_code": "GIN"
+  },
+  {
+    "name": "Angola",
+    "url_flag": "country/ago.png",
+    "country_code": "AGO"
+  },
+  {
+    "name": "Benin",
+    "url_flag": "country/ben.png",
+    "country_code": "BEN"
+  },
+  {
+    "name": "Burundi",
+    "url_flag": "country/bdi.png",
+    "country_code": "BDI"
+  },
+  {
+    "name": "Botswana",
+    "url_flag": "country/bwa.png",
+    "country_code": "BWA"
+  },
+  {
+    "name": "Congo Republic",
+    "url_flag": "country/cog.png",
+    "country_code": "COG"
+  },
+  {
+    "name": "Comoros",
+    "url_flag": "country/com.png",
+    "country_code": "COM"
+  },
+  {
+    "name": "Djibouti",
+    "url_flag": "country/dji.png",
+    "country_code": "DJI"
+  },
+  {
+    "name": "Ethiopia",
+    "url_flag": "country/eth.png",
+    "country_code": "ETH"
+  },
+  {
+    "name": "Gabon",
+    "url_flag": "country/gab.png",
+    "country_code": "GAB"
+  },
+  {
+    "name": "Ghana",
+    "url_flag": "country/gha.png",
+    "country_code": "GHA"
+  },
+  {
+    "name": "Gambia",
+    "url_flag": "country/gmb.png",
+    "country_code": "GMB"
+  },
+  {
+    "name": "Equatorial Guinea",
+    "url_flag": "country/gnq.png",
+    "country_code": "GNQ"
+  },
+  {
+    "name": "Kenya",
+    "url_flag": "country/ken.png",
+    "country_code": "KEN"
+  },
+  {
+    "name": "Liberia",
+    "url_flag": "country/lbr.png",
+    "country_code": "LBR"
+  },
+  {
+    "name": "Libya",
+    "url_flag": "country/lby.png",
+    "country_code": "LBY"
+  },
+  {
+    "name": "Lesotho",
+    "url_flag": "country/lso.png",
+    "country_code": "LSO"
+  },
+  {
+    "name": "Madagascar",
+    "url_flag": "country/mdg.png",
+    "country_code": "MDG"
+  },
+  {
+    "name": "Mozambique",
+    "url_flag": "country/moz.png",
+    "country_code": "MOZ"
+  },
+  {
+    "name": "MAURITANIA",
+    "url_flag": "country/mrt.png",
+    "country_code": "MRT"
+  },
+  {
+    "name": "Malawi",
+    "url_flag": "country/mwi.png",
+    "country_code": "MWI"
+  },
+  {
+    "name": "Namibia",
+    "url_flag": "country/nam.png",
+    "country_code": "NAM"
+  },
+  {
+    "name": "Niger",
+    "url_flag": "country/ner.png",
+    "country_code": "NER"
+  },
+  {
+    "name": "Rwanda",
+    "url_flag": "country/rwa.png",
+    "country_code": "RWA"
+  },
+  {
+    "name": "Senegal",
+    "url_flag": "country/sen.png",
+    "country_code": "SEN"
+  },
+  {
+    "name": "Swaziland",
+    "url_flag": "country/swz.png",
+    "country_code": "SWZ"
+  },
+  {
+    "name": "Tanzania",
+    "url_flag": "country/tza.png",
+    "country_code": "TZA"
+  },
+  {
+    "name": "Uganda",
+    "url_flag": "country/uga.png",
+    "country_code": "UGA"
+  },
+  {
+    "name": "Zimbabwe",
+    "url_flag": "country/zwe.png",
+    "country_code": "ZWE"
+  }
+]

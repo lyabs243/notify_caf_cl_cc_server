@@ -35,4 +35,20 @@ class FanClub extends NotifyController {
 		echo json_encode($result,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 		die;
 	}
+
+	public function get($idSubscriber, $category=1)
+	{
+		$data = $this->Fan_club_model->get_fan($idSubscriber, $category);
+
+		if(count($data)) {
+			$result['NOTIFYGROUP'] = array('success' => '1', 'data' => $data);
+		}
+		else {
+			$result['NOTIFYGROUP'] = array('success' => '0');
+		}
+
+		header( 'Content-Type: application/json; charset=utf-8' );
+		echo json_encode($result,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+		die;
+	}
 }

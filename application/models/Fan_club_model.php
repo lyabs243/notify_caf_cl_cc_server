@@ -33,4 +33,33 @@ class Fan_club_model extends CI_Model
 		}
 		return $return;
 	}
+
+	function  get_fan($idSubscriber, $category)
+	{
+		$query = $this->db->query('
+				SELECT sf.id_subscriber, sf.id_team, sf.category, st.title, st.country_code, st.url_logo, st.top_club, st.color
+				FROM spt_fan sf
+				JOIN spt_team st 
+				ON sf.id_team = st.id
+				WHERE sf.id_subscriber = ?
+				AND sf.category = ?'
+			,array($idSubscriber, $category));
+		$results = $query->result();
+		$data = array();
+		foreach ($results as $result)
+		{
+			$row['id_subscriber'] = $result->id_subscriber;
+			$row['id_team'] = $result->id_team;
+			$row['category'] = $result->category;
+			$row['title'] = $result->title;
+			$row['country_code'] = $result->country_code;
+			$row['url_logo'] = $result->url_logo;
+			$row['top_club'] = $result->top_club;
+			$row['color'] = $result->color;
+
+			$data[] = $row;
+		}
+
+		return $data;
+	}
 }

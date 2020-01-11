@@ -72,4 +72,29 @@ class Fan_club_model extends CI_Model
 
 		return $data;
 	}
+
+	function  get_countries($category)
+	{
+		$query = $this->db->query('
+				SELECT c.nicename, c.url_flag, c.iso3 as country_code
+				FROM country c
+				WHERE c.iso3 IN (
+					SELECT country_code FROM spt_team 
+					WHERE category = ?
+				)
+				ORDER BY c.nicename ASC'
+			,array($category));
+		$results = $query->result();
+		$data = array();
+		foreach ($results as $result)
+		{
+			$row['nicename'] = $result->nicename;
+			$row['url_flag'] = $result->url_flag;
+			$row['country_code'] = $result->country_code;
+
+			$data[] = $row;
+		}
+
+		return $data;
+	}
 }

@@ -50,7 +50,9 @@ class Subscriber_model extends CI_Model
     }
 
     //get all data of specific subscriber
-    public function get($id){
+    public function get($id, $competitionCategory = 1){
+	    $this->load->model('Fan_club_model');
+
         $data = null;
         $query = $this->db->query('SELECT * FROM subscriber WHERE id = ?'
             ,array($id));
@@ -59,6 +61,7 @@ class Subscriber_model extends CI_Model
         {
             $data = array();
             $data['success'] = 1;
+	        $data['badge'] = $this->Fan_club_model->get_fan($id, $competitionCategory);
             $data['id'] = $result->id_user;
             $data['id_subscriber'] = $result->id;
             $data['id_account_user'] = $result->id_account_user;
@@ -104,8 +107,10 @@ class Subscriber_model extends CI_Model
     }
 
     //verifie si le subscriber existe deja en renvoyant ses coordonneessss
-    function  is_subscriber_exist($id_account_user,$id_account_type)
+    function  is_subscriber_exist($id_account_user, $id_account_type, $competitionCategory=1)
     {
+	    $this->load->model('Fan_club_model');
+
         $data = null;
         $query = $this->db->query('SELECT * FROM subscriber WHERE id_account_user = ? AND id_account = ?'
             ,array($id_account_user,$id_account_type));
@@ -115,6 +120,7 @@ class Subscriber_model extends CI_Model
             $data = array();
             $data['success'] = 1;
             $data['id'] = $result->id_user;
+	        $data['badge'] = $this->Fan_club_model->get_fan($result->id, $competitionCategory);
             $data['id_subscriber'] = $result->id;
             $data['id_account_user'] = $result->id_account_user;
             $data['username'] = $result->username;

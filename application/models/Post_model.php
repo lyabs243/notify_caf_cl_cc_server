@@ -35,9 +35,10 @@ class Post_model extends CI_Model
 	}
 
 	//get posts of specific subscriber or all posts
-	public function get_posts($active_subscriber, $idSubscriber, $page){
+	public function get_posts($active_subscriber, $idSubscriber, $page, $competitionCategory=1){
 		$this->load->model('Post_reaction_model');
 		$this->load->model('Comment_model');
+		$this->load->model('Fan_club_model');
 		$timezone = $this->session->timezone;
 		$page_start = (((int)$page)-1)*10;
 		$posts = array();
@@ -68,6 +69,7 @@ class Post_model extends CI_Model
 			$data['url_image'] = $result->url_image;
 			$data['subscriber']['full_name'] = $result->full_name;
 			$data['subscriber']['url_profil_pic'] = $result->url_profil_pic;
+			$data['subscriber']['badge'] = $this->Fan_club_model->get_fan($result->id, $competitionCategory);
 			$data['total_comments'] = $this->Comment_model->total_post_comments($result->id);
 			$data['type'] = $result->type;
 			$data['active'] = $result->active;
@@ -80,9 +82,10 @@ class Post_model extends CI_Model
 	}
 
 	//get a specific post
-	public function get_post($id_post, $active_subscriber){
+	public function get_post($id_post, $active_subscriber, $competitionCategory=1){
 		$this->load->model('Post_reaction_model');
 		$this->load->model('Comment_model');
+		$this->load->model('Fan_club_model');
 		$timezone = $this->session->timezone;
 		$post = null;
 		$args[] = $timezone;
@@ -105,6 +108,7 @@ class Post_model extends CI_Model
 			$data['id_subscriber'] = $result->id_subscriber;
 			$data['post'] = $result->post;
 			$data['url_image'] = $result->url_image;
+			$data['subscriber']['badge'] = $this->Fan_club_model->get_fan($result->id, $competitionCategory);
 			$data['subscriber']['full_name'] = $result->full_name;
 			$data['subscriber']['url_profil_pic'] = $result->url_profil_pic;
 			$data['type'] = $result->type;
@@ -152,9 +156,10 @@ class Post_model extends CI_Model
 		return $comments;
 	}
 
-	public function get_abusive_posts($page, $id_admin){
+	public function get_abusive_posts($page, $id_admin, $competitionCategory=1){
 		$this->load->model('Post_reaction_model');
 		$this->load->model('Comment_model');
+		$this->load->model('Fan_club_model');
 		$timezone = $this->session->timezone;
 		$page_start = (((int)$page)-1)*10;
 		$query = '
@@ -185,6 +190,7 @@ class Post_model extends CI_Model
 			$data['id_subscriber'] = $result->id_subscriber;
 			$data['register_date'] = $result->register_date;
 
+			$data['subscriber']['badge'] = $this->Fan_club_model->get_fan($result->id, $competitionCategory);
 			$data['subscriber']['full_name'] = $result->full_name;
 			$data['subscriber']['url_profil'] = $result->url_profil_pic;
 

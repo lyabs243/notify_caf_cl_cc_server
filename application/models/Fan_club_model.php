@@ -97,4 +97,37 @@ class Fan_club_model extends CI_Model
 
 		return $data;
 	}
+
+	function  get_country_clubs($country_code, $category)
+	{
+		$country_code = strtolower($country_code);
+		$query = $this->db->query('
+				SELECT st.`id`, st.`title`, st.`title_small`, st.`is_national_team`, st.`country_code`, st.`url_logo`, st.`category`,
+				 st.`top_club`, st.`color`, st.`register_date`
+				FROM spt_team st
+				WHERE st.category = ?
+				AND LOWER(st.country_code) = ?
+				AND st.is_national_team = 0
+				ORDER BY st.top_club DESC, st.title ASC'
+			,array($category, $country_code));
+		$results = $query->result();
+		$data = array();
+		foreach ($results as $result)
+		{
+			$row['id'] = $result->id;
+			$row['title'] = $result->title;
+			$row['title_small'] = $result->title_small;
+			$row['is_national_team'] = $result->is_national_team;
+			$row['country_code'] = $result->country_code;
+			$row['url_logo'] = $result->url_logo;
+			$row['category'] = $result->category;
+			$row['top_club'] = $result->top_club;
+			$row['color'] = $result->color;
+			$row['register_date'] = $result->register_date;
+
+			$data[] = $row;
+		}
+
+		return $data;
+	}
 }

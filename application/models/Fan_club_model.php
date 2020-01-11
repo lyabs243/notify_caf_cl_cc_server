@@ -40,6 +40,10 @@ class Fan_club_model extends CI_Model
 		return $result;
 	}
 
+	public function delete_badge($idSubscriber, $competitionCategory) {
+		return $this->db->delete('spt_fan', array('id_subscriber' => $idSubscriber, 'category' => $competitionCategory));
+	}
+
 	function  get_fan($idSubscriber, $category)
 	{
 		$query = $this->db->query('

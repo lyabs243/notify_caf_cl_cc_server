@@ -37,6 +37,23 @@ class FanClub extends NotifyController {
 		die;
 	}
 
+	public function delete($idSubscriber, $competitionCategory=1){
+		if($this->Subscriber_model->is_active($idSubscriber)) {
+			$result = $this->Fan_club_model->delete_badge($idSubscriber, $competitionCategory);
+			if ($result)
+				$output['NOTIFYGROUP'] = array('success' => '1');
+			else
+				$output['NOTIFYGROUP'] = array('success' => '0');
+		}
+		else{
+			$output['NOTIFYGROUP'] = array('success' => '0');
+		}
+
+		header( 'Content-Type: application/json; charset=utf-8' );
+		echo json_encode($output,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+		die;
+	}
+
 	public function update($idSubscriber, $idTeam, $competitionCategory=1){
 		if($this->Subscriber_model->is_active($idSubscriber)) {
 			$data['id_team'] = $idTeam;

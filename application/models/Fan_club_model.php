@@ -57,7 +57,7 @@ class Fan_club_model extends CI_Model
 			$row['top_club'] = $result->top_club;
 			$row['color'] = $result->color;
 
-			$data[] = $row;
+			$data = $row;
 		}
 
 		return $data;

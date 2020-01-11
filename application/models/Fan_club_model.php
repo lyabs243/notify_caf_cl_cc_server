@@ -34,6 +34,12 @@ class Fan_club_model extends CI_Model
 		return $return;
 	}
 
+	public function update($idSubscriber, $competitionCategory, $data) {
+		$result = $this->db->update('spt_fan', $data,
+			array('id_subscriber' => $idSubscriber, 'category' => $competitionCategory));
+		return $result;
+	}
+
 	function  get_fan($idSubscriber, $category)
 	{
 		$query = $this->db->query('

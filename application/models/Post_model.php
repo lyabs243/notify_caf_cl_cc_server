@@ -69,7 +69,7 @@ class Post_model extends CI_Model
 			$data['url_image'] = $result->url_image;
 			$data['subscriber']['full_name'] = $result->full_name;
 			$data['subscriber']['url_profil_pic'] = $result->url_profil_pic;
-			$data['subscriber']['badge'] = $this->Fan_club_model->get_fan($result->id, $competitionCategory);
+			$data['subscriber']['badge'] = $this->Fan_club_model->get_fan($result->id_subscriber, $competitionCategory);
 			$data['total_comments'] = $this->Comment_model->total_post_comments($result->id);
 			$data['type'] = $result->type;
 			$data['active'] = $result->active;
@@ -108,7 +108,7 @@ class Post_model extends CI_Model
 			$data['id_subscriber'] = $result->id_subscriber;
 			$data['post'] = $result->post;
 			$data['url_image'] = $result->url_image;
-			$data['subscriber']['badge'] = $this->Fan_club_model->get_fan($result->id, $competitionCategory);
+			$data['subscriber']['badge'] = $this->Fan_club_model->get_fan($result->id_subscriber, $competitionCategory);
 			$data['subscriber']['full_name'] = $result->full_name;
 			$data['subscriber']['url_profil_pic'] = $result->url_profil_pic;
 			$data['type'] = $result->type;
@@ -190,7 +190,7 @@ class Post_model extends CI_Model
 			$data['id_subscriber'] = $result->id_subscriber;
 			$data['register_date'] = $result->register_date;
 
-			$data['subscriber']['badge'] = $this->Fan_club_model->get_fan($result->id, $competitionCategory);
+			$data['subscriber']['badge'] = $this->Fan_club_model->get_fan($result->id_subscriber, $competitionCategory);
 			$data['subscriber']['full_name'] = $result->full_name;
 			$data['subscriber']['url_profil'] = $result->url_profil_pic;
 

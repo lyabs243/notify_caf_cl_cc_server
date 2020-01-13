@@ -14,18 +14,20 @@ class Fan_club_model extends CI_Model
 	}
 
 	public function add_fan($data) {
-		if(!$this->is_fan_exist($data['id_subscriber'], $data['id_team'], $data['category'])) {
+		if(!$this->is_fan_exist($data['id_subscriber'], $data['category'])) {
 			$this->db->insert('spt_fan', $data);
 			return $this->db->insert_id();
 		}
-		return 0;
+		else {
+			return $this->update($data['id_subscriber'], $data['category'], $data);
+		}
 	}
 
-	function  is_fan_exist($idSubscriber,$idTeam,$category)
+	function  is_fan_exist($idSubscriber,$category)
 	{
 		$return = false;
-		$query = $this->db->query('SELECT * FROM spt_fan WHERE id_subscriber = ? AND id_team = ? AND category = ?'
-			,array($idSubscriber, $idTeam, $category));
+		$query = $this->db->query('SELECT * FROM spt_fan WHERE id_subscriber = ? AND category = ?'
+			,array($idSubscriber, $category));
 		$results = $query->result();
 		foreach ($results as $result)
 		{

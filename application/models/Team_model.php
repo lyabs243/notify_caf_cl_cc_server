@@ -35,6 +35,24 @@ class Team_model extends CI_Model
 		}
 	}
 
+	//temporary function: updates teams api id and url logo
+	public function update_teams_from_json($json)
+	{
+		$teams = json_decode($json);
+		echo 'Total: ' . count($teams) . '<br>';
+		foreach($teams as $team){
+			$data = null;
+			$data['api_id'] = $team->api_id;
+
+			if($data['api_id'] > 0) {
+				$data['url_logo'] = 'https://media.api-football.com/teams/' . $data['api_id'] . '.png';
+			}
+
+			$this->db->where('title', $team->name);
+			echo $this->db->update('spt_team', $data) . ' ' . $team->name . '<br>';
+		}
+	}
+
 	public function update_country_urlflag_from_json($json)
 	{
 		$countries = json_decode($json);

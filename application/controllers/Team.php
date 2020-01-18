@@ -26,4 +26,9 @@ class Team extends NotifyController {
 		$this->Team_model->update_country_urlflag_from_json($json);
 	}
 
+	public function update_teams_from_json(){
+		$json = file_get_contents('./resource/json/teams.json');
+		$this->Team_model->update_teams_from_json($json);
+	}
+
 }

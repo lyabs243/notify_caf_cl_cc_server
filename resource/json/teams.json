@@ -4,231 +4,264 @@
     "url_logo": "egy/al_ahly.png",
     "country_code": "EGY",
     "color": "#ff0000",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 1577
   },
   {
     "name": "ES Tunis",
     "url_logo": "tun/est.png",
     "country_code": "TUN",
     "color": "#ff0000",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 980
   },
   {
     "name": "TP Mazembe",
     "url_logo": "cod/tpm.png",
     "country_code": "COD",
     "color": "#000000",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 6435
   },
   {
     "name": "Etoile Sahel",
     "url_logo": "tun/ess.png",
     "country_code": "TUN",
     "color": "#ff0000",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 990
   },
   {
     "name": "Al Hilal",
     "url_logo": "sdn/al_hilal.png",
     "country_code": "SDN",
     "color": "#0000ff",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 5237
   },
   {
     "name": "AS Vita Club",
     "url_logo": "cod/as_vita.png",
     "country_code": "COD",
     "color": "#00ff00",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 6437
   },
   {
     "name": "Wydad Casablanca",
     "url_logo": "mar/wac.png",
     "country_code": "MAR",
     "color": "#ff0000",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 968
   },
   {
     "name": "Zamalek SC",
     "url_logo": "egy/zamalek.png",
     "country_code": "EGY",
     "color": "#ff0000",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 1040
   },
   {
     "name": "ASEC Mimosas",
     "url_logo": "civ/asec.png",
     "country_code": "CIV",
     "color": "#ffff00",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 0
   },
   {
     "name": "ES Setif",
     "url_logo": "dza/ess.png",
     "country_code": "DZA",
     "color": "#000000",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 0
   },
   {
     "name": "Coton Sport",
     "url_logo": "cmr/cotonsport.png",
     "country_code": "CMR",
     "color": "#00ff00",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 0
   },
   {
     "name": "Al Merreikh",
     "url_logo": "sdn/al_merreikh.png",
     "country_code": "SDN",
     "color": "#ff0000",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 5239
   },
   {
     "name": "CS Sfaxien",
     "url_logo": "tun/css.png",
     "country_code": "TUN",
     "color": "#000000",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 983
   },
   {
     "name": "Stade Malien",
     "url_logo": "mli/stade_malien.png",
     "country_code": "MLI",
     "color": "#0000ff",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 6434
   },
   {
     "name": "ZESCO United FC",
     "url_logo": "zmb/zesco.png",
     "country_code": "ZMB",
     "color": "#ffa500",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 5214
   },
   {
     "name": "Enyimba FC",
     "url_logo": "nga/enyimba.png",
     "country_code": "NGA",
     "color": "#0000ff",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 5177
   },
   {
     "name": "Mamelodi Sundowns",
     "url_logo": "zaf/sundowns.png",
     "country_code": "ZAF",
     "color": "#ffff00",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 2699
   },
   {
     "name": "Horoya AC",
     "url_logo": "gin/hac.png",
     "country_code": "GIN",
     "color": "#ff0000",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 4417
   },
   {
     "name": "Club Africain",
     "url_logo": "tun/club_africain.png",
     "country_code": "TUN",
     "color": "#ff0000",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 0
   },
   {
     "name": "Primeiro Agosto",
     "url_logo": "ago/primeiro.png",
     "country_code": "AGO",
     "color": "#ff0000",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 4913
   },
   {
     "name": "AC Leopard",
     "url_logo": "cog/ac_leopards.png",
     "country_code": "COG",
     "color": "#00ff00",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 0
   },
   {
     "name": "Raja Casablanca",
     "url_logo": "mar/raja_cas.png",
     "country_code": "MAR",
     "color": "#00ff00",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 976
   },
   {
     "name": "FUS Rabat",
     "url_logo": "mar/fus.png",
     "country_code": "MAR",
     "color": "#ff0000",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 0
   },
   {
     "name": "Djoliba AC",
     "url_logo": "mli/djoliba.png",
     "country_code": "MLI",
     "color": "#ff0000",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 8060
   },
   {
     "name": "USM Alger",
     "url_logo": "dza/usma.png",
     "country_code": "DZA",
     "color": "#ff0000",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 910
   },
   {
     "name": "Mbabane Swallows",
     "url_logo": "swz/mbabane.png",
     "country_code": "SWZ",
     "color": "#00ff00",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 0
   },
   {
     "name": "Orlando Pirates",
     "url_logo": "zaf/orlando.png",
     "country_code": "ZAF",
     "color": "#000000",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 2700
   },
   {
     "name": "Al Masry SC",
     "url_logo": "egy/al_masry.png",
     "country_code": "EGY",
     "color": "#00ff00",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 1031
   },
   {
     "name": "Young Africans FC",
     "url_logo": "tza/young_africans.png",
     "country_code": "TZA",
     "color": "#00ff00",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 5370
   },
   {
     "name": "Al Ahli Shendi",
     "url_logo": "sdn/al_ahli_shandi.png",
     "country_code": "SDN",
     "color": "#000000",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 5235
   },
   {
     "name": "Gor Mahia",
     "url_logo": "ken/gor_mahia.png",
     "country_code": "KEN",
     "color": "#00ff00",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 2467
   },
   {
     "name": "CNaPS Sport",
     "url_logo": "mdg/cnaps.png",
     "country_code": "MDG",
     "color": "#0000ff",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 8059
   },
   {
     "name": "APR FC",
     "url_logo": "rwa/apr.png",
     "country_code": "RWA",
     "color": "#000000",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 0
   }
   ,
   {
@@ -236,7 +269,8 @@
     "url_logo": "egy/ismaily.png",
     "country_code": "EGY",
     "color": "#ffff00",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 0
   }
   ,
   {
@@ -244,7 +278,8 @@
     "url_logo": "lby/al_ahli.png",
     "country_code": "LBY",
     "color": "#00ff00",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 0
   }
   ,
   {
@@ -252,7 +287,8 @@
     "url_logo": "eth/st_george.png",
     "country_code": "ETH",
     "color": "#ffff00",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 0
   }
   ,
   {
@@ -260,7 +296,8 @@
     "url_logo": "gab/cfm.png",
     "country_code": "GAB",
     "color": "#00ff00",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 0
   }
   ,
   {
@@ -268,7 +305,8 @@
     "url_logo": "bwa/township_rollers.png",
     "country_code": "BWA",
     "color": "#ffff00",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 5431
   }
   ,
   {
@@ -276,7 +314,8 @@
     "url_logo": "zaf/supersport.png",
     "country_code": "ZAF",
     "color": "#0000ff",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 0
   }
   ,
   {
@@ -284,7 +323,8 @@
     "url_logo": "lby/ittihad.png",
     "country_code": "LBY",
     "color": "#000000",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 8053
   }
   ,
   {
@@ -292,7 +332,8 @@
     "url_logo": "uga/kcca.png",
     "country_code": "UGA",
     "color": "#ffff00",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 6422
   }
   ,
   {
@@ -300,7 +341,8 @@
     "url_logo": "dza/mca.png",
     "country_code": "DZA",
     "color": "#00ff00",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 0
   }
   ,
   {
@@ -308,7 +350,8 @@
     "url_logo": "zmb/zanaco.png",
     "country_code": "ZMB",
     "color": "#ff0000",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 5215
   }
   ,
   {
@@ -316,7 +359,8 @@
     "url_logo": "civ/sss.png",
     "country_code": "CIV",
     "color": "#0000ff",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 0
   }
   ,
   {
@@ -324,7 +368,8 @@
     "url_logo": "ago/crd.png",
     "country_code": "AGO",
     "color": "#0000ff",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 0
   }
   ,
   {
@@ -332,7 +377,8 @@
     "url_logo": "rwa/rayon_sports.png",
     "country_code": "RWA",
     "color": "#0000ff",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 5323
   }
   ,
   {
@@ -340,7 +386,8 @@
     "url_logo": "lbr/byc.png",
     "country_code": "LBR",
     "color": "#0000ff",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 0
   }
   ,
   {
@@ -348,7 +395,8 @@
     "url_logo": "moz/songo.png",
     "country_code": "MOZ",
     "color": "#0000ff",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 6433
   }
   ,
   {
@@ -356,7 +404,8 @@
     "url_logo": "dza/csc.png",
     "country_code": "DZA",
     "color": "#00ff00",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 0
   }
   ,
   {
@@ -364,7 +413,8 @@
     "url_logo": "mar/dhj.png",
     "country_code": "MAR",
     "color": "#00ff00",
-	"top_club": 1
+	"top_club": 1,
+    "api_id": 0
   }
   ,
   {
@@ -372,7 +422,8 @@
     "url_logo": "tza/simba.png",
     "country_code": "TZA",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 6432
   }
   ,
   {
@@ -380,7 +431,8 @@
     "url_logo": "ago/petro.png",
     "country_code": "AGO",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 4922
   }
   ,
   {
@@ -388,7 +440,8 @@
     "url_logo": "gab/manga.png",
     "country_code": "GAB",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   }
   ,
   {
@@ -396,7 +449,8 @@
     "url_logo": "zwe/fcplatinum.png",
     "country_code": "ZWE",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 5230
   }
   ,
   {
@@ -404,7 +458,8 @@
     "url_logo": "sdn/obayid.png",
     "country_code": "SDN",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   }
   ,
   {
@@ -412,7 +467,8 @@
     "url_logo": "zmb/nkanafc.png",
     "country_code": "ZMB",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   }
   ,
   {
@@ -420,7 +476,8 @@
     "url_logo": "mar/tanger.png",
     "country_code": "MAR",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   }
   ,
   {
@@ -428,7 +485,8 @@
     "url_logo": "zaf/wits.png",
     "country_code": "ZAF",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 2695
   }
   ,
   {
@@ -436,7 +494,8 @@
     "url_logo": "lso/bantu.png",
     "country_code": "LSO",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   }
   ,
   {
@@ -444,7 +503,8 @@
     "url_logo": "cog/diables_noirs.png",
     "country_code": "COG",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   }
   ,
   {
@@ -452,7 +512,8 @@
     "url_logo": "tza/jku.png",
     "country_code": "TZA",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   }
   ,
   {
@@ -460,7 +521,8 @@
     "url_logo": "zwe/dynamos.png",
     "country_code": "ZWE",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   }
   ,
   {
@@ -468,7 +530,8 @@
     "url_logo": "gnq/leones.png",
     "country_code": "GNQ",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   }
   ,
   {
@@ -476,7 +539,8 @@
     "url_logo": "dza/jsmb.png",
     "country_code": "DZA",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   }
   ,
   {
@@ -484,7 +548,8 @@
     "url_logo": "gmb/gamtel.png",
     "country_code": "GMB",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   }
   ,
   {
@@ -492,7 +557,8 @@
     "url_logo": "dza/jsk.png",
     "country_code": "DZA",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 918
   }
   ,
   {
@@ -500,7 +566,8 @@
     "url_logo": "mrt/fcn.png",
     "country_code": "MRT",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 6427
   }
   ,
   {
@@ -508,7 +575,8 @@
     "url_logo": "cod/dcmp.png",
     "country_code": "COD",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 8067
   }
   ,
   {
@@ -516,7 +584,8 @@
     "url_logo": "cog/otoho.png",
     "country_code": "COG",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 6428
   }
   ,
   {
@@ -524,7 +593,8 @@
     "url_logo": "dza/jss.png",
     "country_code": "DZA",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   }
   ,
   {
@@ -532,7 +602,8 @@
     "url_logo": "egy/smouha.png",
     "country_code": "EGY",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   }
   ,
   {
@@ -540,7 +611,8 @@
     "url_logo": "egy/enppi.png",
     "country_code": "EGY",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   }
   ,
   {
@@ -548,7 +620,8 @@
     "url_logo": "lby/al-ahly_benghazi.png",
     "country_code": "LBY",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   }
   ,
   {
@@ -556,7 +629,8 @@
     "url_logo": "com/volcan.png",
     "country_code": "COM",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   }
   ,
   {
@@ -564,7 +638,8 @@
     "url_logo": "cog/cara.png",
     "country_code": "COG",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   }
   ,
   {
@@ -572,7 +647,8 @@
     "url_logo": "uga/vipers.png",
     "country_code": "UGA",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   }
   ,
   {
@@ -580,7 +656,8 @@
     "url_logo": "mar/mas.png",
     "country_code": "MAR",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   }
   ,
   {
@@ -588,7 +665,8 @@
     "url_logo": "gha/asante_kotoko.png",
     "country_code": "GHA",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 6411
   }
   ,
   {
@@ -596,7 +674,8 @@
     "url_logo": "mwi/big bullets_fc.png",
     "country_code": "MWI",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 4596
   }
   ,
   {
@@ -604,7 +683,8 @@
     "url_logo": "mli/as_real_bamako.png",
     "country_code": "MLI",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   }
   ,
   {
@@ -612,7 +692,8 @@
     "url_logo": "cmr/ums.png",
     "country_code": "CMR",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 5412
   }
   ,
   {
@@ -620,7 +701,8 @@
     "url_logo": "tun/cab.png",
     "country_code": "TUN",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   }
   ,
   {
@@ -628,7 +710,8 @@
     "url_logo": "civ/gagnoa.png",
     "country_code": "CIV",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   }
   ,
   {
@@ -636,7 +719,8 @@
     "url_logo": "zaf/kaizer.png",
     "country_code": "ZAF",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   }
   ,
   {
@@ -644,7 +728,8 @@
     "url_logo": "nga/warri.png",
     "country_code": "NGA",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   }
   ,
   {
@@ -652,7 +737,8 @@
     "url_logo": "dji/asas.png",
     "country_code": "DJI",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   }
   ,
   {
@@ -660,7 +746,8 @@
     "url_logo": "mar/berkane.png",
     "country_code": "MAR",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 962
   }
   ,
   {
@@ -668,7 +755,8 @@
     "url_logo": "nam/stars.png",
     "country_code": "NAM",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 5357
   }
   ,
   {
@@ -676,7 +764,8 @@
     "url_logo": "sen/asc.png",
     "country_code": "SEN",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   }
   ,
   {
@@ -684,7 +773,8 @@
     "url_logo": "bdi/vital_o.png",
     "country_code": "BDI",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   }
   ,
   {
@@ -692,7 +782,8 @@
     "url_logo": "tza/azam.png",
     "country_code": "TZA",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 8057
   }
   ,
   {
@@ -700,7 +791,8 @@
     "url_logo": "sen/generation.png",
     "country_code": "SEN",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 5288
   }
   ,
   {
@@ -708,7 +800,8 @@
     "url_logo": "egy/maqasa.png",
     "country_code": "EGY",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   }
   ,
   {
@@ -716,7 +809,8 @@
     "url_logo": "mli/onze.png",
     "country_code": "MLI",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   }
   ,
   {
@@ -724,7 +818,8 @@
     "url_logo": "bdi/messager.png",
     "country_code": "BDI",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   }
   ,
   {
@@ -732,7 +827,8 @@
     "url_logo": "moz/ferroviário.png",
     "country_code": "MOZ",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   }
   ,
   {
@@ -740,7 +836,8 @@
     "url_logo": "nga/enugu.png",
     "country_code": "NGA",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 5176
   }
   ,
   {
@@ -748,7 +845,8 @@
     "url_logo": "lby/al-nassr_fC.png",
     "country_code": "LBY",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   }
   ,
   {
@@ -756,7 +854,8 @@
     "url_logo": "lbr/liscr.png",
     "country_code": "LBR",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 8062
   }
   ,
   {
@@ -764,77 +863,88 @@
     "url_logo": "ner/sonidep.png",
     "country_code": "NER",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 6431
   },
   {
     "name": "El Geish",
     "url_logo": "egy/geish.png",
     "country_code": "EGY",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Al Mokawloon",
     "url_logo": "egy/mokawloon.png",
     "country_code": "EGY",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Petrojet",
     "url_logo": "egy/petrojet.png",
     "country_code": "EGY",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Wadi Degla",
     "url_logo": "egy/wadi.png",
     "country_code": "EGY",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   },
   {
     "name": "El Entag El Harby",
     "url_logo": "egy/entag.png",
     "country_code": "EGY",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Tanta SC",
     "url_logo": "egy/tanta_sc.png",
     "country_code": "EGY",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   },
   {
     "name": "El Dakhleya FC",
     "url_logo": "egy/el_dakhleya_fc.png",
     "country_code": "EGY",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Aswan SC",
     "url_logo": "egy/aswan.png",
     "country_code": "EGY",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Al Nasr",
     "url_logo": "egy/al_nasr.png",
     "country_code": "EGY",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 6410
   },
   {
     "name": "El Sharqiya",
     "url_logo": "egy/el_sharqiya.png",
     "country_code": "EGY",
     "color": "#000000",
-	"top_club": 0
+	"top_club": 0,
+    "api_id": 0
   }
 ,
   {
@@ -842,713 +952,815 @@
     "url_logo": "dza/pac.png",
     "country_code": "DZA",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 915
   },
   {
     "name": "Na Hussein Dey",
     "url_logo": "dza/na_hussein.png",
     "country_code": "DZA",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "MC Oran",
     "url_logo": "dza/mc_oran.png",
     "country_code": "DZA",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Olympique Médéa",
     "url_logo": "dza/medea.png",
     "country_code": "DZA",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Aïn M'lila",
     "url_logo": "dza/ain.png",
     "country_code": "DZA",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "CA Bordj",
     "url_logo": "dza/ca_bordj.png",
     "country_code": "DZA",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "USM Bel Abbès",
     "url_logo": "dza/usm_bel.png",
     "country_code": "DZA",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "MO Béjaïa",
     "url_logo": "dza/mob.png",
     "country_code": "DZA",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Tadjenanet",
     "url_logo": "dza/tadjenanet.png",
     "country_code": "DZA",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Belouizdad",
     "url_logo": "dza/belouizdad.png",
     "country_code": "DZA",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 904
   },
   {
     "name": "Desportivo Huíla",
     "url_logo": "ago/desportivo.png",
     "country_code": "AGO",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Kabuscorp SC",
     "url_logo": "ago/kabuscorp.png",
     "country_code": "AGO",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Progresso",
     "url_logo": "ago/progresso.png",
     "country_code": "AGO",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Onze Bravos",
     "url_logo": "ago/onze.png",
     "country_code": "AGO",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Santa Rita",
     "url_logo": "ago/santa.png",
     "country_code": "AGO",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "GD Interclube",
     "url_logo": "ago/interclube.png",
     "country_code": "AGO",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "CR DA CaaLa",
     "url_logo": "ago/Caala.png",
     "country_code": "AGO",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Sagrada Esperança",
     "url_logo": "ago/sagrada.png",
     "country_code": "AGO",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Bamboutos FC",
     "url_logo": "cmr/bamboutos.png",
     "country_code": "CMR",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "New Star",
     "url_logo": "cmr/New_Star.png",
     "country_code": "CMR",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Fovu Club de Baham",
     "url_logo": "cmr/fovu.png",
     "country_code": "CMR",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Young Sport Academy",
     "url_logo": "cmr/young_sport.png",
     "country_code": "CMR",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Union Douala",
     "url_logo": "cmr/union_douala.png",
     "country_code": "CMR",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Eding Sport",
     "url_logo": "cmr/eding_sport.png",
     "country_code": "CMR",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Colombe",
     "url_logo": "cmr/colombe.png",
     "country_code": "CMR",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Feutcheu",
     "url_logo": "cmr/feutcheu.png",
     "country_code": "CMR",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Astres",
     "url_logo": "cmr/astres.png",
     "country_code": "CMR",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Muungano",
     "url_logo": "cod/muungano.png",
     "country_code": "COD",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "AS Dragons",
     "url_logo": "cod/as_dragons.png",
     "country_code": "COD",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Lubumbashi Sport",
     "url_logo": "cod/lubumbashi_sport.png",
     "country_code": "COD",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Nyuki",
     "url_logo": "cod/nyuki.png",
     "country_code": "COD",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Renaissance",
     "url_logo": "cod/renaissance.png",
     "country_code": "COD",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Mont Bleu",
     "url_logo": "cod/mont_bleu.png",
     "country_code": "COD",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Groupe Bazano",
     "url_logo": "cod/groupe_bazano.png",
     "country_code": "COD",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Saint Éloi Lupopo",
     "url_logo": "cod/lupopo.png",
     "country_code": "COD",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Dauphins Noirs",
     "url_logo": "cod/dauphins_noirs.png",
     "country_code": "COD",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Rangers",
     "url_logo": "cod/rangers.png",
     "country_code": "COD",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Sanga Balende",
     "url_logo": "cod/sm_balende.png",
     "country_code": "COD",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Don Bosco",
     "url_logo": "cod/don_bosco.png",
     "country_code": "COD",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Maniema Union",
     "url_logo": "cod/maniema_union.png",
     "country_code": "COD",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 8064
   },
   {
     "name": "Al Ittihad",
     "url_logo": "egy/al_Ittihad.png",
     "country_code": "EGY",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Hafia",
     "url_logo": "gin/hafia.png",
     "country_code": "GIN",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 4416
   },
   {
     "name": "Santoba",
     "url_logo": "gin/santoba.png",
     "country_code": "GIN",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 4420
   },
   {
     "name": "Kaloum Star",
     "url_logo": "gin/kaloum.png",
     "country_code": "GIN",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "CO Coyah",
     "url_logo": "gin/Coyah.png",
     "country_code": "GIN",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Société Omnisports de l'Armée",
     "url_logo": "civ/soa.png",
     "country_code": "CIV",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "San-Pédro",
     "url_logo": "civ/san_pedro.png",
     "country_code": "CIV",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 4521
   },
   {
     "name": "Racing d'Abidjan",
     "url_logo": "civ/racing.png",
     "country_code": "CIV",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "AS Tanda",
     "url_logo": "civ/tanda.png",
     "country_code": "CIV",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Bouaké FC",
     "url_logo": "civ/bouake.png",
     "country_code": "CIV",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Académie de football Amadou Diallo",
     "url_logo": "civ/afad.png",
     "country_code": "CIV",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Abengourou",
     "url_logo": "civ/abengourou.png",
     "country_code": "CIV",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Bassam",
     "url_logo": "civ/bassam.png",
     "country_code": "CIV",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Africa Sports",
     "url_logo": "civ/africa_sports.png",
     "country_code": "CIV",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "USC Kita",
     "url_logo": "mli/kita.png",
     "country_code": "MLI",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Olympique de Bamako",
     "url_logo": "mli/olympique_bamako.png",
     "country_code": "MLI",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Lafia Club de Bamako",
     "url_logo": "mli/LC_ba.png",
     "country_code": "MLI",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "AS Olympique de Missira",
     "url_logo": "mli/asom.png",
     "country_code": "MLI",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "AS Bakaridjan",
     "url_logo": "mli/bakaridjan.png",
     "country_code": "MLI",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "USFAS Bamako",
     "url_logo": "mli/usfas.png",
     "country_code": "MLI",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Hassania Agadir",
     "url_logo": "mar/hassania.png",
     "country_code": "MAR",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 973
   },
   {
     "name": "Youssoufia Berrechid",
     "url_logo": "mar/youssoufia.png",
     "country_code": "MAR",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Olympic Safi",
     "url_logo": "mar/safi.png",
     "country_code": "MAR",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Rapide Oued Zem",
     "url_logo": "mar/rapide_oued.png",
     "country_code": "MAR",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Moghreb Tétouan",
     "url_logo": "mar/moghreb_tetouan.png",
     "country_code": "MAR",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Mouloudia Oujda",
     "url_logo": "mar/mouloudia_oujda.png",
     "country_code": "MAR",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Khouribga",
     "url_logo": "mar/khouribga.png",
     "country_code": "MAR",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Chabab Rif Hoceima",
     "url_logo": "mar/chabab.png",
     "country_code": "MAR",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "FAR Rabat",
     "url_logo": "mar/far.png",
     "country_code": "MAR",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Kawkab Marrakech",
     "url_logo": "mar/kawkab.png",
     "country_code": "MAR",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Lobi Stars",
     "url_logo": "nga/lobi.png",
     "country_code": "NGA",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Sunshine Stars FC",
     "url_logo": "nga/sunshine.png",
     "country_code": "NGA",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Wikki Tourist",
     "url_logo": "nga/wikki.png",
     "country_code": "NGA",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Miracles FC",
     "url_logo": "nga/mfm.png",
     "country_code": "NGA",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Rivers United",
     "url_logo": "nga/rivers_united.png",
     "country_code": "NGA",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Cape Town City",
     "url_logo": "zaf/cape_town.png",
     "country_code": "ZAF",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Bloemfontein Celtic",
     "url_logo": "zaf/bloemfontein_celtic.png",
     "country_code": "ZAF",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Polokwane City",
     "url_logo": "zaf/polokwane_city.png",
     "country_code": "ZAF",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Golden Arrows",
     "url_logo": "zaf/arrows.png",
     "country_code": "ZAF",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Highlands Park",
     "url_logo": "zaf/highlands_park.png",
     "country_code": "ZAF",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "AmaZulu",
     "url_logo": "zaf/amazulu.png",
     "country_code": "ZAF",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Black Leopards",
     "url_logo": "zaf/black_leopards.png",
     "country_code": "ZAF",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Baroka",
     "url_logo": "zaf/baroka.png",
     "country_code": "ZAF",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Chippa United",
     "url_logo": "zaf/chippa.png",
     "country_code": "ZAF",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Free State Stars",
     "url_logo": "zaf/free_state.png",
     "country_code": "ZAF",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Maritzburg United",
     "url_logo": "zaf/maritzburg.png",
     "country_code": "ZAF",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "US Tataouine",
     "url_logo": "tun/tataouine.png",
     "country_code": "TUN",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Stade Tunisien",
     "url_logo": "tun/stade_tunisien.png",
     "country_code": "TUN",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Stade Gabésien",
     "url_logo": "tun/stade_gabesien.png",
     "country_code": "TUN",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Ben Guerdane",
     "url_logo": "tun/ben_guerdane.png",
     "country_code": "TUN",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 986
   },
   {
     "name": "AS de Gabès",
     "url_logo": "tun/gabes.png",
     "country_code": "TUN",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Métlaoui",
     "url_logo": "tun/metlaoui.png",
     "country_code": "TUN",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Kairouan",
     "url_logo": "tun/kairouan.png",
     "country_code": "TUN",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Hammam-Lif",
     "url_logo": "tun/hammam_lif.png",
     "country_code": "TUN",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "US Monastir",
     "url_logo": "tun/monastir.png",
     "country_code": "TUN",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Al Ahli Khartoum",
     "url_logo": "sdn/al_ahli_khartoum.png",
     "country_code": "SDN",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Green Buffaloes",
     "url_logo": "zmb/green_buffaloes.png",
     "country_code": "ZMB",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Buildcon FC",
     "url_logo": "zmb/Buildcon.png",
     "country_code": "ZMB",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Power Dynamos",
     "url_logo": "zmb/power_dynamos.png",
     "country_code": "ZMB",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Forest Rangers FC",
     "url_logo": "zmb/forest_rangers.png",
     "country_code": "ZMB",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "ESAE FC",
     "url_logo": "ben/esae.png",
     "country_code": "BEN",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   },
   {
     "name": "Pyramids FC",
     "url_logo": "egy/pyramids_fc.png",
     "country_code": "EGY",
     "color": "#000000",
-    "top_club": 0
+    "top_club": 0,
+    "api_id": 0
   }
 ]

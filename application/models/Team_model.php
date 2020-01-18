@@ -35,6 +35,29 @@ class Team_model extends CI_Model
 		}
 	}
 
+	public function add_teams_from_api_json($json)
+	{
+		$sql = 'INSERT INTO `spt_team`( `api_id`, `title`,  `is_national_team`, `country_code`, `url_logo`, `category`, top_club, `color`)
+ 			VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+		$json_decode = json_decode($json);
+		$teams = $json_decode->api->teams;
+		foreach($teams as $team){
+			$api_id = $team->team_id;
+			$url_logo = $team->logo;
+			$category = 1;
+			$is_national_team = 0;
+			$country_code = null;
+			$title = $team->name;
+			$color = '#000000';
+			$top_club = 0;
+
+			if (!$this->is_api_team_exist($api_id)) {
+				$args = array($api_id, $title, $is_national_team, $country_code, $url_logo, $category, $top_club, $color);
+				echo $this->db->query($sql, $args) . ' ' . $title . '<br>';
+			}
+		}
+	}
+
 	//temporary function: updates teams api id and url logo
 	public function update_teams_from_json($json)
 	{
@@ -71,6 +94,20 @@ class Team_model extends CI_Model
 		$return = false;
 		$query = $this->db->query('SELECT * FROM spt_team WHERE url_logo = ?'
 			,array($url_team_logo));
+		$results = $query->result();
+		foreach ($results as $result)
+		{
+			$return = true;
+		}
+		return $return;
+	}
+
+	//check if specific team already exist from api id
+	function  is_api_team_exist($api_id)
+	{
+		$return = false;
+		$query = $this->db->query('SELECT * FROM spt_team WHERE api_id = ?'
+			,array($api_id));
 		$results = $query->result();
 		foreach ($results as $result)
 		{

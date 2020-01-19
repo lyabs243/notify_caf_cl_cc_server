@@ -209,7 +209,8 @@ class Edition_model extends CI_Model
             $row['id_stage_group'] = $result->id_stage_group;
             $row['id_team'] = $result->id_team;
             $row['title'] = $result->title;
-            $row['title_small'] = $result->title_small;
+            $row['title_small'] = ($result->title_small == null)?
+	            substr($row['title'], 0, 3) : $result->title_small;
             $row['url_logo'] = $result->url_logo;
 
             array_push($stages,$row);

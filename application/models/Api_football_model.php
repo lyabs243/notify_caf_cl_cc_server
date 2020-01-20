@@ -73,6 +73,34 @@ class Api_football_model extends CI_Model
 		}
 	}
 
+	//add top scorers
+	public function add_top_scorers($league_id, $id_edition)
+	{
+		$this->load->model('Edition_model');
+		$url = "https://api-football-v1.p.rapidapi.com/v2/topscorers/$league_id";
+
+		$json = $this->get_api_data($url);
+
+		if ($json != null) {
+			$json_decode = json_decode($json);
+			$scorers = $json_decode->api->topscorers;
+			foreach($scorers as $scorer) {
+				$data = null;
+
+				$data['id_edition'] = $id_edition;
+				$data['api_player_id'] = $scorer->player_id;
+				$data['api_team_id'] = $scorer->team_id;
+				$data['name'] = $scorer->player_name;
+				$data['goals'] = $scorer->goals->total;
+				$data['penalty_goals'] = $scorer->penalty->success;
+
+				$this->Edition_model->add_scorer($id_edition, $data);
+
+				echo '<br>' . $data['name'] . '<br>';
+			}
+		}
+	}
+
 	function init_match_from_api($match, $editionStage=0) {
 		$data = null;
 		$data['api_id'] = $match->fixture_id;

@@ -85,6 +85,35 @@ class Edition_model extends CI_Model
         return $match_steps;
     }
 
+    //add scorer if he doesnt exist, else update scorer
+	public function add_scorer($idEdition, $data) {
+		if(!$this->is_scorer_exist($idEdition, $data)) {
+			$this->db->insert('spt_scorers_edition', $data);
+			$result = $this->db->insert_id();
+		}
+		else {
+			$result = $this->db->update('spt_scorers_edition', $data,
+				array('api_player_id' => $data['api_player_id'], 'api_team_id' => $data['api_team_id'],
+					'id_edition' => $idEdition));
+		}
+
+		return $result;
+	}
+
+	function  is_scorer_exist($idEdition, $data)
+	{
+		$id = 0;
+		$query = $this->db->query('SELECT * FROM spt_scorers_edition WHERE api_player_id = ? AND api_team_id = ? AND id_edition = ? 
+		',array($data['api_player_id'], $data['api_team_id'], $idEdition));
+		$results = $query->result();
+		foreach ($results as $result)
+		{
+			$id = $result->id;
+			break;
+		}
+		return $id;
+	}
+
     public function get_scorers($idCompetition,$page,$idEdition=0) {
         if(!$idEdition)
         {

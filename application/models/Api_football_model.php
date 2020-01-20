@@ -161,6 +161,32 @@ class Api_football_model extends CI_Model
 
 					echo $this->Match_model->add_action($action) . ' ' . $action['minute'] . '<br>';
 				}
+
+				//get match lineup
+				$lineups = $fixture->lineups;
+				$idComposition = $this->Match_model->add_match_composition($match['id']);
+
+				foreach ($lineups as $lineup) {
+					$items = $lineup->startXI;
+					$players = array();
+
+					foreach ($items as $item) {
+						$player = null;
+
+						$player['id_match'] = $match['id'];
+						$player['id_composition'] = $idComposition;
+						$player['api_id_player'] = $item->player_id;
+						$player['api_id_team'] = $item->team_id;
+						$player['description'] = $item->player;
+						$player['number'] = $item->number;
+						$player['position'] = $item->pos;
+
+						$players[] = $player;
+
+					}
+
+					echo $this->Match_model->add_composition_details($players) . ' ' . $player['description'] . '<br>';
+				}
 			}
 		}
 	}

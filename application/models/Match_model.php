@@ -44,6 +44,20 @@ class Match_model extends CI_Model
 		return $id;
 	}
 
+	function  is_composition_detail_exist($data)
+	{
+		$id = 0;
+		$query = $this->db->query('SELECT * FROM spt_composition_detail WHERE id_match = ? AND id_composition = ? AND api_id_player = ? 
+		AND api_id_team = ?',array($data['id_match'], $data['id_composition'], $data['api_id_player'], $data['api_id_team']));
+		$results = $query->result();
+		foreach ($results as $result)
+		{
+			$id = $result->id;
+			break;
+		}
+		return $id;
+	}
+
     //verifie si la composition d un match existe deja
     function  is_composition_exist($idMatch)
     {
@@ -83,17 +97,14 @@ class Match_model extends CI_Model
         return $id;
     }
 
-    public function add_composition_details($idMatch,$idComposition,$idTeam,$players) {
-        $data['id_team'] = $idTeam;
-        $data['id_match'] = $idMatch;
-        $data['id_composition'] = $idComposition;
+    public function add_composition_details($players) {
         $result = false;
         foreach ($players as $player)
         {
-            $data['id_player'] = $player['id'];
-            $data['description'] = $this->get_player_name($player);
-            $this->db->insert('spt_composition_detail', $data);
-            $result = true;
+        	if(!$this->is_composition_detail_exist($player)) {
+		        $this->db->insert('spt_composition_detail', $player);
+		        $result = true;
+	        }
         }
         return $result;
     }

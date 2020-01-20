@@ -143,27 +143,24 @@ class Api_football_model extends CI_Model
 				$data = null;
 				$data = $this->init_match_from_api($fixture);
 
-				echo  $this->db->update('spt_match', $data, array('api_id' => $data['api_id'])) . ' ' . $data['api_round'] . '<br><br><br>';
-			}
+				echo $this->db->update('spt_match', $data, array('api_id' => $data['api_id'])) . ' ' . $data['api_round'] . '<br><br><br>';
 
-			//get match events
-			$url = "https://api-football-v1.p.rapidapi.com/v2/events/$fixture_api_id";
-			$json = $this->get_api_data($url);
-			$json_decode = json_decode($json);
-			$events = $json_decode->api->events;
-			foreach($events as $event) {
-				$action = null;
+				//get match events
+				$events = $fixture->events;
+				foreach ($events as $event) {
+					$action = null;
 
-				$action['id_match'] = $match['id'];
-				$action['type'] = $this->get_action_type($event->type, $event->detail);
-				$action['detail_a'] = $event->player;
-				$action['detail_b'] = $event->assist;
-				$action['minute'] = $event->elapsed;
-				$action['api_id_player'] = $event->player_id;
-				$action['api_id_player_assist'] = $event->assist_id;
-				$action['api_id_team'] = $event->team_id;
+					$action['id_match'] = $match['id'];
+					$action['type'] = $this->get_action_type($event->type, $event->detail);
+					$action['detail_a'] = $event->player;
+					$action['detail_b'] = $event->assist;
+					$action['minute'] = $event->elapsed;
+					$action['api_id_player'] = $event->player_id;
+					$action['api_id_player_assist'] = $event->assist_id;
+					$action['api_id_team'] = $event->team_id;
 
-				echo $this->Match_model->add_action($action) . ' ' . $action['minute'] . '<br>';
+					echo $this->Match_model->add_action($action) . ' ' . $action['minute'] . '<br>';
+				}
 			}
 		}
 	}

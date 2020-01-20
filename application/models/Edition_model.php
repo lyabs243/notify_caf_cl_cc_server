@@ -90,19 +90,12 @@ class Edition_model extends CI_Model
         {
             $idEdition = $this->get_latest_competition_edition($idCompetition);
         }
-        $sql = "SELECT sma.`id_player`, sma.`id_team`, sp.name, st.title, st.title_small, st.url_logo,
-                (SELECT COUNT(*) FROM spt_match_action WHERE id_player = sma.id_player AND (type = 2 OR type = 1)) as goals,
-                (SELECT COUNT(*) FROM spt_match_action WHERE id_player = sma.id_player AND (type = 2)) as goalsPenalty
-                FROM `spt_match_action` sma
-                JOIN spt_player sp
-                ON sma.id_player = sp.id
+        $sql = "SELECT sce.`api_player_id`, sce.`api_team_id`, sce.name, st.title, st.title_small, st.url_logo,
+                sce.goals, sce.penalty_goals as goalsPenalty
+                FROM `spt_scorers_edition` sce
                 JOIN spt_team st 
-                ON sma.id_team = st.id
-                JOIN spt_team_edition ste
-                ON ste.id_team = st.id
-                WHERE ste.id_edition = ?
-                AND (sma.type = 1 OR sma.type = 2)
-                GROUP BY sp.id
+                ON sce.api_team_id = st.api_id
+                WHERE sce.id_edition = ?
                 ORDER BY goals DESC
                 LIMIT ?,10";
         $page_start = (((int)$page)-1)*10;
@@ -113,12 +106,15 @@ class Edition_model extends CI_Model
         foreach ($results as $result)
         {
             $row = array();
-            $row['id_player'] = $result->id_player;
-            $row['id_team'] = $result->id_team;
+            $row['id_player'] = $result->api_player_id;
+            $row['id_team'] = $result->api_team_id;
             $row['name'] = $result->name;
             $row['url_flag'] = $result->url_logo;
             $row['team_name'] = $result->title;
-            $row['team_name_small'] = $result->title_small;
+	        $row['team_name_small'] = $result->title_small;
+            if($result->title_small == null) {
+	            $row['team_name_small'] = substr($result->title_small, 0, 3);
+            }
             $row['goals'] = $result->goals;
             $row['goalsPenalty'] = $result->goalsPenalty;
 

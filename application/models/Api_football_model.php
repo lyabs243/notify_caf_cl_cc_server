@@ -34,7 +34,9 @@ class Api_football_model extends CI_Model
 			$editionStage = $this->is_round_exist($notifyRoundDormat, $id_edition);
 			if($editionStage) {
 				//check if round has fixture if no, register fixture of that round
-				if(!$this->is_round_contains_fixtures($round, $editionStage)) {
+				//or register fixture if round has unfinished matchs
+				if(!$this->is_round_contains_fixtures($round, $editionStage) ||
+					$this->is_round_contains_fixtures($round, $editionStage, true)) {
 					$this->add_round_matchs($league_id, $editionStage, $round);
 				}
 			}
@@ -76,6 +78,9 @@ class Api_football_model extends CI_Model
 				if (!$this->Match_model->is_match_exist($data['api_id'])) {
 					echo $this->db->insert('spt_match', $data) . ' ' . $data['api_round'] . '<br>';
 				}
+				else { //update fixture in database
+					echo  $this->db->update('spt_match', $data, array('api_id' => $data['api_id'])) . ' ' . $data['api_round'] . '<br>';
+				}
 			}
 		}
 	}
@@ -107,11 +112,20 @@ class Api_football_model extends CI_Model
 		return $this->is_round_exist($round_code, $id_edition);
 	}
 
-	//check if round contains fixtures
-	function  is_round_contains_fixtures($round_code, $id_edition_stage)
+	/**
+	 * check if round contains fixtures
+	 *
+	 * @param $round_code: the api rounde code
+	 * @param $id_edition_stage
+	 * @param bool $gameFinished : help to check if round has still have fixtures that not
+	 * finished
+	 * @return bool
+	 */
+	function  is_round_contains_fixtures($round_code, $id_edition_stage, $gameFinished=false)
 	{
 		$return = false;
 		$query = $this->db->query('SELECT id FROM spt_match WHERE api_round = ? AND id_edition_stage = ?'
+			. (($gameFinished)? ' AND status <> 3' : '')
 			,array($round_code, $id_edition_stage));
 		$results = $query->result();
 		foreach ($results as $result)

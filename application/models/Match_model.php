@@ -421,14 +421,12 @@ class Match_model extends CI_Model
     }
 
     public function get_match_lineup($idMatch,$idTeam) {
-        $sql = "SELECT scd.`id_player`, scd.`id_team`, scd.`description`, sp.name, spe.num_player
+        $sql = "SELECT scd.`api_id_player`, st.`id` as id_team, scd.`description`, scd.description as name, scd.number as num_player
                 FROM `spt_composition_detail` scd
-                LEFT JOIN spt_player sp
-                ON scd.id_player = sp.id
-                JOIN spt_player_edition spe
-                ON sp.id = spe.id_player
+                JOIN  spt_team st 
+                ON st.api_id = scd.api_id_team
                 WHERE scd.id_match = ?
-                AND scd.id_team = ?";
+                AND st.id = ?";
         $args = array($idMatch,$idTeam);
 
         $query = $this->db->query($sql,$args);
@@ -437,7 +435,7 @@ class Match_model extends CI_Model
         foreach ($results as $result)
         {
             $row = array();
-            $row['id_player'] = $result->id_player;
+            $row['id_player'] = $result->api_id_player;
             $row['id_team'] = $result->id_team;
             $row['description'] = $result->description;
             $row['name'] = $result->name;

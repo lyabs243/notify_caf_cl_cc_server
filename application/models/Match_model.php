@@ -76,7 +76,7 @@ class Match_model extends CI_Model
         $id = $this->is_composition_exist($idMatch);
         if($id <= 0)
         {
-            $this->db->insert('spt_composition', array('id_match' => $ip));
+            $this->db->insert('spt_composition', array('id_match' => $idMatch));
             $id = $this->db->insert_id();
         }
 

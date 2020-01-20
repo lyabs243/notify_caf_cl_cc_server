@@ -23,9 +23,26 @@ class Match_model extends CI_Model
     }
 
     public function add_action($data) {
-        $this->db->insert('spt_match_action', $data);
-        return $this->db->insert_id();
+    	if(!$this->is_match_action_exist($data)) {
+		    $this->db->insert('spt_match_action', $data);
+		    return $this->db->insert_id();
+	    }
     }
+
+	//verifie si la composition d un match existe deja
+	function  is_match_action_exist($data)
+	{
+		$id = 0;
+		$query = $this->db->query('SELECT * FROM spt_match_action WHERE id_match = ? AND type = ? AND api_id_player = ? 
+		AND api_id_team = ?',array($data['id_match'], $data['type'], $data['api_id_player'], $data['api_id_team']));
+		$results = $query->result();
+		foreach ($results as $result)
+		{
+			$id = $result->id;
+			break;
+		}
+		return $id;
+	}
 
     //verifie si la composition d un match existe deja
     function  is_composition_exist($idMatch)

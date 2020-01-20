@@ -11,6 +11,7 @@ class Api_football_model extends CI_Model
 	public function __construct()
 	{
 		$this->load->database();
+		$this->load->model('Team_model');
 	}
 
 	public function init_matchs_from_api($id_edition, $league_id)
@@ -49,7 +50,6 @@ class Api_football_model extends CI_Model
 
 	public function add_round_matchs($league_id, $editionStage, $round_code)
 	{
-		$this->load->model('Team_model');
 		$this->load->model('Match_model');
 		$url = "https://api-football-v1.p.rapidapi.com/v2/fixtures/league/$league_id/$round_code";
 
@@ -61,19 +61,7 @@ class Api_football_model extends CI_Model
 			foreach($matchs as $match) {
 				$data = null;
 
-				$data['api_id'] = $match->fixture_id;
-				$data['api_round'] = $round_code;
-				$data['id_edition_stage'] = $editionStage;
-				$data['id_team_a'] = $this->Team_model->get_teamid_from_apiid($match->homeTeam->team_id);
-				$data['id_team_b'] = $this->Team_model->get_teamid_from_apiid($match->awayTeam->team_id);
-				$data['team_a_goal'] = ($match->goalsHomeTeam == null)? 0 : $match->goalsHomeTeam;
-				$data['team_b_goal'] = ($match->goalsAwayTeam == null)? 0 : $match->goalsAwayTeam;
-				if(strlen($match->score->penalty) > 0) {
-					$data['team_a_penalty'] = substr($match->score->penalty, 0, strpos($match->score->penalty, '-'));
-					$data['team_b_penalty'] = substr($match->score->penalty, strpos($match->score->penalty, '-') + 1);
-				}
-				$data['status'] = $this->get_status_code($match->statusShort);
-				$data['match_date'] = date('Y-m-d H:i:s',$match->event_timestamp);
+				$data = $this->init_match_from_api($match, $editionStage);
 
 				if (!$this->Match_model->is_match_exist($data['api_id'])) {
 					echo $this->db->insert('spt_match', $data) . ' ' . $data['api_round'] . '<br>';
@@ -83,6 +71,27 @@ class Api_football_model extends CI_Model
 				}
 			}
 		}
+	}
+
+	function init_match_from_api($match, $editionStage=0) {
+		$data = null;
+		$data['api_id'] = $match->fixture_id;
+		$data['api_round'] = $match->round;
+		if($editionStage > 0) {
+			$data['id_edition_stage'] = $editionStage;
+		}
+		$data['id_team_a'] = $this->Team_model->get_teamid_from_apiid($match->homeTeam->team_id);
+		$data['id_team_b'] = $this->Team_model->get_teamid_from_apiid($match->awayTeam->team_id);
+		$data['team_a_goal'] = ($match->goalsHomeTeam == null)? 0 : $match->goalsHomeTeam;
+		$data['team_b_goal'] = ($match->goalsAwayTeam == null)? 0 : $match->goalsAwayTeam;
+		if(strlen($match->score->penalty) > 0) {
+			$data['team_a_penalty'] = substr($match->score->penalty, 0, strpos($match->score->penalty, '-'));
+			$data['team_b_penalty'] = substr($match->score->penalty, strpos($match->score->penalty, '-') + 1);
+		}
+		$data['status'] = $this->get_status_code($match->statusShort);
+		$data['match_date'] = date('Y-m-d H:i:s',$match->event_timestamp);
+
+		return $data;
 	}
 
 	//check if round exist, if it exist, return edition stage id
@@ -110,6 +119,53 @@ class Api_football_model extends CI_Model
 
 		$this->db->insert('spt_edition_stage', $data);
 		return $this->is_round_exist($round_code, $id_edition);
+	}
+
+	//add events matchs from api
+	public function add_matchs_actions()
+	{
+		$this->load->model('Match_model');
+		//get all matchs  that date in intervall of 3 minutes before to 3 hour after
+		$matchs = $this->Match_model->get_matchs_in_intervall('5 MINUTE', '3 HOUR');
+
+		foreach ($matchs as $match) {
+			echo $match['teamA'] . 'VS' . $match['teamB'] . ' ' . '<br><br><br>';
+			$fixture_api_id = $match['api_id'];
+
+			//get and update match data
+			$url = "https://api-football-v1.p.rapidapi.com/v2/fixtures/id/$fixture_api_id";
+			$json = $this->get_api_data($url);
+			$json_decode = json_decode($json);
+			$fixtures = $json_decode->api->fixtures;
+
+			foreach($fixtures as $fixture) {
+
+				$data = null;
+				$data = $this->init_match_from_api($fixture);
+
+				echo  $this->db->update('spt_match', $data, array('api_id' => $data['api_id'])) . ' ' . $data['api_round'] . '<br><br><br>';
+			}
+
+			//get match events
+			$url = "https://api-football-v1.p.rapidapi.com/v2/events/$fixture_api_id";
+			$json = $this->get_api_data($url);
+			$json_decode = json_decode($json);
+			$events = $json_decode->api->events;
+			foreach($events as $event) {
+				$action = null;
+
+				$action['id_match'] = $match['id'];
+				$action['type'] = $this->get_action_type($event->type, $event->detail);
+				$action['detail_a'] = $event->player;
+				$action['detail_b'] = $event->assist;
+				$action['minute'] = $event->elapsed;
+				$action['api_id_player'] = $event->player_id;
+				$action['api_id_player_assist'] = $event->assist_id;
+				$action['api_id_team'] = $event->team_id;
+
+				echo $this->Match_model->add_action($action) . ' ' . $action['minute'] . '<br>';
+			}
+		}
 	}
 
 	/**
@@ -161,6 +217,30 @@ class Api_football_model extends CI_Model
 		curl_close($curl);
 
 		return $json;
+	}
+
+	//get action type from api
+	function  get_action_type($api_type, $api_detail) {
+		$api_type = strtolower($api_type);
+		$api_detail = strtolower($api_detail);
+		$type = -1;
+
+		if($api_type == 'card') {
+			if($api_detail == 'red card') {
+				$type = 12;
+			}
+			else { //yellow card
+				$type = 11;
+			}
+		}
+		else if($api_type == 'goal') {
+			$type = 1;
+		}
+		else if($api_type == 'subst') {
+			$type = 10;
+		}
+
+		return $type;
 	}
 
 	//get status code from api status code

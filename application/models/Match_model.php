@@ -356,15 +356,16 @@ class Match_model extends CI_Model
     }
 
     public function get_match_actions($idMatch,$actionMin=0) {
-        $sql = "SELECT sma.`id`, sma.`id_match`, sma.`type`, sma.`detail_a`, sma.`detail_b`, sma.`detail_c`, sma.`detail_d`, sma.`minute`, sma.`id_team`, sma.`id_admin_user`, sma.`register_date`, sm.id_team_a, sm.id_team_b,
-                (SELECT COUNT(*) FROM `spt_match_action` WHERE (type = 1 OR type = 2) AND id_team = sm.id_team_a AND id_match = sm.id AND register_date <= sma.register_date) as teamA_goal,
-                (SELECT COUNT(*) FROM `spt_match_action` WHERE (type = 1 OR type = 2) AND id_team = sm.id_team_b AND id_match = sm.id AND register_date <= sma.register_date) as teamB_goal
+        $sql = "SELECT sma.`id`, sma.`id_match`, sma.`type`, sma.`detail_a`, sma.`detail_b`, sma.`detail_c`, sma.`detail_d`, sma.`minute`, st.`id` as id_team, sma.`id_admin_user`, sma.`register_date`, sm.id_team_a, sm.id_team_b,
+                sm.team_a_goal as teamA_goal, sm.team_b_goal as teamB_goal
                 FROM `spt_match_action` sma
                 JOIN spt_match sm
                 ON sma.id_match = sm.id
+                JOIN spt_team st 
+                ON sma.api_id_team = st.api_id
                 WHERE sma.id_match = ?
                 AND sma.id > ?
-                ORDER BY sma.register_date DESC
+                ORDER BY minute DESC
                  ";
         $args = array($idMatch,$actionMin);
 

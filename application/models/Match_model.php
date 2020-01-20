@@ -41,6 +41,19 @@ class Match_model extends CI_Model
         return $id;
     }
 
+	function  is_match_exist($apiId)
+	{
+		$id = 0;
+		$query = $this->db->query('SELECT * FROM spt_match WHERE api_id = ?',array($apiId));
+		$results = $query->result();
+		foreach ($results as $result)
+		{
+			$id = $result->id;
+			break;
+		}
+		return $id;
+	}
+
     public function add_match_composition($idMatch) {
         $id = 0;
         $id = $this->is_composition_exist($idMatch);
@@ -131,6 +144,7 @@ class Match_model extends CI_Model
             $row['teamB'] = $result->teamB;
             $row['teamA_logo'] = $result->teamA_logo;
             $row['teamB_logo'] = $result->teamB_logo;
+            
             $row['teamA_goal'] = $result->teamA_goal;
             $row['teamB_goal'] = $result->teamB_goal;
             $row['team_a_penalty'] = $result->team_a_penalty;

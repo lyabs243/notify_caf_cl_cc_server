@@ -115,4 +115,17 @@ class Team_model extends CI_Model
 		}
 		return $return;
 	}
+
+	function  get_teamid_from_apiid($api_id)
+	{
+		$return = 0;
+		$query = $this->db->query('SELECT id FROM spt_team WHERE api_id = ?'
+			,array($api_id));
+		$results = $query->result();
+		foreach ($results as $result)
+		{
+			$return = $result->id;
+		}
+		return $return;
+	}
 }

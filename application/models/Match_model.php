@@ -197,7 +197,7 @@ class Match_model extends CI_Model
             $row['competition']['trophy_icon_url'] = $result->comp_trophy_icon_url;
             $row['competition']['register_date'] = $result->comp_register_date;
             //on change l affichage de la date du match par rapport au status
-            $row['match_date'] = strval($this->getMatchDate($row['id'],$row['status'],$row['match_date']));
+            $row['match_status'] = strval($this->getMatchDate($row['id'],$row['status'],$row['match_date']));
 
             array_push($matchs,$row);
         }
@@ -598,7 +598,7 @@ class Match_model extends CI_Model
 		return $matchs;
 	}
 
-    private function getMatchDate($idMatch,$status,$date)
+    private function getMatchDate($idMatch,$status,$date,$minute)
     {
         $date = strtotime($date);
         $result = $date;
@@ -618,9 +618,7 @@ class Match_model extends CI_Model
         //le match est en cour
         elseif ($status == 1)
         {
-            $start_date = new DateTime($this->get_match_status_date($idMatch,$status));
-            $since_start = $start_date->diff(new DateTime($this->get_current_time()));
-            $result = ($since_start->h*60)+$since_start->i . '\'';
+            $result = $minute . '\'';
         }
         //la mi temps
         elseif ($status == 2)

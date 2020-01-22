@@ -29,6 +29,30 @@ class Match_model extends CI_Model
 	    }
     }
 
+    public function add_match_video($id_match, $youtube_id) {
+    	$data['id_match'] = $id_match;
+    	$data['youtube_video_id'] = $youtube_id;
+	    if (!$this->is_match_video_exist($id_match)) {
+		    return $this->db->insert('spt_match_video', $data);
+	    }
+	    else { //update in database
+		    return $this->db->update('spt_match_video', $data, array('id_match' => $id_match));
+	    }
+    }
+
+	function  is_match_video_exist($id_match)
+	{
+		$id = 0;
+		$query = $this->db->query('SELECT * FROM spt_match_video WHERE id_match = ?',array($id_match));
+		$results = $query->result();
+		foreach ($results as $result)
+		{
+			$id = $result->id;
+			break;
+		}
+		return $id;
+	}
+
 	//verifie si la composition d un match existe deja
 	function  is_match_action_exist($data)
 	{

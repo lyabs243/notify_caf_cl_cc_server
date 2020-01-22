@@ -130,6 +130,19 @@ class Match extends NotifyController {
         die;
     }
 
+	public function add_video($idMatch,$youtubeId)
+	{
+		$video = $this->Match_model->add_match_video($idMatch, $youtubeId);
+		if($video)
+			$result['NOTIFYGROUP']['success'] = '1';
+		else
+			$result['NOTIFYGROUP']['success'] = '0';
+
+		header( 'Content-Type: application/json; charset=utf-8' );
+		echo json_encode($result,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+		die;
+	}
+
     public function lineup($idMatch,$idTeam)
     {
         $lineup = $this->Match_model->get_match_lineup($idMatch,$idTeam);

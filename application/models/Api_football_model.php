@@ -104,6 +104,7 @@ class Api_football_model extends CI_Model
 	function init_match_from_api($match, $editionStage=0) {
 		$data = null;
 		$data['api_id'] = $match->fixture_id;
+		$data['minute'] = $match->elapsed;
 		$data['api_round'] = $match->round;
 		if($editionStage > 0) {
 			$data['id_edition_stage'] = $editionStage;

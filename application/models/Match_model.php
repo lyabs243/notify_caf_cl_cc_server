@@ -182,7 +182,7 @@ class Match_model extends CI_Model
         return $query;
     }
 
-    private function get_match_array_from_result($results){
+    private function get_match_array_from_result($results, $getAction = false){
         $matchs = array();
         foreach ($results as $result)
         {
@@ -207,6 +207,10 @@ class Match_model extends CI_Model
             $row['status'] = $result->status;
             $row['idGroupA'] = $result->idGroupA;
             $row['idGroupB'] = $result->idGroupB;
+
+            if($getAction) {
+	            $row['actions'] = $this->get_match_actions($result->id);
+            }
 
             $row['edition_stage']['id'] = $result->editstage_id;
             $row['edition_stage']['id_edition'] = $result->editstage_id_edition;
@@ -600,7 +604,7 @@ class Match_model extends CI_Model
         $args = array($timezone,$idMatch);
         $query = $this->db->query($sql,$args);
         $results = $query->result();
-        $matchs = $this->get_match_array_from_result($results);
+        $matchs = $this->get_match_array_from_result($results, true);
         return $matchs;
     }
 

@@ -199,10 +199,17 @@ class Match extends NotifyController {
 
     public function get($idMatch)
     {
-        $news['NOTIFYGROUP'] = $this->Match_model->get_match($idMatch);
+    	$data = $this->Match_model->get_match($idMatch);
+    	if(count($data)) {
+		    $result['NOTIFYGROUP']['succes'] = '1';
+	    }
+	    else {
+		    $result['NOTIFYGROUP']['succes'] = '0';
+	    }
+	    $result['NOTIFYGROUP']['data'] = $data;
 
         header( 'Content-Type: application/json; charset=utf-8' );
-        echo json_encode($news,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        echo json_encode($result,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
         die;
     }
 

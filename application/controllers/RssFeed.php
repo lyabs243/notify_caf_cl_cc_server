@@ -8,6 +8,8 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 include APPPATH.'controllers/NotifyController.php';
+require_once APPPATH.'libraries/feed/Feed.php';
+include APPPATH.'libraries/simple_html_dom.php';
 class RssFeed extends CI_Controller
 {
     function __construct()
@@ -59,8 +61,7 @@ class RssFeed extends CI_Controller
     }
 
     public function add_news_from_feed(){
-        $json = file_get_contents('./resource/json/json_feed.txt');
-        $this->Article_model->add_from_jsonfeed($json);
+        $this->RssFeed_model->add_feeds_items();
     }
 
     public function desactivate_appeal($id,$id_admin){

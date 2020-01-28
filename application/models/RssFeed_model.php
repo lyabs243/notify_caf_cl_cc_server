@@ -56,4 +56,69 @@ class RssFeed_model extends CI_Model
         }
         return $feeds;
     }
+
+	function get_image_from_html($html_string){
+		$src = '';
+		if(strlen($html_string) > 0){
+			$html = str_get_html($html_string);
+			foreach($html->find('img') as $element) {
+				$src = $element->src;
+				break;
+			}
+		}
+		return $src;
+	}
+
+	function get_image($item){
+		$src = '';
+		$html_encoded = (string)$item->{'content:encoded'};
+		$html_description = (string)$item->description;
+		//get it in encoded tag
+		if(strlen($html_encoded) > 0){
+			$src = $this->get_image_from_html($html_encoded);
+		}
+		if(strlen($src) == 0){
+			$src = $this->get_image_from_html($html_description);
+		}
+		if(strlen($src) == 0){
+			$src = $item->enclosure['url'];
+		}
+		return $src;
+	}
+
+	function add_feeds_items() {
+		$this->load->model('Article_model');
+		$feeds = $this->get_feeds();
+		foreach($feeds as $feed){
+
+			$rss = Feed::loadRss($feed['url_adress']);
+			$data = array();
+			foreach ($rss->item as $item) {
+				$row = array();
+				$row['title'] = (string)$item->title;
+				$row['link'] = (string)$item->link;
+				$row['timestamp'] = (string)$item->timestamp;
+				$row['date_time'] = date('Y-m-d H:i:s', $row['timestamp']);
+				$row['description'] = (string)$item->description;
+				$row['encoded'] = (string)$item->{'content:encoded'};
+				$row['img_url'] = (string)$this->get_image($item);
+
+				array_push($data,$row);
+			}
+
+			$result[] = array(
+				'feed' => $feed['url_adress'],
+				'id_rss_feed' => $feed['id'],
+				'id_website' => $feed['id_website'],
+				'title' => (string)$rss->title,
+				'description' => (string)$rss->description,
+				'link' => (string)$rss->link,
+				'items' => $data
+			);
+		}
+
+		$feeds = json_encode($result,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+		$this->Article_model->add_from_jsonfeed($feeds);
+	}
+
 }

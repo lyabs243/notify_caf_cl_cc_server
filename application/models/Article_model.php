@@ -44,7 +44,7 @@ class Article_model extends CI_Model
                     WHERE id_competition_category = ?
                 )
                 AND w.lang = ?
-                AND a.register_date >= DATE( DATE_SUB( NOW() , INTERVAL 365 DAY ) )
+                AND a.register_date >= DATE( DATE_SUB( NOW() , INTERVAL 5 DAY ) )
                 GROUP BY id
                 ORDER BY total_views desc 
                 LIMIT 5";

@@ -75,10 +75,10 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-    /*'hostname' => 'notifygrlznotiap.mysql.db',
-    'username' => 'notifygrlznotiap',
-    'password' => 'nvbrXErut7notiApp',
-    'database' => 'notifygrlznotiap',*/
+    /*'hostname' => 'notifyspixlyabs.mysql.db',
+    'username' => 'notifyspixlyabs',
+    'password' => 'kdc82ZcvcyKAcKd',
+    'database' => 'notifyspixlyabs',*/
 	'hostname' => 'localhost',
 	'username' => 'root',
 	'password' => '',

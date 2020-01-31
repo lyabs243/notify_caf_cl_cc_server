@@ -137,7 +137,6 @@ class Match extends NotifyController {
 			$result['NOTIFYGROUP']['success'] = '1';
 		else
 			$result['NOTIFYGROUP']['success'] = '0';
-
 		header( 'Content-Type: application/json; charset=utf-8' );
 		echo json_encode($result,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 		die;
@@ -149,7 +148,7 @@ class Match extends NotifyController {
         if(count($lineup) > 0)
             $result['NOTIFYGROUP']['success'] = '1';
         else
-            $result['NOTIFYGROUP']['success'] = '0';
+            $result['NOTIFYGROUP']['success '] = '0';
         $result['NOTIFYGROUP']['data'] = $lineup;
 
         header( 'Content-Type: application/json; charset=utf-8' );

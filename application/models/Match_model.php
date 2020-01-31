@@ -10,6 +10,7 @@ class Match_model extends CI_Model
 {
     public function __construct() {
         $this->load->database();
+	    $this->load->model('Notification_model');
     }
 
     public function set_status($idMatch,$status) {
@@ -25,6 +26,13 @@ class Match_model extends CI_Model
     public function add_action($data) {
     	if(!$this->is_match_action_exist($data)) {
 		    $this->db->insert('spt_match_action', $data);
+		    //notify if it is a goal
+		    if($data['type'] == 1) {
+		    	$match = $this->get_match($data['id_match']);
+			    $scoredTeam = $this->Match_model->get_team_id($data['api_id_team']);
+			    $this->Notification_model->notify_match_goal($data['id_match'], $match[0]['teamA'], $match[0]['teamB'],
+				    $scoredTeam, $match[0]['team_a_goal'], $match[0]['team_b_goal']);
+		    }
 		    return $this->db->insert_id();
 	    }
     }
@@ -33,6 +41,8 @@ class Match_model extends CI_Model
     	$data['id_match'] = $id_match;
     	$data['youtube_video_id'] = $youtube_id;
 	    if (!$this->is_match_video_exist($id_match)) {
+		    $match = $this->get_match($id_match);
+		    $this->Notification_model->notify_match_video($id_match, $match[0]['teamA'], $match[0]['teamB']);
 		    return $this->db->insert('spt_match_video', $data);
 	    }
 	    else { //update in database
@@ -59,6 +69,20 @@ class Match_model extends CI_Model
 		$id = 0;
 		$query = $this->db->query('SELECT * FROM spt_match_action WHERE id_match = ? AND type = ? AND api_id_player = ? 
 		AND api_id_team = ?',array($data['id_match'], $data['type'], $data['api_id_player'], $data['api_id_team']));
+		$results = $query->result();
+		foreach ($results as $result)
+		{
+			$id = $result->id;
+			break;
+		}
+		return $id;
+	}
+
+	//get team id from team api id
+	function  get_team_id($api_id)
+	{
+		$id = 0;
+		$query = $this->db->query('SELECT id FROM spt_team WHERE api_id = ?',array($api_id));
 		$results = $query->result();
 		foreach ($results as $result)
 		{
@@ -116,6 +140,8 @@ class Match_model extends CI_Model
         {
             $this->db->insert('spt_composition', array('id_match' => $idMatch));
             $id = $this->db->insert_id();
+            $match = $this->get_match($idMatch);
+	        $this->Notification_model->notify_match_lineup($idMatch, $match[0]['teamA'], $match[0]['teamB']);
         }
 
         return $id;

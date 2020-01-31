@@ -154,6 +154,7 @@ class Api_football_model extends CI_Model
 	public function add_matchs_actions()
 	{
 		$this->load->model('Match_model');
+		$this->load->model('Notification_model');
 		//get all matchs  that date in intervall of 3 minutes before to 3 hour after
 		$matchs = $this->Match_model->get_matchs_in_intervall('5 MINUTE', '3 HOUR');
 
@@ -171,6 +172,20 @@ class Api_football_model extends CI_Model
 
 				$data = null;
 				$data = $this->init_match_from_api($fixture);
+
+				if($match['status'] != $data['status']) {
+					if($data['status'] == 1) { //match start
+						$this->Notification_model->notify_match_start($match['id'], $match['teamA'], $match['teamB']);
+					}
+					else if($data['status'] == 2) { //half time
+						$this->Notification_model->notify_match_halftime($match['id'], $match['teamA'], $match['teamB'],
+							$match['team_a_goal'], $match['team_b_goal']);
+					}
+					else if($data['status'] == 1) { //full time
+						$this->Notification_model->notify_match_fulltime($match['id'], $match['teamA'], $match['teamB'],
+							$match['team_a_goal'], $match['team_b_goal']);
+					}
+				}
 
 				echo $this->db->update('spt_match', $data, array('api_id' => $data['api_id'])) . ' ' . $data['api_round'] . '<br><br><br>';
 

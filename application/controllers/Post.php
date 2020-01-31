@@ -135,7 +135,7 @@ class Post extends NotifyController
 				    $error = $this->upload->display_errors();
 			    } else {
 				    $uploadData = $this->upload->data();
-				    $data['url_image'] = 'http://www.notifygroup.org/notifyapp/api/resource/images/posts/' . $uploadData['file_name'];
+				    $data['url_image'] = 'http://www.notifysport.org/api/v1/resource/images/posts/' . $uploadData['file_name'];
 			    }
 		    }
 

@@ -158,78 +158,84 @@ class Api_football_model extends CI_Model
 		//get all matchs  that date in intervall of 3 minutes before to 3 hour after
 		$matchs = $this->Match_model->get_matchs_in_intervall('5 MINUTE', '3 HOUR');
 
-		foreach ($matchs as $match) {
-			echo $match['teamA'] . 'VS' . $match['teamB'] . ' ' . '<br><br><br>';
-			$fixture_api_id = $match['api_id'];
+		if(is_array($matchs)) {
+			foreach ($matchs as $match) {
+				echo $match['teamA'] . 'VS' . $match['teamB'] . ' ' . '<br><br><br>';
+				$fixture_api_id = $match['api_id'];
 
-			//get and update match data
-			$url = "https://api-football-v1.p.rapidapi.com/v2/fixtures/id/$fixture_api_id";
-			$json = $this->get_api_data($url);
-			$json_decode = json_decode($json);
-			$fixtures = $json_decode->api->fixtures;
+				//get and update match data
+				$url = "https://api-football-v1.p.rapidapi.com/v2/fixtures/id/$fixture_api_id";
+				$json = $this->get_api_data($url);
+				$json_decode = json_decode($json);
+				$fixtures = $json_decode->api->fixtures;
 
-			foreach($fixtures as $fixture) {
+				foreach ($fixtures as $fixture) {
 
-				$data = null;
-				$data = $this->init_match_from_api($fixture);
+					$data = null;
+					$data = $this->init_match_from_api($fixture);
 
-				if($match['status'] != $data['status']) {
-					if($data['status'] == 1) { //match start
-						$this->Notification_model->notify_match_start($match['id'], $match['teamA'], $match['teamB']);
-					}
-					else if($data['status'] == 2) { //half time
-						$this->Notification_model->notify_match_halftime($match['id'], $match['teamA'], $match['teamB'],
-							$match['team_a_goal'], $match['team_b_goal']);
-					}
-					else if($data['status'] == 1) { //full time
-						$this->Notification_model->notify_match_fulltime($match['id'], $match['teamA'], $match['teamB'],
-							$match['team_a_goal'], $match['team_b_goal']);
-					}
-				}
-
-				echo $this->db->update('spt_match', $data, array('api_id' => $data['api_id'])) . ' ' . $data['api_round'] . '<br><br><br>';
-
-				//get match events
-				$events = $fixture->events;
-				foreach ($events as $event) {
-					$action = null;
-
-					$action['id_match'] = $match['id'];
-					$action['type'] = $this->get_action_type($event->type, $event->detail);
-					$action['detail_a'] = $event->player;
-					$action['detail_b'] = $event->assist;
-					$action['minute'] = $event->elapsed;
-					$action['api_id_player'] = $event->player_id;
-					$action['api_id_player_assist'] = $event->assist_id;
-					$action['api_id_team'] = $event->team_id;
-
-					echo $this->Match_model->add_action($action) . ' ' . $action['minute'] . '<br>';
-				}
-
-				//get match lineup
-				$lineups = $fixture->lineups;
-				$idComposition = $this->Match_model->add_match_composition($match['id']);
-
-				foreach ($lineups as $lineup) {
-					$items = $lineup->startXI;
-					$players = array();
-
-					foreach ($items as $item) {
-						$player = null;
-
-						$player['id_match'] = $match['id'];
-						$player['id_composition'] = $idComposition;
-						$player['api_id_player'] = $item->player_id;
-						$player['api_id_team'] = $item->team_id;
-						$player['description'] = $item->player;
-						$player['number'] = $item->number;
-						$player['position'] = $item->pos;
-
-						$players[] = $player;
-
+					if ($match['status'] != $data['status']) {
+						if ($data['status'] == 1) { //match start
+							$this->Notification_model->notify_match_start($match['id'], $match['teamA'], $match['teamB']);
+						} else if ($data['status'] == 2) { //half time
+							$this->Notification_model->notify_match_halftime($match['id'], $match['teamA'], $match['teamB'],
+								$match['team_a_goal'], $match['team_b_goal']);
+						} else if ($data['status'] == 1) { //full time
+							$this->Notification_model->notify_match_fulltime($match['id'], $match['teamA'], $match['teamB'],
+								$match['team_a_goal'], $match['team_b_goal']);
+						}
 					}
 
-					echo $this->Match_model->add_composition_details($players) . ' ' . $player['description'] . '<br>';
+					echo $this->db->update('spt_match', $data, array('api_id' => $data['api_id'])) . ' ' . $data['api_round'] . '<br><br><br>';
+
+					//get match events
+					$events = $fixture->events;
+					if (is_array($events)) {
+						foreach ($events as $event) {
+							$action = null;
+
+							$action['id_match'] = $match['id'];
+							$action['type'] = $this->get_action_type($event->type, $event->detail);
+							$action['detail_a'] = $event->player;
+							$action['detail_b'] = $event->assist;
+							$action['minute'] = $event->elapsed;
+							$action['api_id_player'] = $event->player_id;
+							$action['api_id_player_assist'] = $event->assist_id;
+							$action['api_id_team'] = $event->team_id;
+
+							echo $this->Match_model->add_action($action) . ' ' . $action['minute'] . '<br>';
+						}
+					}
+
+					//get match lineup
+					$lineups = $fixture->lineups;
+					$idComposition = $this->Match_model->add_match_composition($match['id']);
+
+					if (is_array($lineups)) {
+						foreach ($lineups as $lineup) {
+							$items = $lineup->startXI;
+							$players = array();
+
+							if (is_array($items)) {
+								foreach ($items as $item) {
+									$player = null;
+
+									$player['id_match'] = $match['id'];
+									$player['id_composition'] = $idComposition;
+									$player['api_id_player'] = $item->player_id;
+									$player['api_id_team'] = $item->team_id;
+									$player['description'] = $item->player;
+									$player['number'] = $item->number;
+									$player['position'] = $item->pos;
+
+									$players[] = $player;
+
+								}
+							}
+
+							echo $this->Match_model->add_composition_details($players) . ' ' . $player['description'] . '<br>';
+						}
+					}
 				}
 			}
 		}

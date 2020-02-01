@@ -189,11 +189,11 @@ class Api_football_model extends CI_Model
 					//home team scored
 					if ($data['team_a_goal'] > $match['teamA_goal']) {
 						$this->Notification_model->notify_match_goal($match['id'], $match['teamA'], $match['teamB'],
-							$match['teamA'], $match['teamA_goal'], $match['teamB_goal']);
+							$match['teamA'], $data['team_a_goal'], $data['team_b_goal']);
 					}
 					else if ($data['team_b_goal'] > $match['teamB_goal']) {
 						$this->Notification_model->notify_match_goal($match['id'], $match['teamA'], $match['teamB'],
-							$match['teamB'], $match['teamA_goal'], $match['teamB_goal']);
+							$match['teamB'], $data['team_a_goal'], $data['team_b_goal']);
 					}
 					echo $this->db->update('spt_match', $data, array('api_id' => $data['api_id'])) . ' ' . $data['api_round'] . '<br><br><br>';
 

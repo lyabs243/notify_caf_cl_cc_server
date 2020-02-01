@@ -34,4 +34,8 @@ class ApiFootball extends CI_Controller
 		$this->Api_football_model->add_matchs_actions();
 	}
 
+	public function add_matchs_lineups(){
+		$this->Api_football_model->add_matchs_lineup();
+	}
+
 }

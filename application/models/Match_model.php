@@ -172,7 +172,6 @@ class Match_model extends CI_Model
 	}
 
     public function add_match_composition($idMatch) {
-        $id = 0;
         $id = $this->is_composition_exist($idMatch);
         if($id <= 0)
         {

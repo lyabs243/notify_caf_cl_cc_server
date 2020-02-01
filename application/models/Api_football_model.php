@@ -234,35 +234,58 @@ class Api_football_model extends CI_Model
 						}
 						echo $this->Match_model->add_actions_json($match['id'], $actions) . ' ' . $action['minute'] . '<br>';
 					}
+				}
+			}
+		}
+	}
+
+	//add line ups for matchs
+	public function add_matchs_lineup()
+	{
+		$this->load->model('Match_model');
+		$this->load->model('Notification_model');
+		//get all matchs  that date in intervall of 3 minutes before to 3 hour after
+		$matchs = $this->Match_model->get_matchs_in_intervall('1 HOUR', '2 HOUR');
+
+		if(is_array($matchs)) {
+			foreach ($matchs as $match) {
+				echo $match['teamA'] . 'VS' . $match['teamB'] . ' ' . '<br><br><br>';
+				$fixture_api_id = $match['api_id'];
+
+				//get and update match data
+				$url = "https://api-football-v1.p.rapidapi.com/v2/fixtures/id/$fixture_api_id";
+				$json = $this->get_api_data($url);
+				$json_decode = json_decode($json);
+				$fixtures = $json_decode->api->fixtures;
+
+				foreach ($fixtures as $fixture) {
+
+					$data = null;
+					$data = $this->init_match_from_api($fixture);
 
 					//get match lineup
 					$lineups = $fixture->lineups;
-					$idComposition = $this->Match_model->add_match_composition($match['id']);
+					foreach ($lineups as $lineup) {
+						$items = $lineup->startXI;
+						$players = array();
+						if (is_array($items)) {
+							foreach ($items as $item) {
+								$player = null;
 
-					if (is_array($lineups)) {
-						foreach ($lineups as $lineup) {
-							$items = $lineup->startXI;
-							$players = array();
+								$player['id_match'] = $match['id'];
+								$player['id_composition'] = $this->Match_model->add_match_composition($match['id']);
+								$player['api_id_player'] = $item->player_id;
+								$player['api_id_team'] = $item->team_id;
+								$player['description'] = $item->player;
+								$player['number'] = $item->number;
+								$player['position'] = $item->pos;
 
-							if (is_array($items)) {
-								foreach ($items as $item) {
-									$player = null;
+								$players[] = $player;
 
-									$player['id_match'] = $match['id'];
-									$player['id_composition'] = $idComposition;
-									$player['api_id_player'] = $item->player_id;
-									$player['api_id_team'] = $item->team_id;
-									$player['description'] = $item->player;
-									$player['number'] = $item->number;
-									$player['position'] = $item->pos;
-
-									$players[] = $player;
-
-								}
 							}
-
-							echo $this->Match_model->add_composition_details($players) . ' ' . $player['description'] . '<br>';
 						}
+
+						echo $this->Match_model->add_composition_details($players) . ' ' . $player['description'] . '<br>';
 					}
 				}
 			}

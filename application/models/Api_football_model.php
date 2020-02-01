@@ -187,7 +187,7 @@ class Api_football_model extends CI_Model
 								$match['teamA_goal'], $match['teamB_goal']);
 						} else if ($data['status'] == 1) { //full time
 							$this->Notification_model->notify_match_fulltime($match['id'], $match['teamA'], $match['teamB'],
-								$match['teamA_goal'], $match['teamA_goal']);
+								$match['teamA_goal'], $match['teamB_goal']);
 						}
 					}
 

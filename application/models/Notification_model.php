@@ -40,6 +40,20 @@ class Notification_model extends CI_Model
 		$this->notify($headingEn, $headingFr, $contentEn, $contentFr, $data, 1800);
 	}
 
+	public function notify_secondhalf_start($idMatch, $teamA, $teamB) {
+
+		$headingEn = "$teamA - $teamB";
+		$headingFr = "$teamA - $teamB";
+
+		$contentEn = "Second half start !";
+		$contentFr = "Début deuxième Mi-Temps !";
+
+		$data['match_id'] = "$idMatch";
+		$data['type'] = "0";
+
+		$this->notify($headingEn, $headingFr, $contentEn, $contentFr, $data, 1800);
+	}
+
 	public function notify_match_halftime($idMatch, $teamA, $teamB, $teamAGoals, $teamBGoals) {
 
 		$headingEn = "$teamA $teamAGoals - $teamBGoals $teamB";

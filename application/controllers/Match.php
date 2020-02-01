@@ -118,7 +118,7 @@ class Match extends NotifyController {
 
     public function actions($idMatch,$actionMin=0)
     {
-        $actions = $this->Match_model->get_match_actions($idMatch,$actionMin);
+        $actions = $this->Match_model->get_match_actions_json($idMatch);
         if(count($actions) > 0)
             $result['NOTIFYGROUP']['success'] = '1';
         else

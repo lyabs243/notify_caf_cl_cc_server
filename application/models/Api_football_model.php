@@ -191,20 +191,39 @@ class Api_football_model extends CI_Model
 					//get match events
 					$events = $fixture->events;
 					if (is_array($events)) {
+						$actions = array();
+						$index = 0;
 						foreach ($events as $event) {
 							$action = null;
 
+							$action['id'] = "$index";
 							$action['id_match'] = $match['id'];
-							$action['type'] = $this->get_action_type($event->type, $event->detail);
-							$action['detail_a'] = $event->player;
-							$action['detail_b'] = $event->assist;
-							$action['minute'] = $event->elapsed;
+							$type = $this->get_action_type($event->type, $event->detail);
+							$action['type'] = "$type";
+							$action['detail_a'] = ($event->player == null)? 'Unknow...' : $event->player;
+							$action['detail_b'] = ($event->assist == null)? '' : $event->assist;
+							$action['detail_c'] = '';
+							$action['detail_d'] = '';
+							$action['teamA_goal'] = $match['teamA_goal'];
+							$action['teamB_goal'] = $match['teamB_goal'];
+							$action['minute'] = "$event->elapsed";
 							$action['api_id_player'] = $event->player_id;
 							$action['api_id_player_assist'] = $event->assist_id;
 							$action['api_id_team'] = $event->team_id;
+							$action['id_team'] = $this->Match_model->get_team_id($action['api_id_team']);
 
-							echo $this->Match_model->add_action($action) . ' ' . $action['minute'] . '<br>';
+							//gere la position de l action dans la vue(gauche ou droite)
+							if ($action['id_team'] == $match['teamAId']) {
+								$action['position'] = 0;
+							} else {
+								$action['position'] = 1;
+							}
+
+							$actions[] = $action;
+							echo $action['detail_a'] . ' ' . $action['minute'] . '<br>';
+							$index++;
 						}
+						echo $this->Match_model->add_actions_json($match['id'], $actions) . ' ' . $action['minute'] . '<br>';
 					}
 
 					//get match lineup

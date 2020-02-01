@@ -37,6 +37,18 @@ class Match_model extends CI_Model
 	    }
     }
 
+    public function add_actions_json($idMatch, $actions) {
+    	$data['id_match'] = $idMatch;
+	    $data['actions_json'] = json_encode($actions);
+	    if(!$this->is_match_actions_json_exist($idMatch)) {
+		    $this->db->insert('spt_match_action', $data);
+		    return $this->db->insert_id();
+	    }
+	    else {
+		    return $this->db->update('spt_match_action', $data, array('id_match' => $idMatch));
+	    }
+    }
+
     public function add_match_video($id_match, $youtube_id) {
     	$data['id_match'] = $id_match;
     	$data['youtube_video_id'] = $youtube_id;
@@ -78,6 +90,19 @@ class Match_model extends CI_Model
 		return $id;
 	}
 
+	function  is_match_actions_json_exist($idMatch)
+	{
+		$id = 0;
+		$query = $this->db->query('SELECT * FROM spt_match_action WHERE id_match = ? AND actions_json is not null',array($idMatch));
+		$results = $query->result();
+		foreach ($results as $result)
+		{
+			$id = $result->id;
+			break;
+		}
+		return $id;
+	}
+
 	//get team name from team api id
 	function  get_team_name($api_id)
 	{
@@ -90,6 +115,19 @@ class Match_model extends CI_Model
 			break;
 		}
 		return $title;
+	}
+
+	function  get_team_id($api_id)
+	{
+		$id = 0;
+		$query = $this->db->query('SELECT id FROM spt_team WHERE api_id = ?',array($api_id));
+		$results = $query->result();
+		foreach ($results as $result)
+		{
+			$id = $result->id;
+			break;
+		}
+		return $id;
 	}
 
 	function  is_composition_detail_exist($data)
@@ -235,7 +273,7 @@ class Match_model extends CI_Model
             $row['idGroupB'] = $result->idGroupB;
 
             if($getAction) {
-	            $row['actions'] = $this->get_match_actions($result->id);
+	            $row['actions'] = $this->get_match_actions_json($result->id);
             }
 
             $row['edition_stage']['id'] = $result->editstage_id;
@@ -436,6 +474,26 @@ class Match_model extends CI_Model
 
         return $matchs;
     }
+
+	public function get_match_actions_json($idMatch) {
+		$sql = "SELECT actions_json 
+				FROM `spt_match_action` sma
+                WHERE sma.id_match = ?
+                 ";
+		$args = array($idMatch);
+
+		$query = $this->db->query($sql,$args);
+		$results = $query->result();
+		$actions = array();
+		foreach ($results as $result)
+		{
+			if($result->actions_json != null) {
+				$actions = json_decode($result->actions_json);
+			}
+		}
+
+		return array_reverse($actions);
+	}
 
     public function get_match_actions($idMatch,$actionMin=0) {
         $sql = "SELECT sma.`id`, sma.`id_match`, sma.`type`, sma.`detail_a`, sma.`detail_b`, sma.`detail_c`, sma.`detail_d`, sma.`minute`, st.`id` as id_team, sma.`id_admin_user`, sma.`register_date`, sm.id_team_a, sm.id_team_b,

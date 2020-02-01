@@ -29,7 +29,7 @@ class Match_model extends CI_Model
 		    //notify if it is a goal
 		    if($data['type'] == 1) {
 		    	$match = $this->get_match($data['id_match']);
-			    $scoredTeam = $this->Match_model->get_team_id($data['api_id_team']);
+			    $scoredTeam = $this->get_team_name($data['api_id_team']);
 			    $this->Notification_model->notify_match_goal($data['id_match'], $match[0]['teamA'], $match[0]['teamB'],
 				    $scoredTeam, $match[0]['teamA_goal'], $match[0]['teamB_goal']);
 		    }
@@ -78,18 +78,18 @@ class Match_model extends CI_Model
 		return $id;
 	}
 
-	//get team id from team api id
-	function  get_team_id($api_id)
+	//get team name from team api id
+	function  get_team_name($api_id)
 	{
-		$id = 0;
-		$query = $this->db->query('SELECT id FROM spt_team WHERE api_id = ?',array($api_id));
+		$title = '';
+		$query = $this->db->query('SELECT title FROM spt_team WHERE api_id = ?',array($api_id));
 		$results = $query->result();
 		foreach ($results as $result)
 		{
-			$id = $result->id;
+			$title = $result->title;
 			break;
 		}
-		return $id;
+		return $title;
 	}
 
 	function  is_composition_detail_exist($data)

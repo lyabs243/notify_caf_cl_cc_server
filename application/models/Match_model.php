@@ -67,8 +67,8 @@ class Match_model extends CI_Model
 	function  is_match_action_exist($data)
 	{
 		$id = 0;
-		$query = $this->db->query('SELECT * FROM spt_match_action WHERE id_match = ? AND type = ? AND api_id_player = ? 
-		AND api_id_team = ?',array($data['id_match'], $data['type'], $data['api_id_player'], $data['api_id_team']));
+		$query = $this->db->query('SELECT * FROM spt_match_action WHERE id_match = ? AND type = ? AND minute = ? 
+		AND api_id_team = ?',array($data['id_match'], $data['type'], $data['minute'], $data['api_id_team']));
 		$results = $query->result();
 		foreach ($results as $result)
 		{

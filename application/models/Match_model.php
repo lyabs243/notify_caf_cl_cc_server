@@ -681,13 +681,20 @@ class Match_model extends CI_Model
     }
 
     public function get_match($idMatch) {
-        $timezone = $this->session->timezone;
+	    $this->load->model('Api_football_model');
+
+	    if($this->Api_football_model->can_request_api_call('30 SECOND')) {
+		    $this->Api_football_model->add_matchs_actions(false);
+	    }
+
+	    $timezone = $this->session->timezone;
         $sql = $this->get_query_match_header() . "
                 WHERE sm.id = ?";
         $args = array($timezone,$idMatch);
         $query = $this->db->query($sql,$args);
         $results = $query->result();
         $matchs = $this->get_match_array_from_result($results, true);
+
         return $matchs;
     }
 

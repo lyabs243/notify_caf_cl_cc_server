@@ -151,7 +151,7 @@ class Api_football_model extends CI_Model
 	}
 
 	//add events matchs from api
-	public function add_matchs_actions()
+	public function add_matchs_actions($showExecutionDetails=true)
 	{
 		$this->load->model('Match_model');
 		$this->load->model('Notification_model');
@@ -160,7 +160,9 @@ class Api_football_model extends CI_Model
 
 		if(is_array($matchs)) {
 			foreach ($matchs as $match) {
-				echo $match['teamA'] . 'VS' . $match['teamB'] . ' ' . '<br><br><br>';
+				if($showExecutionDetails) {
+					echo $match['teamA'] . 'VS' . $match['teamB'] . ' ' . '<br><br><br>';
+				}
 				$fixture_api_id = $match['api_id'];
 
 				//get and update match data
@@ -200,7 +202,10 @@ class Api_football_model extends CI_Model
 						$this->Notification_model->notify_match_goal($match['id'], $match['teamA'], $match['teamB'],
 							$match['teamB'], $data['team_a_goal'], $data['team_b_goal']);
 					}
-					echo $this->db->update('spt_match', $data, array('api_id' => $data['api_id'])) . ' ' . $data['api_round'] . '<br><br><br>';
+					$this->db->update('spt_match', $data, array('api_id' => $data['api_id']));
+					if($showExecutionDetails) {
+						echo  'Update ' . $data['api_round'] . '<br><br><br>';
+					}
 
 					//get match events
 					$events = $fixture->events;
@@ -234,14 +239,20 @@ class Api_football_model extends CI_Model
 							}
 
 							$actions[] = $action;
-							echo $action['detail_a'] . ' ' . $action['minute'] . '<br>';
+							if($showExecutionDetails) {
+								echo $action['detail_a'] . ' ' . $action['minute'] . '<br>';
+							}
 							$index++;
 						}
-						echo $this->Match_model->add_actions_json($match['id'], $actions) . ' ' . $action['minute'] . '<br>';
+						$this->Match_model->add_actions_json($match['id'], $actions);
+						if($showExecutionDetails) {
+							echo 'Add action ' . $action['minute'] . '<br>';
+						}
 					}
 				}
 			}
 		}
+		$this->update_last_execution();
 	}
 
 	//add line ups for matchs
@@ -346,6 +357,38 @@ class Api_football_model extends CI_Model
 		curl_close($curl);
 
 		return $json;
+	}
+
+	/**
+	 * Check if where can call the API, we check this by retrieving the last execution of the API,
+	 * it must be greater than or equal to the value in the parameters
+	 *
+	 * @param $intervallEnd
+	 * @return bool
+	 */
+	public function can_request_api_call($intervallEnd) {
+
+		$canRequest = false;
+		$sql = "SELECT * FROM `api_foot_execution`
+				WHERE NOW() >= DATE_ADD(last_execution, INTERVAL $intervallEnd)";
+		$args = array();
+		$query = $this->db->query($sql,$args);
+		$results = $query->result();
+		foreach ($results as $result)
+		{
+			$canRequest = true;
+			break;
+		}
+		return $canRequest;
+	}
+
+	public function update_last_execution() {
+		$sql = "UPDATE api_foot_execution SET last_execution = NOW()
+                WHERE id = 1 
+                 ";
+
+		$args = array();
+		$this->db->query($sql,$args);
 	}
 
 	//get action type from api

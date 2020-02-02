@@ -684,7 +684,7 @@ class Match_model extends CI_Model
 	    $this->load->model('Api_football_model');
 
 	    if($this->Api_football_model->can_request_api_call('30 SECOND')) {
-		    $this->Api_football_model->add_matchs_actions(false);
+		    $this->Api_football_model->add_matchs_actions(false, false);
 	    }
 
 	    $timezone = $this->session->timezone;

@@ -151,7 +151,7 @@ class Api_football_model extends CI_Model
 	}
 
 	//add events matchs from api
-	public function add_matchs_actions($showExecutionDetails=true)
+	public function add_matchs_actions($showExecutionDetails=true, $canNotifyMatchStatus=true)
 	{
 		$this->load->model('Match_model');
 		$this->load->model('Notification_model');
@@ -177,19 +177,21 @@ class Api_football_model extends CI_Model
 					$data = $this->init_match_from_api($fixture);
 
 					if ($match['status'] != $data['status']) {
-						if ($data['status'] == 1) {
-							if($match['status'] == 0) { //match start
-								$this->Notification_model->notify_match_start($match['id'], $match['teamA'], $match['teamB']);
-							}
-							else if($match['status'] == 2) { //second half start
-								$this->Notification_model->notify_secondhalf_start($match['id'], $match['teamA'], $match['teamB']);
-							}
-						} else if ($data['status'] == 2) { //half time
+						if($canNotifyMatchStatus) {
+							if ($data['status'] == 1) {
+								if ($match['status'] == 0) { //match start
+									$this->Notification_model->notify_match_start($match['id'], $match['teamA'], $match['teamB']);
+								}
+								/*else if($match['status'] == 2) { //second half start
+									$this->Notification_model->notify_secondhalf_start($match['id'], $match['teamA'], $match['teamB']);
+								}*/
+							} /*else if ($data['status'] == 2) { //half time
 							$this->Notification_model->notify_match_halftime($match['id'], $match['teamA'], $match['teamB'],
 								$match['teamA_goal'], $match['teamB_goal']);
-						} else if ($data['status'] == 3) { //full time
-							$this->Notification_model->notify_match_fulltime($match['id'], $match['teamA'], $match['teamB'],
-								$match['teamA_goal'], $match['teamB_goal']);
+						} */ else if ($data['status'] == 3) { //full time
+								$this->Notification_model->notify_match_fulltime($match['id'], $match['teamA'], $match['teamB'],
+									$match['teamA_goal'], $match['teamB_goal']);
+							}
 						}
 					}
 

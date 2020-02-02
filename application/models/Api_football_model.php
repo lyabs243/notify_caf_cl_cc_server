@@ -151,7 +151,7 @@ class Api_football_model extends CI_Model
 	}
 
 	//add events matchs from api
-	public function add_matchs_actions($showExecutionDetails=true, $canNotifyMatchStatus=true)
+	public function add_matchs_actions($showExecutionDetails=true)
 	{
 		$this->load->model('Match_model');
 		$this->load->model('Notification_model');
@@ -175,23 +175,17 @@ class Api_football_model extends CI_Model
 
 					$data = null;
 					$data = $this->init_match_from_api($fixture);
+					$this->db->update('spt_match', $data, array('api_id' => $data['api_id']));
 
 					if ($match['status'] != $data['status']) {
-						if($canNotifyMatchStatus) {
-							if ($data['status'] == 1) {
-								if ($match['status'] == 0) { //match start
-									$this->Notification_model->notify_match_start($match['id'], $match['teamA'], $match['teamB']);
-								}
-								/*else if($match['status'] == 2) { //second half start
-									$this->Notification_model->notify_secondhalf_start($match['id'], $match['teamA'], $match['teamB']);
-								}*/
-							} /*else if ($data['status'] == 2) { //half time
-							$this->Notification_model->notify_match_halftime($match['id'], $match['teamA'], $match['teamB'],
-								$match['teamA_goal'], $match['teamB_goal']);
-						} */ else if ($data['status'] == 3) { //full time
-								$this->Notification_model->notify_match_fulltime($match['id'], $match['teamA'], $match['teamB'],
-									$match['teamA_goal'], $match['teamB_goal']);
+						if ($data['status'] == 1) {
+							if ($match['status'] == 0) { //match start
+								$this->Notification_model->notify_match_start($match['id'], $match['teamA'], $match['teamB']);
 							}
+						}
+						else if ($data['status'] == 3) { //full time
+							$this->Notification_model->notify_match_fulltime($match['id'], $match['teamA'], $match['teamB'],
+									$match['teamA_goal'], $match['teamB_goal']);
 						}
 					}
 
@@ -204,7 +198,7 @@ class Api_football_model extends CI_Model
 						$this->Notification_model->notify_match_goal($match['id'], $match['teamA'], $match['teamB'],
 							$match['teamB'], $data['team_a_goal'], $data['team_b_goal']);
 					}
-					$this->db->update('spt_match', $data, array('api_id' => $data['api_id']));
+
 					if($showExecutionDetails) {
 						echo  'Update ' . $data['api_round'] . '<br><br><br>';
 					}

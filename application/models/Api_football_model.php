@@ -38,6 +38,7 @@ class Api_football_model extends CI_Model
 				//or register fixture if round has unfinished matchs
 				if(!$this->is_round_contains_fixtures($round, $editionStage) ||
 					$this->is_round_contains_fixtures($round, $editionStage, true)) {
+					echo $editionStage . ' ' . $round . '<br>';
 					$this->add_round_matchs($league_id, $editionStage, $round);
 				}
 			}
@@ -61,7 +62,7 @@ class Api_football_model extends CI_Model
 			foreach($matchs as $match) {
 				$data = null;
 
-				$data = $this->init_match_from_api($match, $editionStage);
+				$data = $this->init_match_from_api($match, $editionStage, $round_code);
 
 				if (!$this->Match_model->is_match_exist($data['api_id'])) {
 					echo $this->db->insert('spt_match', $data) . ' ' . $data['api_round'] . '<br>';
@@ -101,11 +102,13 @@ class Api_football_model extends CI_Model
 		}
 	}
 
-	function init_match_from_api($match, $editionStage=0) {
+	function init_match_from_api($match, $editionStage=0, $apiRound=null) {
 		$data = null;
 		$data['api_id'] = $match->fixture_id;
 		$data['minute'] = $match->elapsed;
-		$data['api_round'] = $match->round;
+		if($apiRound != null) {
+			$data['api_round'] = $apiRound;
+		}
 		if($editionStage > 0) {
 			$data['id_edition_stage'] = $editionStage;
 		}

@@ -253,7 +253,7 @@ class Article_model extends CI_Model
             $row['url_fav'] = $result->url_fav;
             $row['news_type'] = $result->news_type;
             $row['news_heading'] = $result->news_heading;
-            $row['news_description'] = $result->news_description;
+            $row['news_description'] = html_entity_decode(trim(strip_tags($result->news_description)));
             $row['news_video_id'] = $result->news_video_id;
             $row['news_video_url'] = $result->news_video_url;
             $row['news_date'] = $result->news_date;

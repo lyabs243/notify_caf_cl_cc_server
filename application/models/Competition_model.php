@@ -28,7 +28,10 @@ class Competition_model extends CI_Model
             $row = array();
             $row['id'] = $result->id;
             $row['title_small'] = $result->title_small;
-            $row['title'] = $this->lang->line($row['title_small']);;
+	        $row['title'] = $result->title;
+	        if($this->lang->line($row['title_small'])) {
+		        $row['title'] = $this->lang->line($row['title_small']);
+	        }
             $row['description'] = $result->description;
             $row['trophy_icon_url'] = $result->trophy_icon_url;
             $row['category'] = $result->category;
@@ -66,7 +69,10 @@ class Competition_model extends CI_Model
             $row = array();
             $row['id'] = $result->id;
             $row['title_small'] = $result->title_small;
-            $row['title'] = $this->lang->line($row['title_small']);;
+	        $row['title'] = $result->title;
+	        if($this->lang->line($row['title_small'])) {
+		        $row['title'] = $this->lang->line($row['title_small']);
+	        }
             $row['description'] = $result->description;
             $row['trophy_icon_url'] = $result->trophy_icon_url;
             $row['category'] = $result->category;
@@ -114,7 +120,10 @@ class Competition_model extends CI_Model
 			$row = array();
 			$row['id'] = $result->id;
 			$row['title_small'] = $result->title_small;
-			$row['title'] = $this->lang->line($row['title_small']);;
+			$row['title'] = $result->title;
+			if($this->lang->line($row['title_small'])) {
+				$row['title'] = $this->lang->line($row['title_small']);
+			}
 			$row['description'] = $result->description;
 			$row['trophy_icon_url'] = $result->trophy_icon_url;
 			$row['category'] = $result->category;

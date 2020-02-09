@@ -60,6 +60,7 @@ class Competition extends NotifyController {
         $result['current_match'] = $this->Match_model->get_current_matchs($idCompetition,0,0,$idCompetitionType);
         $result['fixture'] = $this->Match_model->get_fixture($idCompetition,0,0,$idCompetitionType);
         $result['latest_result'] = $this->Match_model->get_latest_results($idCompetition,0,0,$idCompetitionType);
+	    $result['featured_competition'] = $this->Competition_model->get_featured_competitions($idCompetitionType);
 
         $news['NOTIFYGROUP'] = $result;
 

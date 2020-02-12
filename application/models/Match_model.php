@@ -382,6 +382,7 @@ class Match_model extends CI_Model
         }
         $sql = $this->get_query_match_header() . "
                 WHERE (sm.status = 0)
+                AND sm.match_date >= DATE(NOW())
                  ";
 
         if($idCompetitionType > 0) {
@@ -424,6 +425,7 @@ class Match_model extends CI_Model
                 ON sta.id = stg.id_team ";
         }
         $sql.=" WHERE (sm.status = 0)
+                AND sm.match_date >= DATE(NOW())
                 AND ses.id = ? ";
         if($idGroup > 0)
         {

@@ -305,7 +305,8 @@ class Match_model extends CI_Model
                 WHERE (sm.status <> 6
                 AND sm.status <> 0
                 AND sm.status <> 11
-                AND sm.status <> 3) ";
+                AND sm.status <> 3)
+                 AND ses.visible > 0 ";
         if($idCompetitionType > 0) {
             $sql .= "AND sc.category = ? ";
             $idArg2 = $idCompetitionType;
@@ -344,6 +345,7 @@ class Match_model extends CI_Model
         }
         $sql = $this->get_query_match_header() . "
                 WHERE (sm.status = 3)
+                AND ses.visible > 0
                  ";
         if($idCompetitionType > 0) {
             $sql .= "AND sc.category = ? ";
@@ -382,6 +384,7 @@ class Match_model extends CI_Model
         }
         $sql = $this->get_query_match_header() . "
                 WHERE (sm.status = 0)
+                AND ses.visible > 0
                 AND sm.match_date >= DATE(NOW())
                  ";
 
@@ -425,6 +428,7 @@ class Match_model extends CI_Model
                 ON sta.id = stg.id_team ";
         }
         $sql.=" WHERE (sm.status = 0)
+                AND ses.visible > 0
                 AND sm.match_date >= DATE(NOW())
                 AND ses.id = ? ";
         if($idGroup > 0)
@@ -457,6 +461,7 @@ class Match_model extends CI_Model
                 ON sta.id = stg.id_team ";
         }
         $sql .=" WHERE (sm.status = 3)
+                AND ses.visible > 0
                 AND ses.id = ? ";
         if($idGroup > 0)
         {

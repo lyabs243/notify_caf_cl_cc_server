@@ -163,7 +163,8 @@ class Edition_model extends CI_Model
                 ON ses.id_edition = sce.id
                 JOIN spt_competition sc
                 ON sce.id_competition = sc.id
-                WHERE ses.id_edition = ?
+                WHERE ses.id_edition = ? 
+                AND ses.visible > 0
                 AND sc.id = ?
                 ORDER BY ses.register_date DESC";
         $args = array($idEdition,$idCompetition);

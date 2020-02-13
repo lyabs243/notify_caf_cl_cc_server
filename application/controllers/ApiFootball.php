@@ -22,8 +22,8 @@ class ApiFootball extends CI_Controller
 		}
 	}
 
-	public function get_league_matchs($id_edition, $league_id){
-		$this->Api_football_model->init_matchs_from_api($id_edition, $league_id);
+	public function get_league_matchs($id_edition, $league_id, $register_all=0){
+		$this->Api_football_model->init_matchs_from_api($id_edition, $league_id, $register_all);
 	}
 
 	public function add_league_scorers($id_edition, $league_id){

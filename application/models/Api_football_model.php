@@ -14,16 +14,16 @@ class Api_football_model extends CI_Model
 		$this->load->model('Team_model');
 	}
 
-	public function init_matchs_from_api($id_edition, $league_id)
+	public function init_matchs_from_api($id_edition, $league_id, $register_all=0)
 	{
 		$urlRounds = "https://api-football-v1.p.rapidapi.com/v2/fixtures/rounds/$league_id";
 		$json = $this->get_api_data($urlRounds);
 		if($json != null) {
-			$this->get_all_rounds_api($id_edition, $league_id, $json);
+			$this->get_all_rounds_api($id_edition, $league_id, $json, $register_all);
 		}
 	}
 
-	public function get_all_rounds_api($id_edition, $league_id, $json)
+	public function get_all_rounds_api($id_edition, $league_id, $json, $register_all=0)
 	{
 		$json_decode = json_decode($json);
 		$rounds = $json_decode->api->fixtures;
@@ -35,9 +35,10 @@ class Api_football_model extends CI_Model
 			$editionStage = $this->is_round_exist($notifyRoundDormat, $id_edition);
 			if($editionStage) {
 				//check if round has fixture if no, register fixture of that round
-				//or register fixture if round has unfinished matchs
+				//or register fixture if round has unfinished matchs or field  $register_all is true
 				if(!$this->is_round_contains_fixtures($round, $editionStage) ||
-					$this->is_round_contains_fixtures($round, $editionStage, true)) {
+					$this->is_round_contains_fixtures($round, $editionStage, true) ||
+					$register_all) {
 					echo $editionStage . ' ' . $round . '<br>';
 					$this->add_round_matchs($league_id, $editionStage, $round);
 				}

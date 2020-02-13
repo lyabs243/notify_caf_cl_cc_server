@@ -380,6 +380,47 @@ class Match_model extends CI_Model
         return $matchs;
     }
 
+	/**
+	 * Get postponed and matchs to define
+	 *
+	 * @param $idCompetition
+	 * @param int $idEdition
+	 * @param int $page
+	 * @param int $idCompetitionType
+	 * @return array
+	 */
+	public function get_other_fixtures($idCompetition,$idEdition=0,$page=0,$idCompetitionType=0) {
+		$timezone = $this->session->timezone;
+		//si l edition n est pas specifie on prend la derniere edition
+		if($idEdition<=0) {
+			$idEdition = $this->Edition_model->get_latest_competition_edition($idCompetition);
+		}
+		$sql = $this->get_query_match_header() . "
+                WHERE (sm.status = 7 OR sm.status = 6)
+                AND ses.visible > 0
+                 ";
+		if($idCompetitionType > 0) {
+			$sql .= "AND sc.category = ? ";
+			$idArg2 = $idCompetitionType;
+		}
+		else {
+			$sql .= "AND ses.id_edition = ? ";
+			$idArg2 = $idEdition;
+		}
+
+		$sql .= "ORDER BY sm.match_date DESC ";
+
+		$page_start = (((int)$page)-1)*10;
+		$args = array($timezone,$idArg2,$page_start);
+		$sql .= " LIMIT ?,10";
+
+		$query = $this->db->query($sql,$args);
+		$results = $query->result();
+		$matchs = $this->get_match_array_from_result($results);
+
+		return $matchs;
+	}
+
     public function get_fixture($idCompetition,$idEdition=0,$page=0,$idCompetitionType=0) {
         $timezone = $this->session->timezone;
         //si l edition n est pas specifie on prend la derniere edition

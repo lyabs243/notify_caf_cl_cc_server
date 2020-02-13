@@ -13,4 +13,6 @@ array
     'extra_time' => 'Extra Time',
     'penalty_kick' => 'Penalty Kick',
     'to_define' => 'To Define',
+	'postponed' => 'Postponed',
+	'to_define_manually' => 'To Define Manually',
 );

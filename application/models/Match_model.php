@@ -381,7 +381,7 @@ class Match_model extends CI_Model
     }
 
 	/**
-	 * Get postponed and matchs to define
+	 * Get postponed and matchs to define and old matchs that does not have results
 	 *
 	 * @param $idCompetition
 	 * @param int $idEdition
@@ -396,7 +396,7 @@ class Match_model extends CI_Model
 			$idEdition = $this->Edition_model->get_latest_competition_edition($idCompetition);
 		}
 		$sql = $this->get_query_match_header() . "
-                WHERE (sm.status = 7 OR sm.status = 6)
+                WHERE (sm.status = 7 OR sm.status = 6 OR (sm.status <> 3 AND sm.match_date < DATE(NOW())))
                 AND ses.visible > 0
                  ";
 		if($idCompetitionType > 0) {
@@ -813,38 +813,12 @@ class Match_model extends CI_Model
         //match reporte
         elseif ($status == 6)
         {
-            $result = $this->lang->line('to_define');
+            $result = $this->lang->line('postponed');
         }
-        //debut 2eme mi temps
+        //to define manually
         elseif ($status == 7)
         {
-            $start_date = new DateTime($this->get_match_status_date($idMatch,$status));
-            $since_start = $start_date->diff(new DateTime($this->get_current_time()));
-            $result = (45 + ($since_start->h*60) + $since_start->i) . '\'';
-        }
-        //debut prolongation
-        elseif ($status == 8)
-        {
-            $start_date = new DateTime($this->get_match_status_date($idMatch,$status));
-            $since_start = $start_date->diff(new DateTime($this->get_current_time()));
-            $result = (90 + ($since_start->h*60) + $since_start->i) . '\'';
-        }
-        //mi temp prolongation
-        elseif ($status == 9)
-        {
-            $result = $this->lang->line('half_time');
-        }
-        //debut 2eme prolongation
-        elseif ($status == 10)
-        {
-            $start_date = new DateTime($this->get_match_status_date($idMatch,$status));
-            $since_start = $start_date->diff(new DateTime($this->get_current_time()));
-            $result = (105 + ($since_start->h*60) + $since_start->i) . '\'';
-        }
-        //fin prolongation
-        elseif ($status == 11)
-        {
-            $result = $this->lang->line('full_time');
+            $result = $this->lang->line('to_define_manually');
         }
 
         return $result;

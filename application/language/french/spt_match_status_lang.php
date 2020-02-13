@@ -13,4 +13,6 @@ array
     'extra_time' => 'Prolongation',
     'penalty_kick' => 'Tirs au but',
     'to_define' => 'Reporté',
+	'postponed' => 'Reporté',
+	'to_define_manually' => 'À définir manuellement',
 );

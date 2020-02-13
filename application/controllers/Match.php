@@ -181,6 +181,27 @@ class Match extends NotifyController {
         die;
     }
 
+	public function update($id) {
+
+    	$data['team_a_goal'] = $this->input->post('team_a_goal');
+		$data['team_b_goal'] = $this->input->post('team_b_goal');
+		$data['team_a_penalty'] = $this->input->post('team_a_penalty');
+		$data['team_b_penalty'] = $this->input->post('team_b_penalty');
+		$data['status'] = $this->input->post('status');
+
+    	$result = $this->Match_model->update_match($id, $data);
+		if ($result) {
+			$output['NOTIFYGROUP'] = array('success' => '1');
+		}
+		else {
+			$output['NOTIFYGROUP'] = array('success' => '0');
+		}
+
+		header( 'Content-Type: application/json; charset=utf-8' );
+		echo json_encode($output,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+		die;
+	}
+
     public function video($idMatch)
     {
         $video = $this->Match_model->get_match_video($idMatch);

@@ -199,6 +199,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <input type="submit" value="OK">
         </form>
 
+        <code>Test Update match</code>
+        <form method="post" action="match/update/641" enctype="multipart/form-data">
+            <input name="team_a_goal" type="text" placeholder="team_a_goal">
+            <input name="team_b_goal" type="text" placeholder="team_b_goal">
+            <input name="team_a_penalty" type="text" placeholder="team_a_penalty">
+            <input name="team_b_penalty" type="text" placeholder="team_b_penalty">
+            <input name="status" type="text" placeholder="status">
+            <input type="submit" value="OK">
+        </form>
+
 		<p>If you are exploring CodeIgniter for the very first time, you should start by reading the <a href="user_guide/">User Guide</a>.</p>
 	</div>
 

@@ -309,6 +309,7 @@ class Match_model extends CI_Model
                 WHERE (sm.status <> 6
                 AND sm.status <> 0
                 AND sm.status <> 11
+                AND sm.status <> 7
                 AND sm.status <> 3)
                  AND ses.visible > 0 ";
         if($idCompetitionType > 0) {

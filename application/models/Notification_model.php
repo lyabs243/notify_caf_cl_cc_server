@@ -8,36 +8,44 @@
 
 class Notification_model extends CI_Model
 {
+	const  TYPE_GOAL = 1;
+	const  TYPE_LINEUP = 2;
+	const  TYPE_MATCHSTART = 3;
+	const  TYPE_MATCHEND = 4;
+
 	public function __construct() {
 		$this->load->database();
 	}
 
 	public function notify_match_goal($idMatch, $teamA, $teamB, $scoredTeam, $teamAGoals, $teamBGoals) {
+		if(!$this->is_notification_exist($idMatch, Notification_model::TYPE_GOAL,
+			"$teamAGoals-$teamBGoals")) {
+			$headingEn = "Goal for $scoredTeam !";
+			$headingFr = "But pour $scoredTeam !";
 
-		$headingEn = "Goal for $scoredTeam !";
-		$headingFr = "But pour $scoredTeam !";
+			$contentEn = "$teamA $teamAGoals - $teamBGoals $teamB";
+			$contentFr = "$teamA $teamAGoals - $teamBGoals $teamB";
 
-		$contentEn = "$teamA $teamAGoals - $teamBGoals $teamB";
-		$contentFr = "$teamA $teamAGoals - $teamBGoals $teamB";
+			$data['match_id'] = "$idMatch";
+			$data['type'] = "0";
 
-		$data['match_id'] = "$idMatch";
-		$data['type'] = "0";
-
-		$this->notify($headingEn, $headingFr, $contentEn, $contentFr, $data, 600);
+			$this->notify($headingEn, $headingFr, $contentEn, $contentFr, $data, 600);
+		}
 	}
 
 	public function notify_match_start($idMatch, $teamA, $teamB) {
+		if(!$this->is_notification_exist($idMatch, Notification_model::TYPE_MATCHSTART)) {
+			$headingEn = "$teamA - $teamB";
+			$headingFr = "$teamA - $teamB";
 
-		$headingEn = "$teamA - $teamB";
-		$headingFr = "$teamA - $teamB";
+			$contentEn = "Kick-Off !";
+			$contentFr = "Coup d'envoi !";
 
-		$contentEn = "Kick-Off !";
-		$contentFr = "Coup d'envoi !";
+			$data['match_id'] = "$idMatch";
+			$data['type'] = "0";
 
-		$data['match_id'] = "$idMatch";
-		$data['type'] = "0";
-
-		$this->notify($headingEn, $headingFr, $contentEn, $contentFr, $data, 1800);
+			$this->notify($headingEn, $headingFr, $contentEn, $contentFr, $data, 1800);
+		}
 	}
 
 	public function notify_secondhalf_start($idMatch, $teamA, $teamB) {
@@ -69,17 +77,18 @@ class Notification_model extends CI_Model
 	}
 
 	public function notify_match_fulltime($idMatch, $teamA, $teamB, $teamAGoals, $teamBGoals) {
+		if(!$this->is_notification_exist($idMatch, Notification_model::TYPE_MATCHEND)) {
+			$headingEn = "$teamA $teamAGoals - $teamBGoals $teamB";
+			$headingFr = "$teamA $teamAGoals - $teamBGoals $teamB";
 
-		$headingEn = "$teamA $teamAGoals - $teamBGoals $teamB";
-		$headingFr = "$teamA $teamAGoals - $teamBGoals $teamB";
+			$contentEn = "Full Time";
+			$contentFr = "Fin du match";
 
-		$contentEn = "Full Time";
-		$contentFr = "Fin du match";
+			$data['match_id'] = "$idMatch";
+			$data['type'] = "0";
 
-		$data['match_id'] = "$idMatch";
-		$data['type'] = "0";
-
-		$this->notify($headingEn, $headingFr, $contentEn, $contentFr, $data, 1800);
+			$this->notify($headingEn, $headingFr, $contentEn, $contentFr, $data, 1800);
+		}
 	}
 
 	public function notify_match_video($idMatch, $teamA, $teamB) {
@@ -97,17 +106,38 @@ class Notification_model extends CI_Model
 	}
 
 	public function notify_match_lineup($idMatch, $teamA, $teamB) {
+		if(!$this->is_notification_exist($idMatch, Notification_model::TYPE_LINEUP)) {
+			$headingEn = "$teamA - $teamB";
+			$headingFr = "$teamA - $teamB";
 
-		$headingEn = "$teamA - $teamB";
-		$headingFr = "$teamA - $teamB";
+			$contentEn = "Line-Up available";
+			$contentFr = "Composition disponible";
 
-		$contentEn = "Line-Up available";
-		$contentFr = "Composition disponible";
+			$data['match_id'] = "$idMatch";
+			$data['type'] = "1";
 
-		$data['match_id'] = "$idMatch";
-		$data['type'] = "1";
+			$this->notify($headingEn, $headingFr, $contentEn, $contentFr, $data, 1800);
+		}
+	}
 
-		$this->notify($headingEn, $headingFr, $contentEn, $contentFr, $data, 1800);
+	function  is_notification_exist($idMatch, $notificationType, $score='?-?')
+	{
+		$id = 0;
+		$query = $this->db->query('SELECT * FROM spt_match_notification_history 
+									WHERE id_match = ? AND type = ? AND score = ? ',
+			array($idMatch, $notificationType, $score));
+		$results = $query->result();
+		foreach ($results as $result)
+		{
+			$id = $result->id;
+			break;
+		}
+
+		if(!$id) {
+			$this->db->insert('spt_match_notification_history', array('id_match' => $idMatch,
+				'type' => $notificationType, 'score' => $score));
+		}
+		return $id;
 	}
 
 	//notify via onesignal

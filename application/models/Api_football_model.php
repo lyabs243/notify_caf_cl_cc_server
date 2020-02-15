@@ -283,27 +283,31 @@ class Api_football_model extends CI_Model
 
 					//get match lineup
 					$lineups = $fixture->lineups;
-					foreach ($lineups as $lineup) {
-						$items = $lineup->startXI;
-						$players = array();
-						if (is_array($items)) {
-							foreach ($items as $item) {
-								$player = null;
+					if(isset($lineups)) {
+						foreach ($lineups as $lineup) {
+							if (isset($lineup->startXI)) {
+								$items = $lineup->startXI;
+								$players = array();
+								if (is_array($items)) {
+									foreach ($items as $item) {
+										$player = null;
 
-								$player['id_match'] = $match['id'];
-								$player['id_composition'] = $this->Match_model->add_match_composition($match['id']);
-								$player['api_id_player'] = $item->player_id;
-								$player['api_id_team'] = $item->team_id;
-								$player['description'] = $item->player;
-								$player['number'] = $item->number;
-								$player['position'] = $item->pos;
+										$player['id_match'] = $match['id'];
+										$player['id_composition'] = $this->Match_model->add_match_composition($match['id']);
+										$player['api_id_player'] = $item->player_id;
+										$player['api_id_team'] = $item->team_id;
+										$player['description'] = $item->player;
+										$player['number'] = $item->number;
+										$player['position'] = $item->pos;
 
-								$players[] = $player;
+										$players[] = $player;
 
+									}
+								}
+
+								echo $this->Match_model->add_composition_details($players) . ' ' . $player['description'] . '<br>';
 							}
 						}
-
-						echo $this->Match_model->add_composition_details($players) . ' ' . $player['description'] . '<br>';
 					}
 				}
 			}

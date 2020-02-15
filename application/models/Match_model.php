@@ -283,7 +283,9 @@ class Match_model extends CI_Model
 
             $row['competition']['id'] = $result->comp_id;
             $row['competition']['title_small'] = $result->comp_title_small;
-            $row['competition']['title'] = strval($this->lang->line($row['competition']['title_small']));
+            $row['competition']['title'] = (strlen(strval($this->lang->line($row['competition']['title_small']))) == 0)?
+											$result->comp_title:
+											strval($this->lang->line($row['competition']['title_small']));
             $row['competition']['description'] = $result->comp_description;
             $row['competition']['trophy_icon_url'] = $result->comp_trophy_icon_url;
             $row['competition']['register_date'] = $result->comp_register_date;

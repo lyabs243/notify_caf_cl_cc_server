@@ -109,7 +109,7 @@ class Competition_model extends CI_Model
 				FROM `spt_competition` sc
 				WHERE sc.category = ?
 				ORDER BY mDate ASC
-				LIMIT 2";
+				LIMIT 5";
 		$args = array($timezone,$category);
 
 		$query = $this->db->query($sql,$args);

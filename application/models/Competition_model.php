@@ -91,24 +91,20 @@ class Competition_model extends CI_Model
 	 */
 	public function get_featured_competitions($category) {
 		$timezone = $this->session->timezone;
-		$sql = "SELECT sc.`id`, sc.`api_id`, sc.`title`, sc.`title_small`, sc.`description`, sc.`trophy_icon_url`, sc.`category`, CONVERT_TZ(sc.`register_date`,@@session.time_zone,?) as register_date,
-				COALESCE(
-				(
-					SELECT MIN(sm1.match_date) 
-					FROM spt_match sm1
-					WHERE id_edition_stage IN 
-					(
-						SELECT ses1.id
-					    FROM spt_competition_edition sce1
-					    JOIN spt_edition_stage ses1
-					    ON sce1.id = ses1.id_edition
-					    WHERE id_competition = sc.id
-					)
-				 	AND sm1.status = 0
-				), (SELECT MAX(sm2.match_date) FROM spt_match sm2)) as mDate
-				FROM `spt_competition` sc
-				WHERE sc.category = ?
-				ORDER BY mDate ASC
+		$sql = "SELECT sc.id, sc.title, sc.title_small, sc.description, sc.trophy_icon_url, sc.category,
+ 				CONVERT_TZ(sc.`register_date`,@@session.time_zone,?) as register_date
+                FROM spt_match sm
+                JOIN spt_edition_stage ses 
+                ON ses.id = sm.id_edition_stage
+                JOIN spt_competition_edition sce 
+                ON sce.id = ses.id_edition 
+                JOIN spt_competition sc 
+                ON sc.id = sce.id_competition
+                WHERE (sm.status = 0 AND sm.match_date >= DATE(NOW()))
+                AND ses.visible > 0
+                AND sc.category = ?
+                GROUP BY id
+                ORDER BY sm.match_date ASC
 				LIMIT 5";
 		$args = array($timezone,$category);
 

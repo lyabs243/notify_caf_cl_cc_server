@@ -195,10 +195,17 @@ class Article_model extends CI_Model
         }
 
         if($page <= 0) {
-            $sql .= "AND a.register_date >= DATE( DATE_SUB( NOW() , INTERVAL 1 DAY ) )
+            $sql .= "
                     ORDER BY news_date desc
                     LIMIT 5";
-            $args = array($idUser);
+	        if($idCompetitionType)
+	        {
+		        $args = array($timezone, $idCompetitionType, $lang);
+	        }
+	        else
+	        {
+		        $args = array($idUser);
+	        }
         }
         else {
             $page_start = (((int)$page)-1)*10;

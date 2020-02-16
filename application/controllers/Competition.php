@@ -56,7 +56,7 @@ class Competition extends NotifyController {
     public function home_infos($idUser,$idCompetition,$idCompetitionType=0)
     {
         $lang = $access = $this->session->lang;
-        $result['trending_news'] = $this->Article_model->get_trend_news($idUser,0,$idCompetitionType,$lang);
+        $result['trending_news'] = $this->Article_model->get_latest_news($idUser, 0, 0, 0, $idCompetitionType, $lang);
         $result['current_match'] = $this->Match_model->get_current_matchs($idCompetition,0,0,$idCompetitionType);
         $result['fixture'] = $this->Match_model->get_fixture($idCompetition,0,0,$idCompetitionType);
         $result['latest_result'] = $this->Match_model->get_latest_results($idCompetition,0,0,$idCompetitionType);

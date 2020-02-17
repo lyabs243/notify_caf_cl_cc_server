@@ -21,12 +21,12 @@ class Subscriber_model extends CI_Model
             $subscriber = $data;
             $data['id_user'] = $this->User_model->add_user(true);
             $this->db->insert('subscriber', $data);
-            $subscriber['active'] = 1;
-            $subscriber['type'] = 1;
+            $subscriber['active'] = '1';
+            $subscriber['type'] = '1';
             $subscriber['success'] = 1;
             $subscriber['username'] = '';
             $subscriber['id'] = $data['id_user'];
-            $subscriber['id_subscriber'] = $this->db->insert_id();
+            $subscriber['id_subscriber'] = strval($this->db->insert_id());
 	        $subscriber['badge'] = $this->Fan_club_model->get_fan($subscriber['id_subscriber'], $competitionCategory);
         }
         else

@@ -206,7 +206,7 @@ class Api_football_model extends CI_Model
 					}
 
 					if($showExecutionDetails) {
-						echo  'Update ' . $data['api_round'] . '<br><br><br>';
+						echo  'Update ' . $data['api_id'] . '<br><br><br>';
 					}
 
 					//get match events

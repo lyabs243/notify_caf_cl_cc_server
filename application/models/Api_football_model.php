@@ -167,7 +167,7 @@ class Api_football_model extends CI_Model
 		if(is_array($matchs)) {
 			foreach ($matchs as $match) {
 				if($showExecutionDetails) {
-					echo $match['teamA'] . 'VS' . $match['teamB'] . ' ' . '<br><br><br>';
+					//echo $match['teamA'] . 'VS' . $match['teamB'] . ' ' . '<br><br><br>';
 				}
 				$fixture_api_id = $match['api_id'];
 
@@ -205,10 +205,6 @@ class Api_football_model extends CI_Model
 							$match['teamB'], $data['team_a_goal'], $data['team_b_goal']);
 					}
 
-					if($showExecutionDetails) {
-						echo  'Update ' . $data['api_id'] . '<br><br><br>';
-					}
-
 					//get match events
 					$events = $fixture->events;
 					if (is_array($events)) {
@@ -242,17 +238,20 @@ class Api_football_model extends CI_Model
 
 							$actions[] = $action;
 							if($showExecutionDetails) {
-								echo $action['detail_a'] . ' ' . $action['minute'] . '<br>';
+								//echo $action['detail_a'] . ' ' . $action['minute'] . '<br>';
 							}
 							$index++;
 						}
 						$this->Match_model->add_actions_json($match['id'], $actions);
 						if($showExecutionDetails) {
-							echo 'Add action ' . $action['minute'] . '<br>';
+							//echo 'Add action ' . $action['minute'] . '<br>';
 						}
 					}
 				}
 			}
+		}
+		if($showExecutionDetails) {
+			echo  'Exectue add event ' . '<br><br><br>';
 		}
 		$this->update_last_execution();
 	}

@@ -90,31 +90,35 @@ class RssFeed_model extends CI_Model
 		$this->load->model('Article_model');
 		$feeds = $this->get_feeds();
 		foreach($feeds as $feed){
+			try {
+				$rss = Feed::loadRss($feed['url_adress']);
+				$data = array();
+				foreach ($rss->item as $item) {
+					$row = array();
+					$row['title'] = (string)$item->title;
+					$row['link'] = (string)$item->link;
+					$row['timestamp'] = (string)$item->timestamp;
+					$row['date_time'] = date('Y-m-d H:i:s', $row['timestamp']);
+					$row['description'] = (string)$item->description;
+					$row['encoded'] = (string)$item->{'content:encoded'};
+					$row['img_url'] = (string)$this->get_image($item);
 
-			$rss = Feed::loadRss($feed['url_adress']);
-			$data = array();
-			foreach ($rss->item as $item) {
-				$row = array();
-				$row['title'] = (string)$item->title;
-				$row['link'] = (string)$item->link;
-				$row['timestamp'] = (string)$item->timestamp;
-				$row['date_time'] = date('Y-m-d H:i:s', $row['timestamp']);
-				$row['description'] = (string)$item->description;
-				$row['encoded'] = (string)$item->{'content:encoded'};
-				$row['img_url'] = (string)$this->get_image($item);
+					array_push($data, $row);
+				}
 
-				array_push($data,$row);
+				$result[] = array(
+					'feed' => $feed['url_adress'],
+					'id_rss_feed' => $feed['id'],
+					'id_website' => $feed['id_website'],
+					'title' => (string)$rss->title,
+					'description' => (string)$rss->description,
+					'link' => (string)$rss->link,
+					'items' => $data
+				);
 			}
-
-			$result[] = array(
-				'feed' => $feed['url_adress'],
-				'id_rss_feed' => $feed['id'],
-				'id_website' => $feed['id_website'],
-				'title' => (string)$rss->title,
-				'description' => (string)$rss->description,
-				'link' => (string)$rss->link,
-				'items' => $data
-			);
+			catch(Exception $e) {
+				echo 'Error for: ' . $feed['url_adress'] . '<br>';
+			}
 		}
 
 		$feeds = json_encode($result,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);

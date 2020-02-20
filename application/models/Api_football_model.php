@@ -70,7 +70,8 @@ class Api_football_model extends CI_Model
 				}
 				else { //update fixture that as no to define manually in database
 					$api_id = $data['api_id'];
-					echo  $this->db->update('spt_match', $data, " api_id = $api_id AND status <> 7 AND status <> 3 ") .
+					echo  $this->db->update('spt_match', $data, " api_id = $api_id AND status <> 7 AND status <> 3 
+					AND api_update = 1 ") .
 						' ' . $data['api_round'] . '<br>';
 				}
 			}

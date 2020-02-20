@@ -212,7 +212,7 @@ class Match_model extends CI_Model
     }
 
     private function get_query_match_header(){
-        $query = "SELECT sm.id, sm.minute, sm.api_id, sm.api_round, sta.id as teamAId, stb.id as teamBId, sta.title as teamA, stb.title as teamB,
+        $query = "SELECT sm.id, sm.minute, sm.api_id, sm.api_round, sm.api_update, sta.id as teamAId, stb.id as teamBId, sta.title as teamA, stb.title as teamB,
  				sta.url_logo as teamA_logo, stb.url_logo as teamB_logo, sm.team_a_goal as teamA_goal, sm.team_b_goal as teamB_goal,
                 sta.title_small as teamA_small, stb.title_small as teamB_small, CONVERT_TZ(sm.match_date,@@session.time_zone,?) as match_date, sm.status,
                 sm.team_a_penalty, sm.team_b_penalty, sc.id as comp_id, sc.title as comp_title, sc.title_small as comp_title_small,
@@ -253,6 +253,7 @@ class Match_model extends CI_Model
             $row['id'] = $result->id;
 	        $row['api_id'] = $result->api_id;
 	        $row['api_round'] = $result->api_round;
+	        $row['api_update'] = $result->api_update;
             $row['teamAId'] = $result->teamAId;
             $row['teamBId'] = $result->teamBId;
             $row['teamA_small'] = $result->teamA_small;

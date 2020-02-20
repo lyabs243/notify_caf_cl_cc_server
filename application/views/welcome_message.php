@@ -206,6 +206,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <input name="team_a_penalty" type="text" placeholder="team_a_penalty">
             <input name="team_b_penalty" type="text" placeholder="team_b_penalty">
             <input name="status" type="text" placeholder="status">
+            <input name="match_date" type="text" placeholder="match timestamp">
             <input type="submit" value="OK">
         </form>
 

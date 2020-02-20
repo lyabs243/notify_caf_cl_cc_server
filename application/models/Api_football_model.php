@@ -182,7 +182,8 @@ class Api_football_model extends CI_Model
 
 					$data = null;
 					$data = $this->init_match_from_api($fixture);
-					$this->db->update('spt_match', $data, array('api_id' => $data['api_id']));
+					$apiId = $data['api_id'];
+					$this->db->update('spt_match', $data, "api_id = $apiId AND api_update = 1 ");
 
 					if ($match['status'] != $data['status']) {
 						if ($data['status'] == 1) {

@@ -188,8 +188,10 @@ class Match extends NotifyController {
 		$data['team_a_penalty'] = $this->input->post('team_a_penalty');
 		$data['team_b_penalty'] = $this->input->post('team_b_penalty');
 		$data['status'] = $this->input->post('status');
-		$data['match_date'] = $this->input->post('match_date');
+		$matchDate = $this->input->post('match_date');
 		$data['api_update'] = $this->input->post('api_update');
+
+		$this->Match_model->update_match_date($id, $matchDate);
 
     	$result = $this->Match_model->update_match($id, $data);
 		if ($result) {

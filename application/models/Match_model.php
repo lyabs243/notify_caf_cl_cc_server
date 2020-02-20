@@ -302,6 +302,14 @@ class Match_model extends CI_Model
 		return $this->db->update('spt_match', $data, array('id' => $id));
 	}
 
+	public function update_match_date($id, $matchDate) {
+		$timezone = '+00:00';
+		$result = $this->db->query('UPDATE spt_match
+ 						  set match_date = CONVERT_TZ(?,@@session.time_zone,?)
+ 						  WHERE id = ? ', array($matchDate, $timezone, $id));
+		return $result;
+	}
+
     public function get_current_matchs($idCompetition,$idEdition=0,$page=0,$idCompetitionType=0) {
         $timezone = $this->session->timezone;
         //si l edition n est pas specifie on prend la derniere edition

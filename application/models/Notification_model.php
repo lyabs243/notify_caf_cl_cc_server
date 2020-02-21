@@ -17,7 +17,7 @@ class Notification_model extends CI_Model
 		$this->load->database();
 	}
 
-	public function notify_match_goal($idMatch, $teamA, $teamB, $scoredTeam, $teamAGoals, $teamBGoals) {
+	public function notify_match_goal($idMatch, $teamA, $teamB, $scoredTeam, $teamAGoals, $teamBGoals, $countryCode=null) {
 		if(!$this->is_notification_exist($idMatch, Notification_model::TYPE_GOAL,
 			"$teamAGoals-$teamBGoals")) {
 			$headingEn = "Goal for $scoredTeam !";
@@ -29,11 +29,11 @@ class Notification_model extends CI_Model
 			$data['match_id'] = "$idMatch";
 			$data['type'] = "0";
 
-			$this->notify($headingEn, $headingFr, $contentEn, $contentFr, $data, 600);
+			$this->notify($headingEn, $headingFr, $contentEn, $contentFr, $data, 600, $countryCode);
 		}
 	}
 
-	public function notify_match_start($idMatch, $teamA, $teamB) {
+	public function notify_match_start($idMatch, $teamA, $teamB, $countryCode=null) {
 		if(!$this->is_notification_exist($idMatch, Notification_model::TYPE_MATCHSTART)) {
 			$headingEn = "$teamA - $teamB";
 			$headingFr = "$teamA - $teamB";
@@ -44,11 +44,11 @@ class Notification_model extends CI_Model
 			$data['match_id'] = "$idMatch";
 			$data['type'] = "0";
 
-			$this->notify($headingEn, $headingFr, $contentEn, $contentFr, $data, 1800);
+			$this->notify($headingEn, $headingFr, $contentEn, $contentFr, $data, 1800, $countryCode);
 		}
 	}
 
-	public function notify_secondhalf_start($idMatch, $teamA, $teamB) {
+	public function notify_secondhalf_start($idMatch, $teamA, $teamB, $countryCode=null) {
 
 		$headingEn = "$teamA - $teamB";
 		$headingFr = "$teamA - $teamB";
@@ -59,10 +59,10 @@ class Notification_model extends CI_Model
 		$data['match_id'] = "$idMatch";
 		$data['type'] = "0";
 
-		$this->notify($headingEn, $headingFr, $contentEn, $contentFr, $data, 1800);
+		$this->notify($headingEn, $headingFr, $contentEn, $contentFr, $data, 1800, $countryCode);
 	}
 
-	public function notify_match_halftime($idMatch, $teamA, $teamB, $teamAGoals, $teamBGoals) {
+	public function notify_match_halftime($idMatch, $teamA, $teamB, $teamAGoals, $teamBGoals, $countryCode=null) {
 
 		$headingEn = "$teamA $teamAGoals - $teamBGoals $teamB";
 		$headingFr = "$teamA $teamAGoals - $teamBGoals $teamB";
@@ -73,7 +73,7 @@ class Notification_model extends CI_Model
 		$data['match_id'] = "$idMatch";
 		$data['type'] = "0";
 
-		$this->notify($headingEn, $headingFr, $contentEn, $contentFr, $data, 600);
+		$this->notify($headingEn, $headingFr, $contentEn, $contentFr, $data, 600, $countryCode);
 	}
 
 	public function notify_match_fulltime($idMatch, $teamA, $teamB, $teamAGoals, $teamBGoals) {
@@ -105,7 +105,7 @@ class Notification_model extends CI_Model
 		$this->notify($headingEn, $headingFr, $contentEn, $contentFr, $data);
 	}
 
-	public function notify_match_lineup($idMatch, $teamA, $teamB) {
+	public function notify_match_lineup($idMatch, $teamA, $teamB, $countryCode=null) {
 		if(!$this->is_notification_exist($idMatch, Notification_model::TYPE_LINEUP)) {
 			$headingEn = "$teamA - $teamB";
 			$headingFr = "$teamA - $teamB";
@@ -116,7 +116,7 @@ class Notification_model extends CI_Model
 			$data['match_id'] = "$idMatch";
 			$data['type'] = "1";
 
-			$this->notify($headingEn, $headingFr, $contentEn, $contentFr, $data, 1800);
+			$this->notify($headingEn, $headingFr, $contentEn, $contentFr, $data, 1800, $countryCode);
 		}
 	}
 
@@ -141,7 +141,7 @@ class Notification_model extends CI_Model
 	}
 
 	//notify via onesignal
-	public function notify($headingEn, $headingFr, $contentEn, $contentFr, $data, $timeToLive=259200) {
+	public function notify($headingEn, $headingFr, $contentEn, $contentFr, $data, $timeToLive=259200, $countryCode=null) {
 
 		$contents = array(
 			'en' => $contentEn,
@@ -161,6 +161,10 @@ class Notification_model extends CI_Model
 			'contents' => $contents,
 			'ttl' => $timeToLive
 		);
+
+		if($countryCode != null) {
+			$fields['filters'] = array(array("field" => "country",  "relation" => "=", "value" => $countryCode),);
+		}
 
 		$fields = json_encode($fields);
 

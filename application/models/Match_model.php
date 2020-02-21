@@ -31,7 +31,7 @@ class Match_model extends CI_Model
 		    	$match = $this->get_match($data['id_match']);
 			    $scoredTeam = $this->get_team_name($data['api_id_team']);
 			    $this->Notification_model->notify_match_goal($data['id_match'], $match[0]['teamA'], $match[0]['teamB'],
-				    $scoredTeam, $match[0]['teamA_goal'], $match[0]['teamB_goal']);
+				    $scoredTeam, $match[0]['teamA_goal'], $match[0]['teamB_goal'], $match[0]['competition']['country_code']);
 		    }
 		    return $this->db->insert_id();
 	    }
@@ -178,7 +178,7 @@ class Match_model extends CI_Model
             $this->db->insert('spt_composition', array('id_match' => $idMatch));
             $id = $this->db->insert_id();
             $match = $this->get_match($idMatch);
-	        $this->Notification_model->notify_match_lineup($idMatch, $match[0]['teamA'], $match[0]['teamB']);
+	        $this->Notification_model->notify_match_lineup($idMatch, $match[0]['teamA'], $match[0]['teamB'], $match[0]['competition']['country_code']);
         }
 
         return $id;
@@ -216,7 +216,7 @@ class Match_model extends CI_Model
  				sta.url_logo as teamA_logo, stb.url_logo as teamB_logo, sm.team_a_goal as teamA_goal, sm.team_b_goal as teamB_goal,
                 sta.title_small as teamA_small, stb.title_small as teamB_small, CONVERT_TZ(sm.match_date,@@session.time_zone,?) as match_date, sm.status,
                 sm.team_a_penalty, sm.team_b_penalty, sc.id as comp_id, sc.title as comp_title, sc.title_small as comp_title_small,
-                sc.description as comp_description, sc.trophy_icon_url as comp_trophy_icon_url, sc.category as comp_category, sc.register_date as comp_register_date,
+                sc.description as comp_description, sc.trophy_icon_url as comp_trophy_icon_url, sc.category as comp_category, sc.country_code as comp_country_code, sc.register_date as comp_register_date,
                 ses.id as editstage_id, ses.id_edition as editstage_id_edition, ses.title as editstage_title, ses.type as editstage_type, ses.register_date as editstage_register_date,
                 (SELECT stg.id_stage_group 
                 FROM `spt_team_group` stg
@@ -289,7 +289,8 @@ class Match_model extends CI_Model
 											strval($this->lang->line($row['competition']['title_small']));
             $row['competition']['description'] = $result->comp_description;
             $row['competition']['trophy_icon_url'] = $result->comp_trophy_icon_url;
-            $row['competition']['register_date'] = $result->comp_register_date;
+            $row['competition']['country_code'] = $result->comp_country_code;
+	        $row['competition']['register_date'] = $result->comp_register_date;
             //on change l affichage de la date du match par rapport au status
             $row['match_status'] = strval($this->getMatchDate($row['id'],$row['status'],$row['match_date'], $result->minute));
 

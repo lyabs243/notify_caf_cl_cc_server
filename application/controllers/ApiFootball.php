@@ -22,6 +22,11 @@ class ApiFootball extends CI_Controller
 		}
 	}
 
+	public function add_teams_from_api($league_id, $isNationalTeam=0)
+	{
+		$this->Api_football_model->add_teams_from_api($league_id, $isNationalTeam);
+	}
+
 	public function get_league_matchs($id_edition, $league_id, $register_all=0){
 		$this->Api_football_model->init_matchs_from_api($id_edition, $league_id, $register_all);
 	}

@@ -35,7 +35,7 @@ class Team_model extends CI_Model
 		}
 	}
 
-	public function add_teams_from_api_json($json)
+	public function add_teams_from_api_json($json, $isNationalTeam=0)
 	{
 		$sql = 'INSERT INTO `spt_team`( `api_id`, `title`,  `is_national_team`, `country_code`, `url_logo`, `category`, top_club, `color`)
  			VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
@@ -45,7 +45,7 @@ class Team_model extends CI_Model
 			$api_id = $team->team_id;
 			$url_logo = $team->logo;
 			$category = 1;
-			$is_national_team = 0;
+			$is_national_team = $isNationalTeam;
 			$country_code = null;
 			$title = $team->name;
 			$color = '#000000';

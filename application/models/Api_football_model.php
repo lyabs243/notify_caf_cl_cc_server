@@ -23,6 +23,15 @@ class Api_football_model extends CI_Model
 		}
 	}
 
+	public function add_teams_from_api($league_id, $isNationalTeam=0)
+	{
+		$urlRounds = "https://api-football-v1.p.rapidapi.com/v2/teams/league/$league_id";
+		$json = $this->get_api_data($urlRounds);
+		if($json != null) {
+			$this->Team_model->add_teams_from_api_json($json, $isNationalTeam);
+		}
+	}
+
 	public function get_all_rounds_api($id_edition, $league_id, $json, $register_all=0)
 	{
 		$json_decode = json_decode($json);

@@ -196,6 +196,7 @@ class Article_model extends CI_Model
 
         if($page <= 0) {
             $sql .= "
+                    GROUP BY id
                     ORDER BY news_date desc
                     LIMIT 5";
 	        if($idCompetitionType)
@@ -240,7 +241,9 @@ class Article_model extends CI_Model
             {
                 $sql .= "AND a.register_date >= DATE( DATE_SUB( NOW() , INTERVAL 30 DAY ) )";
             }
-            $sql .= "ORDER BY news_date desc
+            $sql .= "
+                    GROUP BY id
+                    ORDER BY news_date desc
                      LIMIT ?,10";
         }
         $query = $this->db->query($sql,$args);

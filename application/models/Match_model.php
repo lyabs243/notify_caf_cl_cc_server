@@ -773,6 +773,7 @@ class Match_model extends CI_Model
 		$sql = $this->get_query_match_header() . "
                 WHERE NOW() >= DATE_SUB(sm.match_date, INTERVAL $intervallStart) 
                 AND NOW() <= DATE_ADD(sm.match_date , INTERVAL $intervallEnd) 
+                AND sc.live_score = 1
                 AND sm.status <> 3";
 		$args = array($timezone);
 		$query = $this->db->query($sql,$args);

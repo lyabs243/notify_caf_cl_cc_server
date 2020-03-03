@@ -31,7 +31,8 @@ class Match_model extends CI_Model
 		    	$match = $this->get_match($data['id_match']);
 			    $scoredTeam = $this->get_team_name($data['api_id_team']);
 			    $this->Notification_model->notify_match_goal($data['id_match'], $match[0]['teamA'], $match[0]['teamB'],
-				    $scoredTeam, $match[0]['teamA_goal'], $match[0]['teamB_goal'], $match[0]['competition']['country_code']);
+				    $scoredTeam, $match[0]['teamA_goal'], $match[0]['teamB_goal'], $match[0]['competition']['country_code'],
+				    $match[0]['competition']['title'], $match[0]['edition_stage']['title']);
 		    }
 		    return $this->db->insert_id();
 	    }

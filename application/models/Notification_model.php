@@ -6,6 +6,9 @@
  * Time: 12:53
  */
 
+require_once APPPATH . "libraries/vendor/autoload.php";
+
+use Abraham\TwitterOAuth\TwitterOAuth;
 class Notification_model extends CI_Model
 {
 	const  TYPE_GOAL = 1;
@@ -17,7 +20,8 @@ class Notification_model extends CI_Model
 		$this->load->database();
 	}
 
-	public function notify_match_goal($idMatch, $teamA, $teamB, $scoredTeam, $teamAGoals, $teamBGoals, $countryCode=null) {
+	public function notify_match_goal($idMatch, $teamA, $teamB, $scoredTeam, $teamAGoals, $teamBGoals, $countryCode=null,
+	                                  $competition='', $competitionStage='') {
 		if(!$this->is_notification_exist($idMatch, Notification_model::TYPE_GOAL,
 			"$teamAGoals-$teamBGoals")) {
 			$headingEn = "Goal for $scoredTeam !";
@@ -30,10 +34,13 @@ class Notification_model extends CI_Model
 			$data['type'] = "0";
 
 			$this->notify($headingEn, $headingFr, $contentEn, $contentFr, $data, 600, $countryCode);
+
+			//tweet
+			$this->tweetMatch($headingEn, $contentEn, $competition, $competitionStage, $teamA, $teamB);
 		}
 	}
 
-	public function notify_match_start($idMatch, $teamA, $teamB, $countryCode=null) {
+	public function notify_match_start($idMatch, $teamA, $teamB, $countryCode=null, $competition='', $competitionStage='') {
 		if(!$this->is_notification_exist($idMatch, Notification_model::TYPE_MATCHSTART)) {
 			$headingEn = "$teamA - $teamB";
 			$headingFr = "$teamA - $teamB";
@@ -45,10 +52,13 @@ class Notification_model extends CI_Model
 			$data['type'] = "0";
 
 			$this->notify($headingEn, $headingFr, $contentEn, $contentFr, $data, 1800, $countryCode);
+
+			//tweet
+			$this->tweetMatch($headingEn, $contentEn, $competition, $competitionStage, $teamA, $teamB);
 		}
 	}
 
-	public function notify_secondhalf_start($idMatch, $teamA, $teamB, $countryCode=null) {
+	public function notify_secondhalf_start($idMatch, $teamA, $teamB, $countryCode=null, $competition='', $competitionStage='') {
 
 		$headingEn = "$teamA - $teamB";
 		$headingFr = "$teamA - $teamB";
@@ -60,9 +70,13 @@ class Notification_model extends CI_Model
 		$data['type'] = "0";
 
 		$this->notify($headingEn, $headingFr, $contentEn, $contentFr, $data, 1800, $countryCode);
+
+		//tweet
+		$this->tweetMatch($headingEn, $contentEn, $competition, $competitionStage, $teamA, $teamB);
 	}
 
-	public function notify_match_halftime($idMatch, $teamA, $teamB, $teamAGoals, $teamBGoals, $countryCode=null) {
+	public function notify_match_halftime($idMatch, $teamA, $teamB, $teamAGoals, $teamBGoals, $countryCode=null,
+	                                      $competition='', $competitionStage='') {
 
 		$headingEn = "$teamA $teamAGoals - $teamBGoals $teamB";
 		$headingFr = "$teamA $teamAGoals - $teamBGoals $teamB";
@@ -74,9 +88,12 @@ class Notification_model extends CI_Model
 		$data['type'] = "0";
 
 		$this->notify($headingEn, $headingFr, $contentEn, $contentFr, $data, 600, $countryCode);
+
+		//tweet
+		$this->tweetMatch($headingEn, $contentEn, $competition, $competitionStage, $teamA, $teamB);
 	}
 
-	public function notify_match_fulltime($idMatch, $teamA, $teamB, $teamAGoals, $teamBGoals) {
+	public function notify_match_fulltime($idMatch, $teamA, $teamB, $teamAGoals, $teamBGoals, $competition='', $competitionStage='') {
 		if(!$this->is_notification_exist($idMatch, Notification_model::TYPE_MATCHEND)) {
 			$headingEn = "$teamA $teamAGoals - $teamBGoals $teamB";
 			$headingFr = "$teamA $teamAGoals - $teamBGoals $teamB";
@@ -88,6 +105,9 @@ class Notification_model extends CI_Model
 			$data['type'] = "0";
 
 			$this->notify($headingEn, $headingFr, $contentEn, $contentFr, $data, 1800);
+
+			//tweet
+			$this->tweetMatch($headingEn, $contentEn, $competition, $competitionStage, $teamA, $teamB);
 		}
 	}
 
@@ -180,5 +200,64 @@ class Notification_model extends CI_Model
 
 		$response = curl_exec($ch);
 		curl_close($ch);
+	}
+
+	function tweetMatch($heading, $content, $competition, $competitionStage, $teamA, $teamB) {
+
+		define('CONSUMER_KEY', 'uQdL3Jhi5zfONirpRtOjpQ8bU');
+		define('CONSUMER_SECRET', 'I9zTB6omtP3UyFga7YzmZxbvw5gcY3yrupiitmdAZY9J9jFkJP');
+		define('ACCESS_TOKEN', '982963896100249600-5mA2pdZM8ohSveGuqzeXKK7CSGKm97Y');
+		define('ACCESS_TOKEN_SECRET', 'bJAswN48kPEk7dy4c2nDSv14nVxvsJ9ytGwMRIhds9PsH');
+
+		$connection = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
+
+		$status = "
+				$competition - $competitionStage
+	
+				$heading
+	
+				$content
+	
+				Enjoy live score by installing for free Notify Afrofoot on http://bit.ly/2TjUrj1
+				#football #africa";
+		$competitionStage = $this->sentenceToHashTags($competition);
+		foreach ($competitionStage as $tag) {
+			$status .= ' ' . $tag;
+		}
+		$status .= ' #' . $this->getLongestWord($teamA);
+		$status .= ' #' . $this->getLongestWord($teamB);
+		$fields['status'] = $status;
+		$post_tweets = $connection->post("statuses/update", $fields);
+	}
+
+	//transform a sentence in hashtags with separate words
+	function sentenceToHashTags($sentence) {
+		$words = explode(' ', $sentence);
+
+		$hashTags = array();
+		foreach($words as $word) {
+			$hashTags[] = '#' . $word;
+		}
+		return $hashTags;
+	}
+
+	//get most length word of a sentence
+	function getLongestWord($sentence) {
+		$words = explode(' ', $sentence);
+
+		$longestWord = '';
+
+		$nbWords = count($words);
+
+		if($nbWords > 0) {
+			$longestWord = $words[0];
+		}
+
+		for($i = 0; $i < $nbWords; $i++) {
+			if(strlen($words[$i]) > strlen($longestWord)) {
+				$longestWord = $words[$i];
+			}
+		}
+		return $longestWord;
 	}
 }

@@ -197,23 +197,26 @@ class Api_football_model extends CI_Model
 					if ($match['status'] != $data['status']) {
 						if ($data['status'] == 1) {
 							if ($match['status'] == 0) { //match start
-								$this->Notification_model->notify_match_start($match['id'], $match['teamA'], $match['teamB'], $match['competition']['country_code']);
+								$this->Notification_model->notify_match_start($match['id'], $match['teamA'], $match['teamB'],
+									$match['competition']['country_code'], $match['competition']['title'], $match['edition_stage']['title']);
 							}
 						}
 						else if ($data['status'] == 3) { //full time
 							$this->Notification_model->notify_match_fulltime($match['id'], $match['teamA'], $match['teamB'],
-									$match['teamA_goal'], $match['teamB_goal']);
+									$match['teamA_goal'], $match['teamB_goal'], $match['competition']['title'], $match['edition_stage']['title']);
 						}
 					}
 
 					//home team scored
 					if ($data['team_a_goal'] > $match['teamA_goal']) {
 						$this->Notification_model->notify_match_goal($match['id'], $match['teamA'], $match['teamB'],
-							$match['teamA'], $data['team_a_goal'], $data['team_b_goal'], $match['competition']['country_code']);
+							$match['teamA'], $data['team_a_goal'], $data['team_b_goal'], $match['competition']['country_code'],
+							$match['competition']['title'], $match['edition_stage']['title']);
 					}
 					else if ($data['team_b_goal'] > $match['teamB_goal']) {
 						$this->Notification_model->notify_match_goal($match['id'], $match['teamA'], $match['teamB'],
-							$match['teamB'], $data['team_a_goal'], $data['team_b_goal'], $match['competition']['country_code']);
+							$match['teamB'], $data['team_a_goal'], $data['team_b_goal'], $match['competition']['country_code'],
+							$match['competition']['title'], $match['edition_stage']['title']);
 					}
 
 					//get match events

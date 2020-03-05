@@ -226,8 +226,29 @@ class Notification_model extends CI_Model
 		}
 		$status .= ' #' . $this->getLongestWord($teamA);
 		$status .= ' #' . $this->getLongestWord($teamB);
-		$fields['status'] = $status;
+		$statusLength = strlen($status);
+		$fields['status'] = substr($status, 0, 280);
+		$nbTweets = ceil($statusLength / 280);
+
+		//create space for "(1/2)"
+		if($nbTweets > 1) {
+			$fields['status'] = "(1/$nbTweets)
+			" . substr($fields['status'], 0, 274);
+		}
+
 		$post_tweets = $connection->post("statuses/update", $fields);
+		$tweet_id = $post_tweets->id;
+
+		//reply to main tweet
+		for($i = 1; $i < $nbTweets; $i++) {
+			$tStatus = 	substr($status, 274*$i, 274);
+			$fields['status'] = $tStatus;
+			$numTweet = $i + 1;
+			$fields['status'] = "($numTweet/$nbTweets)
+			" . $fields['status'];
+			$fields['in_reply_to_status_id'] = $tweet_id;
+			$connection->post("statuses/update", $fields);
+		}
 	}
 
 	//transform a sentence in hashtags with separate words

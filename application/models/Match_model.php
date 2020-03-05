@@ -194,7 +194,30 @@ class Match_model extends CI_Model
 		        $result = true;
 	        }
         }
+        $this->tweet_composition_details($players);
         return $result;
+    }
+
+    function tweet_composition_details($players) {
+
+    	$match = $this->get_match($players['id_match']);
+    	$team = $this->get_team_name($players['api_id_team']);
+    	$competition = $match['competition']['title'];
+    	$competitionStage = $match['edition_stage']['title'];
+    	$teamA = $match['teamA'];
+    	$teamB = $match['teamB'];
+
+    	$heading = "Starting XI for $team ";
+    	$content = "";
+
+    	foreach ($players as $player) {
+    		if(strlen($player) > 15) {
+    			$player = substr($player, 0, 15) . '.';
+		    }
+    		$content .= "-$player ";
+	    }
+
+	    $this->Notification_model->tweetMatch($heading, $content, $competition, $competitionStage, $teamA, $teamB);
     }
 
     public function get_player_name($idPlayer) {

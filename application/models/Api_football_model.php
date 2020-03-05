@@ -276,7 +276,7 @@ class Api_football_model extends CI_Model
 		$this->load->model('Match_model');
 		$this->load->model('Notification_model');
 		//get all matchs  that date in intervall of 3 minutes before to 3 hour after
-		$matchs = $this->Match_model->get_matchs_in_intervall('1 HOUR', '2 HOUR');
+		$matchs = $this->Match_model->get_matchs_in_intervall('1 HOUR', '2 HOUR', 1);
 
 		if(is_array($matchs)) {
 			foreach ($matchs as $match) {

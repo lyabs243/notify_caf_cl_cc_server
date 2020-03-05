@@ -769,17 +769,30 @@ class Match_model extends CI_Model
 	 * @param $idMatch
 	 * @return array
 	 */
-	public function get_matchs_in_intervall($intervallStart, $intervallEnd) {
+	public function get_matchs_in_intervall($intervallStart, $intervallEnd, $lineUp=0) {
 		$timezone = $this->session->timezone;
 		$sql = $this->get_query_match_header() . "
                 WHERE NOW() >= DATE_SUB(sm.match_date, INTERVAL $intervallStart) 
                 AND NOW() <= DATE_ADD(sm.match_date , INTERVAL $intervallEnd) 
                 AND sc.live_score = 1
-                AND sm.status <> 3";
+                AND sm.status <> 3 
+                ";
 		$args = array($timezone);
 		$query = $this->db->query($sql,$args);
 		$results = $query->result();
 		$matchs = $this->get_match_array_from_result($results);
+
+		//return match only if composition is not available
+		if($lineUp) {
+			$filters = array();
+			foreach ($matchs as $match) {
+				if(!$this->is_composition_exist($match['id'])) {
+					$filters[] = $match;
+				}
+			}
+			$matchs = $filters;
+		}
+
 		return $matchs;
 	}
 

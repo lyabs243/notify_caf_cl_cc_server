@@ -207,16 +207,45 @@ class Match_model extends CI_Model
 			$teamA = $match[0]['teamA'];
 			$teamB = $match[0]['teamB'];
 
-			$heading = "Starting XI for $team ";
-			$content = "";
+			$heading = "
+			Starting XI for $team ";
 
-			foreach ($players as $player) {
-				$playerName = $player['description'];
-				if (strlen($playerName) > 15) {
-					$playerName = substr($playerName, 0, 15) . '.';
-				}
-				$content .= "-$playerName ";
-			}
+			$player0 = (strlen($players[0]['description']) > 15)? substr($players[0]['description'], 0, 15) . '.'
+				: $players[0]['description'];
+			$player1 = (strlen($players[1]['description']) > 15)? substr($players[1]['description'], 0, 15) . '.'
+				: $players[1]['description'];
+			$player2 = (strlen($players[2]['description']) > 15)? substr($players[2]['description'], 0, 15) . '.'
+				: $players[2]['description'];
+			$player3 = (strlen($players[3]['description']) > 15)? substr($players[3]['description'], 0, 15) . '.'
+				: $players[3]['description'];
+			$player4 = (strlen($players[4]['description']) > 15)? substr($players[4]['description'], 0, 15) . '.'
+				: $players[4]['description'];
+			$player5 = (strlen($players[5]['description']) > 15)? substr($players[5]['description'], 0, 15) . '.'
+				: $players[5]['description'];
+			$player6 = (strlen($players[6]['description']) > 15)? substr($players[6]['description'], 0, 15) . '.'
+				: $players[6]['description'];
+			$player7 = (strlen($players[7]['description']) > 15)? substr($players[7]['description'], 0, 15) . '.'
+				: $players[7]['description'];
+			$player8 = (strlen($players[8]['description']) > 15)? substr($players[8]['description'], 0, 15) . '.'
+				: $players[8]['description'];
+			$player9 = (strlen($players[9]['description']) > 15)? substr($players[9]['description'], 0, 15) . '.'
+				: $players[9]['description'];
+			$player10 = (strlen($players[10]['description']) > 15)? substr($players[10]['description'], 0, 15) . '.'
+				: $players[10]['description'];
+
+			$content = "
+			- $player0
+			- $player1
+			- $player2
+			- $player3
+			- $player4
+			- $player5
+			- $player6
+			- $player7
+			- $player8
+			- $player9
+			- $player10
+			";
 
 			$this->Notification_model->tweetMatch($heading, $content, $competition, $competitionStage, $teamA, $teamB);
 		}

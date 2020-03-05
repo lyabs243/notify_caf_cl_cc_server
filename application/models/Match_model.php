@@ -199,25 +199,27 @@ class Match_model extends CI_Model
     }
 
     function tweet_composition_details($players) {
+		if(count($players) > 0) {
+			$match = $this->get_match($players[0]['id_match']);
+			$team = $this->get_team_name($players[0]['api_id_team']);
+			$competition = $match['competition']['title'];
+			$competitionStage = $match['edition_stage']['title'];
+			$teamA = $match['teamA'];
+			$teamB = $match['teamB'];
 
-    	$match = $this->get_match($players['id_match']);
-    	$team = $this->get_team_name($players['api_id_team']);
-    	$competition = $match['competition']['title'];
-    	$competitionStage = $match['edition_stage']['title'];
-    	$teamA = $match['teamA'];
-    	$teamB = $match['teamB'];
+			$heading = "Starting XI for $team ";
+			$content = "";
 
-    	$heading = "Starting XI for $team ";
-    	$content = "";
+			foreach ($players as $player) {
+				$playerName = $player['description'];
+				if (strlen($playerName) > 15) {
+					$playerName = substr($playerName, 0, 15) . '.';
+				}
+				$content .= "-$playerName ";
+			}
 
-    	foreach ($players as $player) {
-    		if(strlen($player) > 15) {
-    			$player = substr($player, 0, 15) . '.';
-		    }
-    		$content .= "-$player ";
-	    }
-
-	    $this->Notification_model->tweetMatch($heading, $content, $competition, $competitionStage, $teamA, $teamB);
+			$this->Notification_model->tweetMatch($heading, $content, $competition, $competitionStage, $teamA, $teamB);
+		}
     }
 
     public function get_player_name($idPlayer) {

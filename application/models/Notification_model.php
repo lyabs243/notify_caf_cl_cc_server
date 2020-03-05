@@ -204,10 +204,10 @@ class Notification_model extends CI_Model
 
 	function tweetMatch($heading, $content, $competition, $competitionStage, $teamA, $teamB) {
 
-		define('CONSUMER_KEY', 'uQdL3Jhi5zfONirpRtOjpQ8bU');
-		define('CONSUMER_SECRET', 'I9zTB6omtP3UyFga7YzmZxbvw5gcY3yrupiitmdAZY9J9jFkJP');
-		define('ACCESS_TOKEN', '982963896100249600-5mA2pdZM8ohSveGuqzeXKK7CSGKm97Y');
-		define('ACCESS_TOKEN_SECRET', 'bJAswN48kPEk7dy4c2nDSv14nVxvsJ9ytGwMRIhds9PsH');
+		if (!defined('CONSUMER_KEY')) define('CONSUMER_KEY', 'uQdL3Jhi5zfONirpRtOjpQ8bU');
+		if (!defined('CONSUMER_SECRET')) define('CONSUMER_SECRET', 'I9zTB6omtP3UyFga7YzmZxbvw5gcY3yrupiitmdAZY9J9jFkJP');
+		if (!defined('ACCESS_TOKEN')) define('ACCESS_TOKEN', '982963896100249600-5mA2pdZM8ohSveGuqzeXKK7CSGKm97Y');
+		if (!defined('ACCESS_TOKEN_SECRET')) define('ACCESS_TOKEN_SECRET', 'bJAswN48kPEk7dy4c2nDSv14nVxvsJ9ytGwMRIhds9PsH');
 
 		$connection = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
 

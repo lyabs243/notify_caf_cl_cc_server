@@ -202,10 +202,10 @@ class Match_model extends CI_Model
 		if(count($players) > 0) {
 			$match = $this->get_match($players[0]['id_match']);
 			$team = $this->get_team_name($players[0]['api_id_team']);
-			$competition = $match['competition']['title'];
-			$competitionStage = $match['edition_stage']['title'];
-			$teamA = $match['teamA'];
-			$teamB = $match['teamB'];
+			$competition = $match[0]['competition']['title'];
+			$competitionStage = $match[0]['edition_stage']['title'];
+			$teamA = $match[0]['teamA'];
+			$teamB = $match[0]['teamB'];
 
 			$heading = "Starting XI for $team ";
 			$content = "";
